@@ -7,3 +7,6 @@ class Alumno(models.Model):
     usuario = models.CharField(max_length=50, null=False)
     password = models.CharField(max_length=20, null=False)
     email = models.CharField(max_length=200, null=False)
+
+    def __str__(self):
+        return self.nombre + " " + self.apellidos

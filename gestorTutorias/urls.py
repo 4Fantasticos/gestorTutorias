@@ -1,7 +1,5 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from tutorias import views
-import tutorias
 
 urlpatterns = patterns('',
     # Examples:
@@ -9,5 +7,6 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^alumnos/', views.index),
+    url(r'^alumnos/$', 'tutorias.views.alumnos', name='alumnos'),
+    url(r'^alumnos/crear/$','tutorias.views.formularioAlumnos', name="formularioAlumnos"),
 )
