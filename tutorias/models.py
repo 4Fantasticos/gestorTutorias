@@ -16,10 +16,10 @@ class Alumno(models.Model):
     	ordering = ('apellidos',)
     		
 class Grado(models.Model):
-	nombre = models.CharField(max_length=200, null=False)
+	titulo = models.CharField(max_length=200, null=False)
 	alumnos = models.ManyToManyField(Alumno)
 
 	def __unicode__(self):
-		return self.nombre
+		return self.titulo
 	class Meta:
 		ordering = ('nombre',)
