@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
 #Ejemplos sobre relaciones en django
 #https://docs.djangoproject.com/en/1.7/topics/db/examples/
 #Usuario, extendemos el User por defecto de Django
