@@ -1,25 +1,55 @@
 from django.db import models
+from django.contrib.auth.models import User
 #Ejemplos sobre relaciones en django
-#https://docs.djangoproject.com/en/1.4/topics/db/examples/
+#https://docs.djangoproject.com/en/1.7/topics/db/examples/
+#Usuario, extendemos el User por defecto de Django
+User.add_to_class('dni', models.CharField(max_length=9,unique=True,null=True))
+User.add_to_class('es_profesor', models.BooleanField(default=False))
 
-class Alumno(models.Model):
-    nombre = models.CharField(max_length=100, null=False)
-    apellidos = models.CharField(max_length=200, null=False)
-    dni = models.CharField(max_length=9, unique=True, null=False)
-    usuario = models.CharField(max_length=50, null=False)
-    password = models.CharField(max_length=20, null=False)
-    email = models.CharField(max_length=200, null=False)
+class Grado(models.Model):
+    titulo = models.CharField(max_length=200)
+    identificador = models.CharField(max_length=3)
+    usuarios = models.ManyToManyField(User)
 
     def __unicode__(self):
-    	return self.nombre + " " + self.apellidos
+        return self.titulo
     class Meta:
-    	ordering = ('apellidos',)
-    		
-class Grado(models.Model):
-	titulo = models.CharField(max_length=200, null=False)
-	alumnos = models.ManyToManyField(Alumno)
+        ordering = ('titulo',)
 
-	def __unicode__(self):
-		return self.titulo
-	class Meta:
-		ordering = ('titulo',)
+DIAS_DE_LA_SEMANA = (
+    ('L', 'Lunes'),
+    ('M', 'Martes'),
+    ('X', 'Miercoles'),
+    ('J', 'Jueves'),
+    ('V', 'Viernes'),
+)
+
+
+class Horario(models.Model):
+    profesor = models.ForeignKey(User)
+    dia_semana = models.CharField(max_length=1, choices=DIAS_DE_LA_SEMANA)
+    hora_inicio = models.DateTimeField()
+    
+class Asignatura(models.Model):
+    codigo = models.CharField(max_length=6)
+    grados = models.ForeignKey(Grado)
+    curso = models.CharField(max_length=1)
+    usuarios = models.ManyToManyField(User)
+    class Meta:
+        ordering = ('codigo',)
+
+ESTADO_RESERVA = (
+    ('R','Reservado'),
+    ('L','Libre'),
+    ('P','Pendiente'),
+)
+class Reserva(models.Model):
+    estado = models.CharField(max_length=1, choices=ESTADO_RESERVA)
+    mensajeAlumno = models.CharField(max_length=500)
+    mensajeCancel = models.CharField(max_length=500)
+    dia = models.DateField()
+    alumnos = models.ForeignKey(User)
+    horarios = models.ManyToManyField(Horario)
+
+
+        

@@ -8,5 +8,4 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^alumnos/$', 'tutorias.views.alumnos', name='alumnos'),
-    url(r'^alumnos/crear/$','tutorias.views.formularioAlumnos', name="formularioAlumnos"),
 )
