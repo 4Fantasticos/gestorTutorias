@@ -7,16 +7,72 @@
     <title>Inicio</title>
 </head>
 <body>
-    <div class="container">
-        <div class="col-md-10 col-md-offset-1 tituloLogin text-center">
-            <h2>Gesti&oacute;n de Tutor&iacute;as de la Universidad Pablo de Olavide</h2>
-        </div>
-        <form action="/admin/addUser/" method="post">
-            {% csrf_token %}
-            {{ form }}
-            <input type="submit" value="Submit" />
+<div class="container">
+    <div class="col-md-10 col-md-offset-1 tituloLogin text-center">
+        <h2>Gesti&oacute;n de Tutor&iacute;as de la Universidad Pablo de Olavide</h2>
+    </div>
+    <div class="col-md-5 col-md-offset-3">
+        <h2>Añadir un usuario</h2>
+
+        <form action="/admin/addUser/" method="post"> {% csrf_token %}
+            <div class="form-group">
+                {% if form.username.errors %}
+                <label class="control-label alert-danger">El username es necesario</label>
+                {% endif %}
+                <label class="sr-only" for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username"
+                       placeholder="Username">
+            </div>
+            <div class="form-group">
+                {% if form.password.errors %}
+                <label class="control-label alert-danger">El password es necesario</label>
+                {% endif %}
+                <label class="sr-only" for="password">Contraseña</label>
+                <input type="password" class="form-control" id="password" name="password"
+                       placeholder="Contraseña">
+            </div>
+            <div class="form-group">
+                {% if form.email.errors %}
+                <label class="control-label alert-danger">El email es necesario</label>
+                {% endif %}
+                <label class="sr-only" for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email"
+                       placeholder="Email">
+            </div>
+            <div class="form-group">
+                {% if form.first_name.errors %}
+                <label class="control-label alert-danger">El nombre es necesario</label>
+                {% endif %}
+                <label class="sr-only" for="first_name">Nombre</label>
+                <input type="text" class="form-control" id="first_name" name="first_name"
+                       placeholder="Nombre">
+            </div>
+            <div class="form-group">
+                {% if form.last_name.errors %}
+                <label class="control-label alert-danger">Los apellidos son necesarios</label>
+                {% endif %}
+                <label class="sr-only" for="last_name">Apellidos</label>
+                <input type="text" class="form-control" id="last_name" name="last_name"
+                       placeholder="Apellidos">
+            </div>
+            <div class="form-group">
+                {% if form.dni.errors %}
+                <label class="control-label alert-danger">El dni es necesario</label>
+                {% endif %}
+                <label class="sr-only" for="dni">DNI</label>
+                <input type="text" class="form-control" id="dni" name="dni"
+                       placeholder="Dni">
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" id="es_profesor" name="es_profesor"> ¿Es profesor?
+                </label>
+            </div>
+            <button type="submit" class="btn btn-default" name="guardar">Guardar</button>
         </form>
-    </div> <!-- /container -->
+    </div>
+</div>
+<!-- /container -->
 <script src="./js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -18,7 +18,7 @@ def user_login(request):
             if user.is_active:
                 login(request, user)
                 if user.is_superuser:
-                    return HttpResponseRedirect("/admin")
+                    return HttpResponseRedirect("/admin/addUser")
                 elif user.es_profesor:
                     return HttpResponseRedirect("/profesor")
                 else:
@@ -37,7 +37,27 @@ def add_users(request):
         form = UserForm(request.POST)
 
         if form.is_valid():
+            print("entro")
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            es_profesor = form.cleaned_data['es_profesor']
+            dni = form.cleaned_data['dni']
+            email = form.cleaned_data['email']
+
+            user = User.objects.create_user(username, email, password)
+            user.es_profesor = es_profesor
+            user.first_name = first_name
+            user.last_name = last_name
+            user.dni = dni
+            user.set_password(password)
+
+            user.save()
+
             return HttpResponse("PERFE")
+        else:
+            print("no")
     else:
         form = UserForm()
     return render_to_response('formularioUser.html',{'form':form},context)

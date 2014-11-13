@@ -5,8 +5,8 @@ from django.contrib.auth.hashers import make_password
 #https://docs.djangoproject.com/en/1.7/topics/db/examples/
 #Usuario, extendemos el User por defecto de Django
 
-User.add_to_class('dni', models.CharField(max_length=9,unique=True,null=True))
-User.add_to_class('es_profesor', models.BooleanField(default=False))
+User.add_to_class('dni', models.CharField(max_length=9,unique=True, null=True))
+User.add_to_class('es_profesor', models.BooleanField(default=False, blank=True))
 
 class Grado(models.Model):
     titulo = models.CharField(max_length=200)
