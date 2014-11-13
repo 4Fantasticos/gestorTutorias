@@ -49,6 +49,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+
+
 ROOT_URLCONF = 'gestorTutorias.urls'
 
 WSGI_APPLICATION = 'gestorTutorias.wsgi.application'

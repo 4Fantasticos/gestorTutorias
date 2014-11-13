@@ -1,13 +1,32 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
+<head lang="es">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/tutoria.css" rel="stylesheet">
     <meta charset="UTF-8">
-    <title></title>
+    <title>Inicio</title>
 </head>
 <body>
-{% for alumno in alumnos %}
-    {{alumno.nombre}}<br />
-{% endfor %}
+    <div class="container">
+        <div class="col-md-10 col-md-offset-1 tituloLogin text-center">
+            <h2>Gesti&oacute;n de Tutor&iacute;as de la Universidad Pablo de Olavide</h2>
+        </div>
+        {% if user.is_authenticated and user.es_profesor == false %}
 
+        {% else %}
+        <div class="col-md-3 col-md-offset-4">
+          <form class="form-signin" role="form" method="post" action="/">
+            {% csrf_token %}
+            <h2 class="form-signin-heading">Login</h2>
+            <label for="inputUser" class="sr-only">User</label>
+            <input type="text" id="inputUser" name="user" class="form-control" placeholder="User" required autofocus>
+            <label for="inputPassword" class="sr-only">Password</label>
+            <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+          </form>
+        </div>
+        {% endif %}
+    </div> <!-- /container -->
+<script src="./js/bootstrap.min.js"></script>
 </body>
 </html>
