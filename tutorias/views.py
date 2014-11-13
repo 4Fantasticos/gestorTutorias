@@ -4,6 +4,7 @@ from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from tutorias.models import *
+from tutorias.form import UserForm
 
 def user_login(request):
     context = RequestContext(request)
@@ -28,3 +29,15 @@ def user_login(request):
             return HttpResponse("Login invalido")
     else:
         return render_to_response('index.html',{}, context)
+
+def add_users(request):
+    context = RequestContext(request)
+
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+
+        if form.is_valid():
+            return HttpResponse("PERFE")
+    else:
+        form = UserForm()
+    return render_to_response('formularioUser.html',{'form':form},context)
