@@ -1,10 +1,11 @@
-#encoding:utf-8
-from django.contrib.auth import authenticate, login
+# encoding:utf-8
+from django.contrib.auth import authenticate, login, logout
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from tutorias.models import *
 from tutorias.form import UserForm
+
 
 def user_login(request):
     context = RequestContext(request)
@@ -13,7 +14,7 @@ def user_login(request):
         username = request.POST['user']
         password = request.POST['password']
 
-        user = authenticate(username=username,password=password)
+        user = authenticate(username=username, password=password)
         if user:
             if user.is_active:
                 login(request, user)
@@ -22,13 +23,21 @@ def user_login(request):
                 elif user.es_profesor:
                     return HttpResponseRedirect("/profesor")
                 else:
-                    return HttpResponseRedirect("/")
+                    asignaturas = user.getAsignaturas()
+                    return render_to_response('miPanel.html', {'asignaturas': asignaturas}, context)
             else:
                 return HttpResponse("No estás activo")
         else:
             return HttpResponse("Login invalido")
     else:
-        return render_to_response('index.html',{}, context)
+        return render_to_response('index.html', {}, context)
+
+
+def user_logout(request):
+    logout(request)
+    # Redirect to a success page.
+    return HttpResponseRedirect("/")
+
 
 def add_users(request):
     context = RequestContext(request)
@@ -60,4 +69,4 @@ def add_users(request):
             print("no")
     else:
         form = UserForm()
-    return render_to_response('formularioUser.html',{'form':form},context)
+    return render_to_response('formularioUser.html', {'form': form}, context)
