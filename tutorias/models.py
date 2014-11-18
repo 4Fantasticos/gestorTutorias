@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 
 from django.contrib.auth.hashers import make_password
 # Ejemplos sobre relaciones en django
-#https://docs.djangoproject.com/en/1.7/topics/db/examples/
-#Usuario, extendemos el User por defecto de Django
+# https://docs.djangoproject.com/en/1.7/topics/db/examples/
+# Usuario, extendemos el User por defecto de Django
 
 """
 MODELO USER MODIFICADO
@@ -57,7 +57,10 @@ DIAS_DE_LA_SEMANA = (
 class Horario(models.Model):
     profesor = models.ForeignKey(User)
     dia_semana = models.CharField(max_length=1, choices=DIAS_DE_LA_SEMANA)
-    hora_inicio = models.DateTimeField()
+    hora_inicio = models.TimeField()
+
+    def __unicode__(self):
+        return self.profesor.username + " - " + self.dia_semana + " - " + str(self.hora_inicio)
 
 
 """

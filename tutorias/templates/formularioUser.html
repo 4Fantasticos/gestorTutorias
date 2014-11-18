@@ -4,7 +4,7 @@
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/css/tutoria.css" rel="stylesheet">
     <meta charset="UTF-8">
-    <title>Inicio</title>
+    <title>A&ntilde;adir Usuario</title>
 </head>
 <body>
 <div class="container">
@@ -12,9 +12,9 @@
         <h2>Gesti&oacute;n de Tutor&iacute;as de la Universidad Pablo de Olavide</h2>
     </div>
     <div class="col-md-5 col-md-offset-3">
-        <h2>Añadir un usuario</h2>
+        <h2>A&ntilde;adir Usuario</h2>
 
-        <form action="/admin/addUser/" method="post"> {% csrf_token %}
+        <form action="{% url 'add_users' %}" method="post"> {% csrf_token %}
             <div class="form-group">
                 {% if form.username.errors %}
                 <label class="control-label alert-danger">El username es necesario</label>
@@ -68,13 +68,16 @@
                     <input type="checkbox" id="es_profesor" name="es_profesor"> ¿Es profesor?
                 </label>
             </div>
-             <select class="form-control" name="grado">
+            {% if form.grado.errors %}
+            <label class="control-label alert-danger">El dni es necesario</label>
+            {% endif %}
+            <select class="form-control" name="grado">
                 {% for gr in grados %}
-                <option>{{gr.titulo}}</option>
+                <option value="{{gr.identificador}}">{{gr.titulo}}</option>
                 {% endfor %}
             </select>
-                 <br/>
-                <button type="submit" class="btn btn-default" name="guardar">Guardar</button>
+            <br/>
+            <button type="submit" class="btn btn-default" name="guardar">Guardar</button>
         </form>
     </div>
 </div>

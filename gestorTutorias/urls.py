@@ -9,7 +9,8 @@ urlpatterns = patterns('',
 
                        url(r'^$', views.user_login, name='login'),
                        url(r'^admin/addUser/$', views.add_users, name='add_users'),
-                       url(r'^admin/addGrado/$',views.add_grado, name='add_grado'),
+                       url(r'^admin/addGrado/$', views.add_grado, name='add_grado'),
+                       url(r'^admin/addHorario/$', views.add_horario, name='add_horario'),
                        url(r'^logout/$', views.user_logout, name='logout'),
                        url(r'^admin/', include(admin.site.urls)),
 )
