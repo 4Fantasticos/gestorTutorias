@@ -4,7 +4,7 @@ from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from tutorias.models import *
-from tutorias.form import UserForm
+from tutorias.form import *
 
 
 def user_login(request):
@@ -54,6 +54,7 @@ def add_users(request):
             es_profesor = form.cleaned_data['es_profesor']
             dni = form.cleaned_data['dni']
             email = form.cleaned_data['email']
+            grado_nombre = form.cleaned_data['grado']
 
             user = User.objects.create_user(username, email, password)
             user.es_profesor = es_profesor
@@ -61,12 +62,37 @@ def add_users(request):
             user.last_name = last_name
             user.dni = dni
             user.set_password(password)
-
             user.save()
+
+            g = Grado.objects.get(titulo=grado_nombre)
+            user.grado_set.add(g)
+
+            return HttpResponse("PERFE")
+        else:
+            grados = Grado.objects.all()
+            return render_to_response('formularioUser.html', {'form': form, 'grados':grados}, context)
+    else:
+        grados = Grado.objects.all()
+        form = UserForm()
+    return render_to_response('formularioUser.html', {'form': form, 'grados':grados}, context)
+
+
+def add_grado(request):
+    context = RequestContext(request)
+
+    if request.method == 'POST':
+        form = GradoForm(request.POST)
+
+        if form.is_valid():
+            titulo = form.cleaned_data['titulo']
+            identificador = form.cleaned_data['identificador']
+
+            grado = Grado(titulo=titulo,identificador=identificador)
+            grado.save()
 
             return HttpResponse("PERFE")
         else:
             print("no")
     else:
-        form = UserForm()
-    return render_to_response('formularioUser.html', {'form': form}, context)
+        form = GradoForm()
+    return render_to_response('formularioGrado.html', {'form': form}, context)

@@ -68,7 +68,13 @@
                     <input type="checkbox" id="es_profesor" name="es_profesor"> ¿Es profesor?
                 </label>
             </div>
-            <button type="submit" class="btn btn-default" name="guardar">Guardar</button>
+             <select class="form-control" name="grado">
+                {% for gr in grados %}
+                <option>{{gr.titulo}}</option>
+                {% endfor %}
+            </select>
+                 <br/>
+                <button type="submit" class="btn btn-default" name="guardar">Guardar</button>
         </form>
     </div>
 </div>
