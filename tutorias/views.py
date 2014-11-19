@@ -8,18 +8,15 @@ from django.template import RequestContext
 from tutorias.models import *
 from tutorias.form import *
 
+
 def esProfesor(user):
     return user.es_profesor
+
 
 def user_login(request):
     context = RequestContext(request)
     if request.user.is_authenticated():
-        if request.user.is_superuser:
-            return HttpResponseRedirect("/admin")
-        elif request.user.es_profesor:
-            return HttpResponseRedirect("/miPanelProfesor")
-        else:
-            return HttpResponseRedirect("/miPanelAlumno")
+        return HttpResponseRedirect(reverse('miPanel'))
     if request.method == 'POST':
         username = request.POST['user']
         password = request.POST['password']
@@ -28,17 +25,7 @@ def user_login(request):
         if user:
             if user.is_active:
                 login(request, user)
-                if user.is_superuser:
-                    return HttpResponseRedirect("/admin/addUser")
-                elif user.es_profesor:
-                    return HttpResponseRedirect("/profesor")
-                else:
-                    asignaturas = user.getAsignaturas()
-                    return render_to_response('miPanel.html', {'asignaturas': asignaturas}, context)
-            else:
-                return HttpResponse("No estás activo")
-        else:
-            return HttpResponse("Login invalido")
+                return HttpResponseRedirect(reverse('miPanel'))
     else:
         return render_to_response('index.html', {}, context)
 
@@ -46,7 +33,7 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     # Redirect to a success page.
-    return HttpResponseRedirect("/")
+    return HttpResponseRedirect(reverse('login'))
 
 '''@user_passes_test(esProfesor, login_url='/') NO ENTRA SI LA FUNCIÓN DEVUELVE TRUE'''
 def add_users(request):
@@ -71,13 +58,11 @@ def add_users(request):
             user.dni = dni
             user.set_password(password)
             user.save()
-            print "ES PROFESOR " + str(es_profesor)
             if not es_profesor:
-                print "entro porque soy gilipollas"
                 g = Grado.objects.get(identificador=grado_identificador)
                 user.grado_set.add(g)
 
-            return HttpResponseRedirect(reverse('add_users'))
+            return HttpResponseRedirect(reverse('miPanel'))
         else:
             grados = Grado.objects.all()
             return render_to_response('formularioUser.html', {'form': form, 'grados': grados}, context)
@@ -100,7 +85,7 @@ def add_grado(request):
             grado = Grado(titulo=titulo, identificador=identificador)
             grado.save()
 
-            return HttpResponseRedirect(reverse('add_grado'))
+            return HttpResponseRedirect(reverse('miPanel'))
         else:
             return render_to_response('formularioGrado.html', {'form': form}, context)
 
@@ -122,9 +107,46 @@ def add_horario(request):
             horario = Horario(dia_semana=dia_semana, hora_inicio=hora_inicio, profesor=user)
             horario.save()
 
-            return HttpResponseRedirect(reverse('add_horario'))
+            return HttpResponseRedirect(reverse('miPanel'))
         else:
             return render_to_response('formularioHorario.html', {'form': form}, context)
 
     form = HorarioForm()
     return render_to_response('formularioHorario.html', {'form': form, 'dias': DIAS_DE_LA_SEMANA}, context)
+
+
+def add_asignatura(request):
+    context = RequestContext(request)
+
+    if request.method == 'POST':
+        form = AsignaturaForm(request.POST)
+
+        if form.is_valid():
+            nombre = form.cleaned_data['nombre']
+            codigo = form.cleaned_data['codigo']
+            curso = form.cleaned_data['curso']
+            grado_id = form.cleaned_data['grado']
+            grado = Grado.objects.get(identificado=grado_id)
+
+            asignatura = Asignatura(nombre=nombre, codigo=codigo, curso=curso, grado=grado)
+            asignatura.save()
+
+            return HttpResponseRedirect(reverse('miPanel'))
+        else:
+            grados = Grado.objects.all()
+            return render_to_response('formularioAsignatura.html', {'form': form, 'grados':grados}, context)
+
+    grados = Grado.objects.all()
+    form = AsignaturaForm()
+    return render_to_response('formularioAsignatura.html', {'form': form, 'grados':grados}, context)
+
+
+def miPanel(request):
+    context = RequestContext(request)
+    return render_to_response('miPanel.html', {}, context)
+
+def mis_horarios(request):
+    context = RequestContext(request)
+    user = request.user
+    horarios = Horario.objects.filter(profesor=user)
+    return render_to_response('misHorarios.html', {'horarios':horarios}, context)

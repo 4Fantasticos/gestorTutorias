@@ -14,16 +14,22 @@
 
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
-            {% if user.is_superuser %}
-                <a href="{% url 'add_users' %}">A&ntilde;adir usuario</a><br />
-                <a href="{% url 'add_grado' %}">A&ntilde;adir grado</a><br />
-                <a href="{% url 'add_asignatura' %}">A&ntilde;adir asignatura</a><br />
-            {% elif user.es_profesor %}
-                <a href="{% url 'add_horario' %}">A&ntilde;adir horario</a><br />
-                <a href="{% url 'misHorarios' %}">Ver mis horarios</a><br />
-            {% else %}
-
-            {% endif %}
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Dia de la Semana</th>
+                    <th>Hora</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for horario in horarios %}
+                        <tr>
+                            <td>{{horario.get_dia_semana_display}}</td>
+                            <td>{{horario.hora_inicio}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 

@@ -33,3 +33,9 @@ class HorarioForm(forms.Form):
     dia_semana = forms.ChoiceField(widget=forms.Select(attrs={'class': 'form-control'}), choices=DIAS_DE_LA_SEMANA,
                                    label="Dia de la Semana")
     hora_inicio = forms.TimeField(widget=forms.TimeInput(format='%H:%M', attrs={'class': 'form-control'}), label="Hora")
+
+class AsignaturaForm(forms.Form):
+    nombre = forms.CharField(max_length=100)
+    codigo = forms.CharField(max_length=6)
+    curso = forms.CharField(max_length=1)
+    grado = forms.CharField(max_length=10)

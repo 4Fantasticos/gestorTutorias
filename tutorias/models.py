@@ -62,6 +62,9 @@ class Horario(models.Model):
     def __unicode__(self):
         return self.profesor.username + " - " + self.dia_semana + " - " + str(self.hora_inicio)
 
+    class Meta:
+        ordering = ('dia_semana',)
+
 
 """
 MODELO ASIGNATURA
@@ -74,6 +77,9 @@ class Asignatura(models.Model):
     grados = models.ForeignKey(Grado)
     curso = models.CharField(max_length=1)
     usuarios = models.ManyToManyField(User)
+
+    def __unicode__(self):
+        return str(self.codigo) + " - " + self.nombre
 
     class Meta:
         ordering = ('codigo',)

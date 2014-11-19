@@ -68,9 +68,7 @@
                     <input type="checkbox" id="es_profesor" name="es_profesor"> ¿Es profesor?
                 </label>
             </div>
-            {% if form.grado.errors %}
-            <label class="control-label alert-danger">El dni es necesario</label>
-            {% endif %}
+
             <select class="form-control" name="grado">
                 {% for gr in grados %}
                 <option value="{{gr.identificador}}">{{gr.titulo}}</option>
