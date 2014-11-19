@@ -39,3 +39,6 @@ class AsignaturaForm(forms.Form):
     codigo = forms.CharField(max_length=6)
     curso = forms.CharField(max_length=1)
     grado = forms.CharField(max_length=10)
+
+class AddAsignaturasForm(forms.Form):
+    choices = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple())
