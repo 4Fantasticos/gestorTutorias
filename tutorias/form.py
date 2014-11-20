@@ -19,9 +19,6 @@ class GradoForm(forms.Form):
     titulo = forms.CharField(label="Titulo", max_length=100)
     identificador = forms.CharField(label="Identificador", max_length=3)
 
-class GradoRemoveForm(forms.Form):
-    identificador = forms.CharField(label="Identificador", max_length=3)
-
 
 DIAS_DE_LA_SEMANA = (
     ('L', 'Lunes'),
@@ -42,6 +39,3 @@ class AsignaturaForm(forms.Form):
     codigo = forms.CharField(max_length=6)
     curso = forms.CharField(max_length=1)
     grado = forms.CharField(max_length=10)
-
-class AsignaturaRemoveForm(forms.Form):
-    nombre = forms.CharField(max_length=100)
