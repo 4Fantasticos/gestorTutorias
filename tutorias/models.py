@@ -82,7 +82,7 @@ class Asignatura(models.Model):
         return str(self.codigo) + " - " + self.nombre
 
     class Meta:
-        ordering = ('codigo',)
+        ordering = ('curso',)
 
 
 """
