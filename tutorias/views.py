@@ -150,3 +150,37 @@ def mis_horarios(request):
     user = request.user
     horarios = Horario.objects.filter(profesor=user)
     return render_to_response('misHorarios.html', {'horarios':horarios}, context)
+
+def remove_asignatura(request):
+    context = RequestContext(request)
+
+    if request.method == 'POST':
+        form = AsignaturaRemoveForm(request.POST)
+
+        if form.is_valid():
+            id = form.cleaned_data['identificador']
+            asignatura = Asignatura.objects.get(pk=id)
+            asignatura.delete()
+
+            return HttpResponseRedirect(reverse('miPanel'))
+
+    asignaturas = Asignatura.objects.all()
+    form = AsignaturaRemoveForm()
+    return render_to_response('removeAsignatura.html', {'form': form, 'asignaturas':asignaturas}, context)
+
+def remove_grado(request):
+    context = RequestContext(request)
+
+    if request.method == 'POST':
+        form = GradoRemoveForm(request.POST)
+
+        if form.is_valid():
+            id = form.cleaned_data['identificador']
+            grado = Grado.objects.get(pk=id)
+            grado.delete()
+
+            return HttpResponseRedirect(reverse('miPanel'))
+
+    grados = Grado.objects.all()
+    form = GradoRemoveForm()
+    return render_to_response('removeGrado.html', {'form': form, 'grados':grados}, context)

@@ -18,6 +18,8 @@
                 <a href="{% url 'add_users' %}">A&ntilde;adir usuario</a><br />
                 <a href="{% url 'add_grado' %}">A&ntilde;adir grado</a><br />
                 <a href="{% url 'add_asignatura' %}">A&ntilde;adir asignatura</a><br />
+                <a href="{% url 'remove_asignatura' %}">Eliminar asignatura</a><br />
+                <a href="{% url 'remove_grado' %}">Eliminar grado</a><br />
             {% elif user.es_profesor %}
                 <a href="{% url 'add_horario' %}">A&ntilde;adir horario</a><br />
                 <a href="{% url 'misHorarios' %}">Ver mis horarios</a><br />
