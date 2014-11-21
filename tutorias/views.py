@@ -203,3 +203,33 @@ def remove_grado(request):
     grados = Grado.objects.all()
     form = GradoRemoveForm()
     return render_to_response('removeGrado.html', {'form': form, 'grados':grados}, context)
+
+def remove_user(request):
+    context = RequestContext(request)
+
+    if request.method == 'POST':
+        form =  UserRemoveForm(request.POST)
+
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            user = User.objects.get(username=username)
+            user.delete()
+
+            return HttpResponseRedirect(reverse('miPanel'))
+
+    users = User.objects.all()
+    form = UserRemoveForm()
+    return render_to_response('removeUser.html', {'form': form, 'users':users}, context)
+
+
+def read_user(request):
+    context = RequestContext(request)
+    if request.method == 'POST':
+        form = UserReadForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            usuario = User.objects.get(username=username)
+        return render_to_response('readUser.html', {'form': form, 'users':usuario}, context)
+    usuarios = User.objects.all()
+    form = UserReadForm()
+    return render_to_response('readUser.html',{'form': form,'usuarios':usuarios}, context)
