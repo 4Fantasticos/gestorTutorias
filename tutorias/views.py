@@ -12,6 +12,12 @@ from tutorias.form import *
 def esProfesor(user):
     return user.es_profesor
 
+def esALumno(user):
+    return not user.es_profesor
+
+def esAdmin(user):
+    return user.is_superuser
+
 
 def user_login(request):
     context = RequestContext(request)
@@ -37,8 +43,6 @@ def user_logout(request):
 
 
 '''@user_passes_test(esProfesor, login_url='/') NO ENTRA SI LA FUNCIÓN DEVUELVE TRUE'''
-
-
 def add_grado(request):
     context = RequestContext(request)
 
@@ -109,7 +113,7 @@ def addAsignaturasAlumnos(request):
             for item in form.cleaned_data['choices']:
                 print item
                 user.asignatura_set.add(item)
-            return HttpResponse("OK")
+            return HttpResponseRedirect(reverse('miPanel'))
         else:
             form = AddAsignaturasForm(request.POST, asignaturas=asignaturas)
             return render_to_response('formAddAsignaturas.html', {'form': form, 'asignaturas': asignaturas}, context)
@@ -167,6 +171,12 @@ def add_asignatura(request):
 
 def miPanel(request):
     context = RequestContext(request)
+    if request.user.is_superuser:
+        usuarios = User.objects.all()
+        grados = Grado.objects.all()
+        asignaturas = Asignatura.objects.all()
+        datos = {'usuarios': len(usuarios), 'grados': len(grados), 'asignaturas': len(asignaturas)}
+        return render_to_response('miPanel.html', {'datos':datos}, context)
     return render_to_response('miPanel.html', {}, context)
 
 
