@@ -28,8 +28,6 @@ class GradoForm(forms.Form):
 class GradoRemoveForm(forms.Form):
     identificador = forms.CharField(label="Identificador", max_length=3)
 
-
-
 DIAS_DE_LA_SEMANA = (
     ('L', 'Lunes'),
     ('M', 'Martes'),
@@ -44,8 +42,6 @@ class HorarioForm(forms.Form):
                                    label="Dia de la Semana")
     hora_inicio = forms.TimeField(widget=forms.TimeInput(format='%H:%M', attrs={'class': 'form-control'}), label="Hora")
 
-
-
 class AsignaturaForm(forms.Form):
     nombre = forms.CharField(max_length=100)
     codigo = forms.CharField(max_length=6)
@@ -55,3 +51,18 @@ class AsignaturaForm(forms.Form):
 class AsignaturaRemoveForm(forms.Form):
     nombre = forms.CharField(max_length=100)
     grado = forms.CharField(max_length=10)
+
+
+class AsignaturaRemoveForm(forms.Form):
+    nombre = forms.CharField(max_length=100)
+
+
+class AddAsignaturasForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        asignaturas = kwargs.pop('asignaturas')
+        lista = ()
+        for asig in asignaturas:
+            sublista = (asig.codigo, asig.nombre)
+            lista = lista + (sublista,)
+        super(AddAsignaturasForm, self).__init__(*args, **kwargs)
+        self.fields['choices'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=lista)

@@ -12,6 +12,12 @@ from tutorias.form import *
 def esProfesor(user):
     return user.es_profesor
 
+def esALumno(user):
+    return not user.es_profesor
+
+def esAdmin(user):
+    return user.is_superuser
+
 
 def user_login(request):
     context = RequestContext(request)
@@ -34,6 +40,7 @@ def user_logout(request):
     logout(request)
     # Redirect to a success page.
     return HttpResponseRedirect(reverse('login'))
+
 
 '''@user_passes_test(esProfesor, login_url='/') NO ENTRA SI LA FUNCIÓN DEVUELVE TRUE'''
 def add_grado(request):
@@ -99,18 +106,19 @@ def addAsignaturasAlumnos(request):
     context = RequestContext(request)
     user = get_object_or_404(User, pk=request.session['alumno'])
     grado = get_object_or_404(Grado, identificador=request.session['grado'])
+    asignaturas = Asignatura.objects.filter(grados=grado)
     if request.method == 'POST':
-        form = AddAsignaturasForm(request.POST)
+        form = AddAsignaturasForm(request.POST, asignaturas=asignaturas)
         if form.is_valid():
             for item in form.cleaned_data['choices']:
                 user.asignatura_set.add(item)
-            return HttpResponse("OK")
+            return HttpResponseRedirect(reverse('miPanel'))
         else:
-            asignaturas = Asignatura.objects.filter(grados=grado)
+            form = AddAsignaturasForm(request.POST, asignaturas=asignaturas)
             return render_to_response('formAddAsignaturas.html', {'form': form, 'asignaturas': asignaturas}, context)
-    asignaturas = Asignatura.objects.filter(grados=grado)
-    form = AddAsignaturasForm()
+    form = AddAsignaturasForm(asignaturas=asignaturas)
     return render_to_response('formAddAsignaturas.html', {'form': form, 'asignaturas': asignaturas}, context)
+
 
 def add_horario(request):
     context = RequestContext(request)
@@ -162,13 +170,21 @@ def add_asignatura(request):
 
 def miPanel(request):
     context = RequestContext(request)
+    if request.user.is_superuser:
+        usuarios = User.objects.all()
+        grados = Grado.objects.all()
+        asignaturas = Asignatura.objects.all()
+        datos = {'usuarios': len(usuarios), 'grados': len(grados), 'asignaturas': len(asignaturas)}
+        return render_to_response('miPanel.html', {'datos':datos}, context)
     return render_to_response('miPanel.html', {}, context)
+
 
 def mis_horarios(request):
     context = RequestContext(request)
     user = request.user
     horarios = Horario.objects.filter(profesor=user)
-    return render_to_response('misHorarios.html', {'horarios':horarios}, context)
+    return render_to_response('misHorarios.html', {'horarios': horarios}, context)
+
 
 def remove_asignatura(request):
     context = RequestContext(request)
@@ -185,7 +201,8 @@ def remove_asignatura(request):
 
     asignaturas = Asignatura.objects.all()
     form = AsignaturaRemoveForm()
-    return render_to_response('removeAsignatura.html', {'form': form, 'asignaturas':asignaturas}, context)
+    return render_to_response('removeAsignatura.html', {'form': form, 'asignaturas': asignaturas}, context)
+
 
 def remove_grado(request):
     context = RequestContext(request)

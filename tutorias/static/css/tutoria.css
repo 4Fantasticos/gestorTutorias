@@ -5,8 +5,30 @@
  */
 
  .tituloLogin {
-      background-color: grey;
-      border-radius:20px;
+      background-color: #0C426F;
+      color: #EEB70E;
+      padding-bottom:5px;
       margin-top: 5px;
       margin-bottom:20px;
+ }
+
+ .tituloLogin > img {
+    padding: 10px 0px;
+    width: 70%;
+ }
+
+ .saltoLinea {
+    margin: 5px 0px;
+ }
+
+ body {
+    background-color: #FFFFFF;
+ }
+
+ .badge {
+    background-color: #244764;
+ }
+
+ .btn-primary {
+    background-color: #0C426F;
  }

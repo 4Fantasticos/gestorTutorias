@@ -18,7 +18,7 @@ urlpatterns = patterns('',
                        url(r'^admin/addAsignatura/$', views.add_asignatura, name='add_asignatura'),
                        url(r'^misHorarios/$', views.mis_horarios, name='misHorarios'),
                        url(r'^miPanel/$', views.miPanel, name='miPanel'),
-                       url(r'^miPanel/addAsignaturasAlumno',views.addAsignaturasAlumnos, name='add_asignaturas_alumno'),
+                       url(r'^miPanel/addAsignaturasAlumno', views.addAsignaturasAlumnos, name='add_asignaturas_alumno'),
                        url(r'^logout/$', views.user_logout, name='logout'),
                        url(r'^admin/', include(admin.site.urls)),
 )
