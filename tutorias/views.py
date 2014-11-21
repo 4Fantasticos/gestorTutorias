@@ -175,8 +175,11 @@ def miPanel(request):
         grados = Grado.objects.all()
         asignaturas = Asignatura.objects.all()
         datos = {'usuarios': len(usuarios), 'grados': len(grados), 'asignaturas': len(asignaturas)}
-        return render_to_response('miPanel.html', {'datos':datos}, context)
-    return render_to_response('miPanel.html', {}, context)
+        return render_to_response('miPanel.html', {'datos': datos}, context)
+    elif request.user.es_profesor:
+        reservas = Reserva.objects.filter(profesor=request.user, estado='P')
+        datos = {'reservas': len(reservas)}
+    return render_to_response('miPanel.html', {'datos': datos}, context)
 
 
 def mis_horarios(request):
@@ -238,7 +241,6 @@ def remove_user(request):
     form = UserRemoveForm()
     return render_to_response('removeUser.html', {'form': form, 'users':users}, context)
 
-
 def read_user(request):
     context = RequestContext(request)
     if request.method == 'POST':
@@ -250,3 +252,6 @@ def read_user(request):
     usuarios = User.objects.all()
     form = UserReadForm()
     return render_to_response('readUser.html',{'form': form,'usuarios':usuarios}, context)
+
+def notificacionesProfesor(request):
+    pass
