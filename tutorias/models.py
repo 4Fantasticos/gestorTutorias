@@ -100,8 +100,8 @@ class Reserva(models.Model):
     mensajeAlumno = models.CharField(max_length=500)
     mensajeCancel = models.CharField(max_length=500)
     dia = models.DateField()
-    alumnos = models.ForeignKey(User)
+    alumnos = models.ForeignKey(User, related_name='alumnos', null=True)
     horarios = models.ManyToManyField(Horario)
-
+    profesor = models.ForeignKey(User, related_name='profesor', null=True)
     class Meta:
         ordering = ('dia',)
