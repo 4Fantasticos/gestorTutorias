@@ -56,6 +56,10 @@ class AsignaturaRemoveForm(forms.Form):
 class AsignaturaRemoveForm(forms.Form):
     nombre = forms.CharField(max_length=100)
 
+class AsignaturaReadForm(forms.Form):
+    nombre = forms.CharField(max_length=100)
+    grado = forms.CharField(max_length=10)
+
 
 class AddAsignaturasForm(forms.Form):
     def __init__(self, *args, **kwargs):

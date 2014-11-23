@@ -250,3 +250,15 @@ def read_user(request):
     usuarios = User.objects.all()
     form = UserReadForm()
     return render_to_response('readUser.html',{'form': form,'usuarios':usuarios}, context)
+
+def read_asignatura(request):
+    context = RequestContext(request)
+    if request.method == 'POST':
+        form = AsignaturaReadForm(request.POST)
+        if form.is_valid():
+            nombre = form.cleaned_data['nombre']
+            asignatura = Asignatura.objects.get(nombre=nombre)
+        return render_to_response('readAsignatura.html', {'form': form, 'asignatura':asignatura}, context)
+    asignaturas = Asignatura.objects.all()
+    form = AsignaturaReadForm()
+    return render_to_response('readAsignatura.html',{'form': form,'todasAsignaturas':asignaturas}, context)

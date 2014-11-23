@@ -4,7 +4,7 @@
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/css/tutoria.css" rel="stylesheet">
     <meta charset="UTF-8">
-    <title>Consulta Usuario</title>
+    <title>Consulta Asignatura</title>
 </head>
 <body>
 <div class="container">
@@ -12,69 +12,60 @@
         <h2>Gesti&oacute;n de Tutor&iacute;as de la Universidad Pablo de Olavide</h2>
     </div>
     <div class="col-md-5 col-md-offset-3">
-        <h2>Consulta Usuario</h2>
-        <form action="{% url 'read_user' %}" method="post"> {% csrf_token %}
+        <h2>Consulta Asignatura</h2>
+        <form action="{% url 'read_asignatura' %}" method="post"> {% csrf_token %}
            <div class="form-group">
-                {% if form.username.errors %}
-                <label class="control-label alert-danger">El username es necesario</label>
+                {% if form.nombre.errors %}
+                <label class="control-label alert-danger">El nombre es necesario</label>
                 {% endif %}
-                <label class="sr-only" for="username">Username</label>
-                <input type="text" class="form-control" id="username" name="username"
-                       placeholder="Username">
+                <label class="sr-only" for="nombre">Nombre</label>
+                <input type="text" class="form-control" id="nombre" name="nombre"
+                       placeholder="nombre">
             </div>
             <button type="submit" class="btn btn-default" name="consultar">Consulta</button><br/>
             <br/>
-              {% if users %}
+            </form>
+            {% if asignaturas %}
                  <table class="table table-striped">
                 <tr>
-                    <th class="">Username</th>
                     <th>Nombre</th>
-                    <th>Apellidos</th>
-                    <th>DNI</th>
-                    <th>Email</th>
-                    <th>¿Profesor?</th>
+                    <th>Codigo</th>
+                    <th>Grado</th>
+                    <th>Curso</th>
                 </tr>
              <tr>
                 <td class="active">
-                 {{users.username }}
+                 {{asignaturas.nombre}}
                 </td>
                 <td class="active">
-                    {{users.first_name }}
+                    {{asignaturas.codigo}}
                 </td>
                  <td class="active">
-                    {{users.last_name}}
+
                 </td>
                  <td class="active">
-                    {{users.dni}}
-                </td>
-                 <td class="active">
-                    {{users.email}}
-                </td>
-                 <td class="active">
-                 {{users.es_profesor}}
+                    {{asignaturas.curso}}
                 </td>
             </tr>
             </table>
-            <div class="col-md-5 col-md-offset-12">
+         <div class="col-md-5 col-md-offset-12">
                <a class="btn btn-default" href="javascript:history.go(-1)" role="button">Volver </a>
                 </div>
                {% endif%}
-            {% if not users %}
+          {% if not asignaturas %}
             <table class="table table-hover">
                 <tr>
-                    <th>Username</th>
                     <th>Nombre</th>
+
                 </tr>
-                {% for us in usuarios %}
+                {% for asig in todasAsignaturas %}
              <tr>
                 <td class="active">
-                    <form action="{% url 'read_user' %}" method="post"> {% csrf_token %}
-                        <button class="btn btn-link" name="username" value="{{us.username}}">{{us.username}}</button>
+                    <form action="{% url 'read_asignatura' %}" method="post"> {% csrf_token %}
+                        <button class="btn btn-link" name="nombre" value="{{asig.nombre}}">{{asig.nombre}}</button>
                     </form>
                 </td>
-                <td class="active">
-                    {{us.first_name}}
-                </td>
+
             </tr>
                    {% endfor %}
             </table>
