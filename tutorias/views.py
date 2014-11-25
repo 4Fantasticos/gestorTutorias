@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
+from django.utils.datetime_safe import datetime
 from tutorias.models import *
 from tutorias.form import *
 
@@ -256,7 +257,7 @@ def read_user(request):
         form = UserReadForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
-            usuario = User.objects.get(username=username)
+            usuario = User.objects.filter(username__icontains=username)
         return render_to_response('readUser.html', {'form': form, 'users': usuario}, context)
     usuarios_list = User.objects.exclude(username='admin')
     paginator = Paginator(usuarios_list, 10)
@@ -277,7 +278,7 @@ def read_asignatura(request):
         form = AsignaturaReadForm(request.POST)
         if form.is_valid():
             nombre = form.cleaned_data['nombre']
-            asignatura = Asignatura.objects.get(nombre=nombre)
+            asignatura = Asignatura.objects.filter(nombre__icontains=nombre)
             return render_to_response('readAsignatura.html', {'form': form, 'asignatura': asignatura}, context)
     asignaturas_lista = Asignatura.objects.all()
     paginator = Paginator(asignaturas_lista, 10)
@@ -293,4 +294,19 @@ def read_asignatura(request):
 
 
 def notificacionesProfesor(request):
-    pass   
+    context = RequestContext(request)
+    if 'aceptar' in request.POST:
+        id = request.POST.get('id')
+        reserva = Reserva.objects.get(id=id)
+        reserva.estado = 'R'
+        reserva.save()
+    elif 'declinar' in request.POST:
+        id = request.POST.get('id')
+        textoProfesor = request.POST.get('texto')
+        reserva = Reserva.objects.get(id=id)
+        reserva.estado = 'C'
+        reserva.save()
+    notificaciones = Reserva.objects.filter(profesor=request.user).filter(estado='P')
+    reservas = Reserva.objects.filter(profesor=request.user).filter(estado='R').filter(dia__gt=datetime.now)
+    return render_to_response('misNotificaciones.html', {'notificaciones': notificaciones, 'reservas': reservas},
+                              context)

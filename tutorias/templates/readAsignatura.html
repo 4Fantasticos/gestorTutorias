@@ -34,20 +34,22 @@
                 <th>Grado</th>
                 <th>Curso</th>
             </tr>
+            {% for as in asignatura %}
             <tr>
                 <td class="active">
-                    {{asignatura.nombre}}
+                    {{as.nombre}}
                 </td>
                 <td class="active">
-                    {{asignatura.codigo}}
+                    {{as.codigo}}
                 </td>
                 <td class="active">
-                    {{asignatura.grados}}
+                    {{as.grados}}
                 </td>
                 <td class="active">
-                    {{asignatura.curso}}
+                    {{as.curso}}
                 </td>
             </tr>
+            {% endfor %}
         </table>
         <div class="col-md-5 col-md-offset-12">
             <a class="btn btn-default" href="{% url 'read_asignatura' %}" role="button">Volver al listado</a>

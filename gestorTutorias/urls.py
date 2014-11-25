@@ -26,6 +26,10 @@ urlpatterns = patterns('',
                        url(r'^miPanel/$', views.miPanel, name='miPanel'),
                        url(r'^miPanel/addAsignaturasAlumno', views.addAsignaturasAlumnos, name='add_asignaturas_alumno'),
                        url(r'^miPanel/notificaciones', views.notificacionesProfesor, name='notificaciones_profesor'),
+                       #Profesor
+                       url(r'^miPanel/misNotificaciones',views.notificacionesProfesor, name='mis_notificaciones'),
+                       #logout
                        url(r'^logout/$', views.user_logout, name='logout'),
+                       #Admin Django
                        url(r'^admin/', include(admin.site.urls)),
 )

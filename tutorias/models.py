@@ -92,16 +92,21 @@ ESTADO_RESERVA = (
     ('R', 'Reservado'),
     ('L', 'Libre'),
     ('P', 'Pendiente'),
+    ('C', 'Cancelada'),
 )
 
 
 class Reserva(models.Model):
     estado = models.CharField(max_length=1, choices=ESTADO_RESERVA)
     mensajeAlumno = models.CharField(max_length=500)
-    mensajeCancel = models.CharField(max_length=500)
+    mensajeCancel = models.CharField(max_length=500, blank=True)
     dia = models.DateField()
     alumnos = models.ForeignKey(User, related_name='alumnos', null=True)
-    horarios = models.ManyToManyField(Horario)
+    horario = models.ForeignKey(Horario)
     profesor = models.ForeignKey(User, related_name='profesor', null=True)
+
+    def __unicode__(self):
+        return self.id
+
     class Meta:
         ordering = ('dia',)
