@@ -1,6 +1,7 @@
 # encoding:utf-8
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import user_passes_test
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
@@ -12,8 +13,10 @@ from tutorias.form import *
 def esProfesor(user):
     return user.es_profesor
 
+
 def esALumno(user):
     return not user.es_profesor
+
 
 def esAdmin(user):
     return user.is_superuser
@@ -43,6 +46,8 @@ def user_logout(request):
 
 
 '''@user_passes_test(esProfesor, login_url='/') NO ENTRA SI LA FUNCIÓN DEVUELVE TRUE'''
+
+
 def add_grado(request):
     context = RequestContext(request)
 
@@ -171,7 +176,7 @@ def add_asignatura(request):
 def miPanel(request):
     context = RequestContext(request)
     if request.user.is_superuser:
-        usuarios = User.objects.all()
+        usuarios = User.objects.exclude(username='admin')
         grados = Grado.objects.all()
         asignaturas = Asignatura.objects.all()
         datos = {'usuarios': len(usuarios), 'grados': len(grados), 'asignaturas': len(asignaturas)}
@@ -179,7 +184,9 @@ def miPanel(request):
     elif request.user.es_profesor:
         reservas = Reserva.objects.filter(profesor=request.user, estado='P')
         datos = {'reservas': len(reservas)}
-    return render_to_response('miPanel.html', {'datos': datos}, context)
+        return render_to_response('miPanel.html', {'datos': datos}, context)
+    else:
+        return render_to_response('miPanel.html', {}, context)
 
 
 def mis_horarios(request):
@@ -222,13 +229,14 @@ def remove_grado(request):
 
     grados = Grado.objects.all()
     form = GradoRemoveForm()
-    return render_to_response('removeGrado.html', {'form': form, 'grados':grados}, context)
+    return render_to_response('removeGrado.html', {'form': form, 'grados': grados}, context)
+
 
 def remove_user(request):
     context = RequestContext(request)
 
     if request.method == 'POST':
-        form =  UserRemoveForm(request.POST)
+        form = UserRemoveForm(request.POST)
 
         if form.is_valid():
             username = form.cleaned_data['username']
@@ -239,7 +247,8 @@ def remove_user(request):
 
     users = User.objects.all()
     form = UserRemoveForm()
-    return render_to_response('removeUser.html', {'form': form, 'users':users}, context)
+    return render_to_response('removeUser.html', {'form': form, 'users': users}, context)
+
 
 def read_user(request):
     context = RequestContext(request)
@@ -248,10 +257,19 @@ def read_user(request):
         if form.is_valid():
             username = form.cleaned_data['username']
             usuario = User.objects.get(username=username)
-        return render_to_response('readUser.html', {'form': form, 'users':usuario}, context)
-    usuarios = User.objects.all()
+        return render_to_response('readUser.html', {'form': form, 'users': usuario}, context)
+    usuarios_list = User.objects.exclude(username='admin')
+    paginator = Paginator(usuarios_list, 10)
+    page = request.GET.get('page')
+    try:
+        usuarios = paginator.page(page)
+    except PageNotAnInteger:
+        usuarios = paginator.page(1)
+    except EmptyPage:
+        usuarios = paginator.page(paginator.num_pages)
     form = UserReadForm()
-    return render_to_response('readUser.html',{'form': form,'usuarios':usuarios}, context)
+    return render_to_response('readUser.html', {'form': form, 'usuarios': usuarios}, context)
+
 
 def read_asignatura(request):
     context = RequestContext(request)
@@ -260,10 +278,19 @@ def read_asignatura(request):
         if form.is_valid():
             nombre = form.cleaned_data['nombre']
             asignatura = Asignatura.objects.get(nombre=nombre)
-        return render_to_response('readAsignatura.html', {'form': form, 'asignatura':asignatura}, context)
-    asignaturas = Asignatura.objects.all()
+            return render_to_response('readAsignatura.html', {'form': form, 'asignatura': asignatura}, context)
+    asignaturas_lista = Asignatura.objects.all()
+    paginator = Paginator(asignaturas_lista, 10)
+    page = request.GET.get('page')
+    try:
+        asignaturas = paginator.page(page)
+    except PageNotAnInteger:
+        asignaturas = paginator.page(1)
+    except EmptyPage:
+        asignaturas = paginator.page(paginator.num_pages)
     form = AsignaturaReadForm()
-    return render_to_response('readAsignatura.html',{'form': form,'todasAsignaturas':asignaturas}, context)
+    return render_to_response('readAsignatura.html', {'form': form, 'asignaturas': asignaturas}, context)
+
 
 def notificacionesProfesor(request):
     pass   

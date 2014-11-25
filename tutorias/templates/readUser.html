@@ -13,8 +13,9 @@
     </div>
     <div class="col-md-5 col-md-offset-3">
         <h2>Consulta Usuario</h2>
+
         <form action="{% url 'read_user' %}" method="post"> {% csrf_token %}
-           <div class="form-group">
+            <div class="form-group">
                 {% if form.username.errors %}
                 <label class="control-label alert-danger">El username es necesario</label>
                 {% endif %}
@@ -22,51 +23,56 @@
                 <input type="text" class="form-control" id="username" name="username"
                        placeholder="Username">
             </div>
-            <button type="submit" class="btn btn-default" name="consultar">Consulta</button><br/>
-            <br/>
-              {% if users %}
-                 <table class="table table-striped">
-                <tr>
-                    <th class="">Username</th>
-                    <th>Nombre</th>
-                    <th>Apellidos</th>
-                    <th>DNI</th>
-                    <th>Email</th>
-                    <th>¿Profesor?</th>
-                </tr>
-             <tr>
+            <button type="submit" class="btn btn-default" name="consultar">Consulta</button>
+        </form>
+        <hr/>
+        {% if users %}
+        <table class="table table-striped">
+            <tr>
+                <th class="">Username</th>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>DNI</th>
+                <th>Email</th>
+                <th>¿Profesor?</th>
+            </tr>
+            <tr>
                 <td class="active">
-                 {{users.username }}
+                    {{users.username }}
                 </td>
                 <td class="active">
                     {{users.first_name }}
                 </td>
-                 <td class="active">
+                <td class="active">
                     {{users.last_name}}
                 </td>
-                 <td class="active">
+                <td class="active">
                     {{users.dni}}
                 </td>
-                 <td class="active">
+                <td class="active">
                     {{users.email}}
                 </td>
-                 <td class="active">
-                 {{users.es_profesor}}
+                <td class="active">
+                    {% if users.es_profesor %}
+                    S&iacute;
+                    {% else %}
+                    No
+                    {% endif %}
                 </td>
             </tr>
-            </table>
-            <div class="col-md-5 col-md-offset-12">
-               <a class="btn btn-default" href="javascript:history.go(-1)" role="button">Volver </a>
-                </div>
-               {% endif%}
-            {% if not users %}
-            <table class="table table-hover">
-                <tr>
-                    <th>Username</th>
-                    <th>Nombre</th>
-                </tr>
-                {% for us in usuarios %}
-             <tr>
+        </table>
+        <div class="col-md-5 col-md-offset-12">
+            <a class="btn btn-default" href="{% url 'read_user' %}" role="button">Volver al listado</a>
+        </div>
+        {% endif %}
+        {% if not users %}
+        <table class="table table-hover">
+            <tr>
+                <th>Username</th>
+                <th>Nombre</th>
+            </tr>
+            {% for us in usuarios %}
+            <tr>
                 <td class="active">
                     <form action="{% url 'read_user' %}" method="post"> {% csrf_token %}
                         <button class="btn btn-link" name="username" value="{{us.username}}">{{us.username}}</button>
@@ -76,11 +82,31 @@
                     {{us.first_name}}
                 </td>
             </tr>
-                   {% endfor %}
-            </table>
-            <br/>
-            {% endif%}
-        </form>
+            {% endfor %}
+        </table>
+        <div class="pagination">
+            <span class="step-links">
+            {% if usuarios.has_previous %}
+                <a href="?page={{ usuarios.previous_page_number }}">Anterior</a>
+            {% endif %}
+
+                <span class="current">
+                    P&aacute;gina {{ usuarios.number }} de {{ usuarios.paginator.num_pages }}.
+                </span>
+
+            {% if usuarios.has_next %}
+                <a href="?page={{ usuarios.next_page_number }}">Siguiente</a>
+            {% endif %}
+            </span>
+        </div>
+        <br/>
+        {% endif%}
+
+    </div>
+
+    <div class="col-md-offset-10 col-md-2">
+        <a href="{% url 'miPanel' %}">Volver</a> |
+        <a href="{% url 'logout' %}">Logout</a>
     </div>
 </div>
 <!-- /container -->

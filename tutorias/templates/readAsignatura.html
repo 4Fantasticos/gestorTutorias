@@ -13,8 +13,9 @@
     </div>
     <div class="col-md-5 col-md-offset-3">
         <h2>Consulta Asignatura</h2>
+
         <form action="{% url 'read_asignatura' %}" method="post"> {% csrf_token %}
-           <div class="form-group">
+            <div class="form-group">
                 {% if form.nombre.errors %}
                 <label class="control-label alert-danger">El nombre es necesario</label>
                 {% endif %}
@@ -22,56 +23,76 @@
                 <input type="text" class="form-control" id="nombre" name="nombre"
                        placeholder="nombre">
             </div>
-            <button type="submit" class="btn btn-default" name="consultar">Consulta</button><br/>
-            <br/>
-            </form>
-            {% if asignaturas %}
-                 <table class="table table-striped">
-                <tr>
-                    <th>Nombre</th>
-                    <th>Codigo</th>
-                    <th>Grado</th>
-                    <th>Curso</th>
-                </tr>
-             <tr>
+            <button type="submit" class="btn btn-default" name="consultar">Consulta</button>
+        </form>
+        <hr/>
+        {% if asignatura %}
+        <table class="table table-striped">
+            <tr>
+                <th>Nombre</th>
+                <th>Codigo</th>
+                <th>Grado</th>
+                <th>Curso</th>
+            </tr>
+            <tr>
                 <td class="active">
-                 {{asignaturas.nombre}}
+                    {{asignatura.nombre}}
                 </td>
                 <td class="active">
-                    {{asignaturas.codigo}}
+                    {{asignatura.codigo}}
                 </td>
-                 <td class="active">
-
+                <td class="active">
+                    {{asignatura.grados}}
                 </td>
-                 <td class="active">
-                    {{asignaturas.curso}}
+                <td class="active">
+                    {{asignatura.curso}}
                 </td>
             </tr>
-            </table>
-         <div class="col-md-5 col-md-offset-12">
-               <a class="btn btn-default" href="javascript:history.go(-1)" role="button">Volver </a>
-                </div>
-               {% endif%}
-          {% if not asignaturas %}
-            <table class="table table-hover">
-                <tr>
-                    <th>Nombre</th>
-
-                </tr>
-                {% for asig in todasAsignaturas %}
-             <tr>
+        </table>
+        <div class="col-md-5 col-md-offset-12">
+            <a class="btn btn-default" href="{% url 'read_asignatura' %}" role="button">Volver al listado</a>
+        </div>
+        {% endif%}
+        {% if not asignatura %}
+        <table class="table table-hover">
+            <tr>
+                <th>Nombre</th>
+                <th>C&oacute;digo</th>
+            </tr>
+            {% for asig in asignaturas %}
+            <tr>
                 <td class="active">
                     <form action="{% url 'read_asignatura' %}" method="post"> {% csrf_token %}
                         <button class="btn btn-link" name="nombre" value="{{asig.nombre}}">{{asig.nombre}}</button>
                     </form>
                 </td>
-
+                <td class="active">
+                    {{ asig.codigo }}
+                </td>
             </tr>
-                   {% endfor %}
-            </table>
-            <br/>
-            {% endif%}
-        </form>
+            {% endfor %}
+        </table>
+        <div class="pagination">
+            <span class="step-links">
+            {% if asignaturas.has_previous %}
+                <a href="?page={{ asignaturas.previous_page_number }}">Anterior</a>
+            {% endif %}
+
+                <span class="current">
+                    P&aacute;gina {{ asignaturas.number }} de {{ asignaturas.paginator.num_pages }}.
+                </span>
+
+            {% if asignaturas.has_next %}
+                <a href="?page={{ asignaturas.next_page_number }}">Siguiente</a>
+            {% endif %}
+            </span>
+        </div>
+        <br/>
+        {% endif%}
+    </div>
+    <div class="col-md-offset-10 col-md-2">
+        <a href="{% url 'miPanel' %}">Volver</a> |
+        <a href="{% url 'logout' %}">Logout</a>
     </div>
 </div>
 <!-- /container -->
