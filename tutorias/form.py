@@ -14,19 +14,23 @@ class UserForm(forms.Form):
     dni = forms.CharField(label="Dni", max_length=10)
     grado = forms.CharField(label="Grados", max_length=10, required=False)
 
+
 class UserRemoveForm(forms.Form):
     username = forms.CharField(label="Usuario", max_length=50)
 
+
 class UserReadForm(forms.Form):
-     username = forms.CharField(label="Usuario", max_length=50)
+    username = forms.CharField(label="Usuario", max_length=50)
 
 
 class GradoForm(forms.Form):
     titulo = forms.CharField(label="Titulo", max_length=100)
     identificador = forms.CharField(label="Identificador", max_length=3)
 
+
 class GradoRemoveForm(forms.Form):
     identificador = forms.CharField(label="Identificador", max_length=3)
+
 
 DIAS_DE_LA_SEMANA = (
     ('L', 'Lunes'),
@@ -42,18 +46,22 @@ class HorarioForm(forms.Form):
                                    label="Dia de la Semana")
     hora_inicio = forms.TimeField(widget=forms.TimeInput(format='%H:%M', attrs={'class': 'form-control'}), label="Hora")
 
+
 class AsignaturaForm(forms.Form):
     nombre = forms.CharField(max_length=100)
     codigo = forms.CharField(max_length=6)
     curso = forms.CharField(max_length=1)
     grado = forms.CharField(max_length=10)
 
+
 class AsignaturaRemoveForm(forms.Form):
     nombre = forms.CharField(max_length=100)
     grado = forms.CharField(max_length=10)
 
+
 class AsignaturaRemoveForm(forms.Form):
     nombre = forms.CharField(max_length=100)
+
 
 class AsignaturaReadForm(forms.Form):
     nombre = forms.CharField(max_length=100)
@@ -67,4 +75,15 @@ class AddAsignaturasForm(forms.Form):
             sublista = (asig.codigo, asig.nombre)
             lista = lista + (sublista,)
         super(AddAsignaturasForm, self).__init__(*args, **kwargs)
+        self.fields['choices'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=lista)
+
+
+class AddGradosForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        grados = kwargs.pop('grados')
+        lista = ()
+        for grado in grados:
+            sublista = (grado.identificador, grado.titulo)
+            lista = lista + (sublista,)
+        super(AddGradosForm, self).__init__(*args, **kwargs)
         self.fields['choices'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=lista)

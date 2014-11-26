@@ -9,46 +9,51 @@
 <body>
 <div class="container">
     <div class="col-lg-12 tituloLogin text-center">
-        <img src="/static/img/logo2.png" />
+        <img src="/static/img/logo2.png"/>
     </div>
 
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
             {% if user.is_superuser %}
-                <div class="col-md-5 col-md-offset-3">
-                    <h2>Panel Administrador:</h2>
-                    <h3>Usuarios <span class="badge">{{datos.usuarios}}</span></h3>
-                    <a href="{% url 'add_users' %}" class="btn btn-primary btn-xs saltoLinea">A&ntilde;adir usuario</a><br />
-                    <a href="{% url 'read_user' %}" class="btn btn-primary btn-xs saltoLinea">Ver usuarios</a><br />
-                    <a href="{% url 'remove_user' %}" class="btn btn-primary btn-xs saltoLinea">Eliminar usuario</a><br />
-                    <hr />
-                    <h3>Grados <span class="badge">{{datos.grados}}</span></h3>
-                    <a href="{% url 'add_grado' %}" class="btn btn-primary btn-xs saltoLinea">A&ntilde;adir grado</a><br />
-                    <a href="{% url 'remove_grado' %}" class="btn btn-primary btn-xs saltoLinea">Eliminar grado</a><br />
-                    <hr />
-                    <h3>Asignaturas <span class="badge">{{datos.asignaturas}}</span></h3>
-                    <a href="{% url 'add_asignatura' %}" class="btn btn-primary btn-xs saltoLinea">A&ntilde;adir asignatura</a><br />
-                    <a href="{% url 'read_asignatura' %}" class="btn btn-primary btn-xs saltoLinea">Ver asignaturas</a><br />
-                    <a href="{% url 'remove_asignatura' %}" class="btn btn-primary btn-xs saltoLinea">Eliminar asignatura</a><br />
-                </div>
-            {% elif user.es_profesor %}
-                <div class="col-md-5 col-md-offset-3">
-                    <h2>Panel Profesor:</h2>
-                    <a href="{% url 'add_horario' %}" class="btn btn-primary btn-xs saltoLinea">A&ntilde;adir horario</a><br />
-                    <a href="{% url 'misHorarios' %}" class="btn btn-primary btn-xs saltoLinea">Ver mis horarios</a><br />
-                    <a href="{% url 'notificaciones_profesor' %}" class="btn btn-primary btn-xs saltoLinea">Notificaciones  <span class="badge">{{datos.reservas}}</span></a>
-                </div>
-            {% else %}
-                <div class="col-md-5 col-md-offset-3">
-                    <h2>Panel Alumno:</h2>
+            <div class="col-md-5 col-md-offset-3">
+                <h2>Panel Administrador:</h2>
 
-                </div>
+                <h3>Usuarios <span class="badge">{{datos.usuarios}}</span></h3>
+                <a href="{% url 'add_users' %}" class="btn btn-primary btn-xs saltoLinea">A&ntilde;adir usuario</a><br/>
+                <a href="{% url 'read_user' %}" class="btn btn-primary btn-xs saltoLinea">Ver usuarios</a><br/>
+                <a href="{% url 'remove_user' %}" class="btn btn-primary btn-xs saltoLinea">Eliminar usuario</a><br/>
+                <hr/>
+                <h3>Grados <span class="badge">{{datos.grados}}</span></h3>
+                <a href="{% url 'add_grado' %}" class="btn btn-primary btn-xs saltoLinea">A&ntilde;adir grado</a><br/>
+                <a href="{% url 'remove_grado' %}" class="btn btn-primary btn-xs saltoLinea">Eliminar grado</a><br/>
+                <hr/>
+                <h3>Asignaturas <span class="badge">{{datos.asignaturas}}</span></h3>
+                <a href="{% url 'add_asignatura' %}" class="btn btn-primary btn-xs saltoLinea">A&ntilde;adir
+                    asignatura</a><br/>
+                <a href="{% url 'read_asignatura' %}" class="btn btn-primary btn-xs saltoLinea">Ver asignaturas</a><br/>
+                <a href="{% url 'remove_asignatura' %}" class="btn btn-primary btn-xs saltoLinea">Eliminar
+                    asignatura</a><br/>
+            </div>
+            {% elif user.es_profesor %}
+            <div class="col-md-5 col-md-offset-3">
+                <h2>Panel Profesor:</h2>
+                <a href="{% url 'add_horario' %}" class="btn btn-primary btn-xs saltoLinea">A&ntilde;adir
+                    horario</a><br/>
+                <a href="{% url 'misHorarios' %}" class="btn btn-primary btn-xs saltoLinea">Ver mis horarios</a><br/>
+                <a href="{% url 'notificaciones_profesor' %}" class="btn btn-primary btn-xs saltoLinea">Notificaciones
+                    <span class="badge">{{datos.reservas}}</span></a>
+            </div>
+            {% else %}
+            <div class="col-md-5 col-md-offset-3">
+                <h2>Panel Alumno:</h2>
+                <a href="{% url 'pedir_tutoria' %}" class="btn btn-primary btn-xs saltoLinea">Pedir tutoria</a><br/>
+            </div>
             {% endif %}
         </div>
     </div>
 
     <div class="col-md-offset-10 col-md-1">
-        <a href="{% url 'logout' %}"class="btn btn-danger btn-xs saltoLinea">Logout</a>
+        <a href="{% url 'logout' %}" class="btn btn-danger btn-xs saltoLinea">Logout</a>
     </div>
 </div>
 <!-- /container -->

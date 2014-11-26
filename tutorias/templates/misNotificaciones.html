@@ -38,7 +38,7 @@
                         <td>
                             <button class="btn btn-success" name="aceptar">Aceptar</button>
                         </td>
-                        <td><input type="text" name="texto" /></td>
+                        <td><input type="text" name="texto"/></td>
                         <td>
                             <button class="btn btn-danger" name="declinar">Declinar</button>
                         </td>
@@ -69,6 +69,88 @@
                 {% endfor %}
                 </tbody>
             </table>
+
+            <h2>Historial Aceptadas</h2>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>D&iacute;a</th>
+                    <th>Horario</th>
+                    <th>Alumno</th>
+                    <th>Mensaje</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for acept in aceptadas%}
+                <tr>
+                    <td>{{acept.dia}}</td>
+                    <td>{{acept.horarios}}</td>
+                    <td>{{acept.alumnos}}</td>
+                    <td>{{acept.mensajeAlumno}}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            {% if aceptadas|length > 0 %}
+            <div class="pagination">
+            <span class="step-links">
+            {% if aceptadas.has_previous %}
+                <a href="?page_a={{ aceptadas.previous_page_number }}">Anterior</a>
+            {% endif %}
+
+                <span class="current">
+                    P&aacute;gina {{ aceptadas.number }} de {{ aceptadas.paginator.num_pages }}.
+                </span>
+
+            {% if aceptadas.has_next %}
+                <a href="?page_a={{ aceptadas.next_page_number }}">Siguiente</a>
+            {% endif %}
+            </span>
+            </div>
+
+            {% endif %}
+
+            <h2>Historial Canceladas</h2>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>D&iacute;a</th>
+                    <th>Horario</th>
+                    <th>Alumno</th>
+                    <th>Mensaje</th>
+                    <th>Mensaje Profesor</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for canc in canceladas%}
+                <tr>
+                    <td>{{canc.dia}}</td>
+                    <td>{{canc.horarios}}</td>
+                    <td>{{canc.alumnos}}</td>
+                    <td>{{canc.mensajeAlumno}}</td>
+                    <td>{{canc.mensajeCancel}}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% if canceladas|length > 0 %}
+            <div class="pagination">
+            <span class="step-links">
+            {% if canceladas.has_previous %}
+                <a href="?page_c={{ canceladas.previous_page_number }}">Anterior</a>
+            {% endif %}
+
+                <span class="current">
+                    P&aacute;gina {{ canceladas.number }} de {{ canceladas.paginator.num_pages }}.
+                </span>
+
+            {% if canceladas.has_next %}
+                <a href="?page_c={{ canceladas.next_page_number }}">Siguiente</a>
+            {% endif %}
+            </span>
+            </div>
+            {% endif %}
         </div>
     </div>
 

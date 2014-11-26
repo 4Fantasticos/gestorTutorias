@@ -17,11 +17,9 @@ User.add_to_class('es_profesor', models.BooleanField(default=False, blank=True))
 MÉTODOS MODELO USER
 """
 
-
 def getAsignaturas(self):
     lista = self.asignatura_set.all()
     return lista
-
 
 User.add_to_class('getAsignaturas', getAsignaturas)
 
@@ -33,7 +31,8 @@ MODELO GRADO
 class Grado(models.Model):
     titulo = models.CharField(max_length=200)
     identificador = models.CharField(max_length=3)
-    usuarios = models.ManyToManyField(User)
+    usuarios = models.ManyToManyField(User, related_name="usuarios")
+    profesores = models.ManyToManyField(User, related_name="profesores")
 
     def __unicode__(self):
         return self.titulo
@@ -76,7 +75,8 @@ class Asignatura(models.Model):
     codigo = models.CharField(max_length=6)
     grados = models.ForeignKey(Grado)
     curso = models.CharField(max_length=1)
-    usuarios = models.ManyToManyField(User)
+    usuarios = models.ManyToManyField(User, related_name="usuarios_asignatura")
+    profesores = models.ManyToManyField(User, related_name="profesores_asignatura")
 
     def __unicode__(self):
         return str(self.codigo) + " - " + self.nombre
@@ -102,11 +102,11 @@ class Reserva(models.Model):
     mensajeCancel = models.CharField(max_length=500, blank=True)
     dia = models.DateField()
     alumnos = models.ForeignKey(User, related_name='alumnos', null=True)
-    horario = models.ForeignKey(Horario)
+    horario = models.ForeignKey(Horario, null=True)
     profesor = models.ForeignKey(User, related_name='profesor', null=True)
 
     def __unicode__(self):
-        return self.id
+        return str(self.id)
 
     class Meta:
         ordering = ('dia',)

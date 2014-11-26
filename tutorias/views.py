@@ -94,10 +94,13 @@ def add_users(request):
             user.save()
             if not es_profesor:
                 g = Grado.objects.get(identificador=grado_identificador)
-                user.grado_set.add(g)
+                g.usuarios.add(user)
                 request.session['alumno'] = user.id
                 request.session['grado'] = grado_identificador
                 return HttpResponseRedirect(reverse('add_asignaturas_alumno'))
+            elif es_profesor:
+                request.session['profesor'] = user.id
+                return HttpResponseRedirect(reverse('add_grados_profesor'))
             return HttpResponseRedirect(reverse('miPanel'))
         else:
             grados = Grado.objects.all()
@@ -117,13 +120,58 @@ def addAsignaturasAlumnos(request):
         form = AddAsignaturasForm(request.POST, asignaturas=asignaturas)
         if form.is_valid():
             for item in form.cleaned_data['choices']:
-                user.asignatura_set.add(item)
+                asig = Asignatura.objects.get(codigo=item)
+                asig.usuarios.add(user)
             return HttpResponseRedirect(reverse('miPanel'))
         else:
             form = AddAsignaturasForm(request.POST, asignaturas=asignaturas)
             return render_to_response('formAddAsignaturas.html', {'form': form, 'asignaturas': asignaturas}, context)
     form = AddAsignaturasForm(asignaturas=asignaturas)
     return render_to_response('formAddAsignaturas.html', {'form': form, 'asignaturas': asignaturas}, context)
+
+
+def addGradosProfesor(request):
+    context = RequestContext(request)
+    user = get_object_or_404(User, pk=request.session['profesor'])
+    grados = Grado.objects.all()
+    if request.method == 'POST':
+        form = AddGradosForm(request.POST, grados=grados)
+        if form.is_valid():
+            for item in form.cleaned_data['choices']:
+                grado = Grado.objects.get(identificador=item)
+                grado.profesores.add(user)
+        request.session['profesor'] = user.id
+        return HttpResponseRedirect(reverse('add_asignaturas_profesor'))
+    else:
+        form = AddGradosForm(request.POST, grados=grados)
+        return render_to_response('formAddGrados.html', {'form': form, 'grados': grados}, context)
+    form = AddGradosForm(grados=grados)
+    return render_to_response('formAddGrados.html', {'form': form, 'grados': grados}, context)
+
+
+def addAsignaturasProfesor(request):
+    context = RequestContext(request)
+    user = get_object_or_404(User, pk=request.session['profesor'])
+    listaAsignaturas = []
+    grados = Grado.objects.filter(profesores=user)
+    for grado in grados:
+        asignaturas = Asignatura.objects.filter(grados=grado)
+        for asignatura in asignaturas:
+            listaAsignaturas.append(asignatura)
+    if request.method == 'POST':
+        form = AddAsignaturasForm(request.POST, asignaturas=asignaturas)
+        if form.is_valid():
+            for item in form.cleaned_data['choices']:
+                asig = Asignatura.objects.get(codigo=item)
+                asig.profesores.add(user)
+            return HttpResponseRedirect(reverse('miPanel'))
+        else:
+            form = AddAsignaturasForm(request.POST, asignaturas=asignaturas)
+            return render_to_response('formAddAsignaturas.html',
+                                      {'profesor': True, 'form': form, 'asignaturas': asignaturas}, context)
+    form = AddAsignaturasForm(asignaturas=asignaturas)
+    return render_to_response('formAddAsignaturas.html', {'profesor': True, 'form': form, 'asignaturas': asignaturas},
+                              context)
 
 
 def add_horario(request):
@@ -304,9 +352,38 @@ def notificacionesProfesor(request):
         id = request.POST.get('id')
         textoProfesor = request.POST.get('texto')
         reserva = Reserva.objects.get(id=id)
+        reserva.mensajeCancel = textoProfesor
         reserva.estado = 'C'
         reserva.save()
     notificaciones = Reserva.objects.filter(profesor=request.user).filter(estado='P')
     reservas = Reserva.objects.filter(profesor=request.user).filter(estado='R').filter(dia__gt=datetime.now)
-    return render_to_response('misNotificaciones.html', {'notificaciones': notificaciones, 'reservas': reservas},
+    aceptadas_lista = Reserva.objects.filter(profesor=request.user).filter(estado='R').filter(dia__lt=datetime.now)
+    paginator_aceptadas = Paginator(aceptadas_lista, 10)
+    page_aceptadas = request.GET.get('page_a')
+    try:
+        aceptadas = paginator_aceptadas.page(page_aceptadas)
+    except PageNotAnInteger:
+        aceptadas = paginator_aceptadas.page(1)
+    except EmptyPage:
+        aceptadas = paginator_aceptadas.page(paginator_aceptadas.num_pages)
+    canceladas_lista = Reserva.objects.filter(profesor=request.user).filter(estado='C')
+    paginator_canceladas = Paginator(canceladas_lista, 10)
+    page_canceladas = request.GET.get('page_c')
+    try:
+        canceladas = paginator_canceladas.page(page_canceladas)
+    except PageNotAnInteger:
+        canceladas = paginator_canceladas.page(1)
+    except EmptyPage:
+        canceladas = paginator_canceladas.page(paginator_canceladas.num_pages)
+    return render_to_response('misNotificaciones.html',
+                              {'notificaciones': notificaciones, 'reservas': reservas, 'canceladas': canceladas,
+                               'aceptadas': aceptadas},
                               context)
+
+
+def pedirTutoria(request):
+    usuario = request.user
+    grados = usuario.grado_set.all()
+    profesores = []
+    for grado in grados:
+        profesores.append(grado.pr)

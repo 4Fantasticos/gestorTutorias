@@ -25,7 +25,11 @@ urlpatterns = patterns('',
                        #Panel
                        url(r'^miPanel/$', views.miPanel, name='miPanel'),
                        url(r'^miPanel/addAsignaturasAlumno', views.addAsignaturasAlumnos, name='add_asignaturas_alumno'),
+                       url(r'^miPanel/addGradosProfesor', views.addGradosProfesor, name='add_grados_profesor'),
+                       url(r'^miPanel/addAsignaturasProfesor', views.addAsignaturasProfesor, name='add_asignaturas_profesor'),
                        url(r'^miPanel/notificaciones', views.notificacionesProfesor, name='notificaciones_profesor'),
+                       #Alumnos
+                       url(r'^miPanel/pedirTutoria', views.pedirTutoria, name='pedir_tutoria'),
                        #Profesor
                        url(r'^miPanel/misNotificaciones',views.notificacionesProfesor, name='mis_notificaciones'),
                        #logout
