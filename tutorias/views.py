@@ -382,8 +382,11 @@ def notificacionesProfesor(request):
 
 
 def pedirTutoria(request):
+    context = RequestContext(request)
     usuario = request.user
-    grados = usuario.grado_set.all()
-    profesores = []
-    for grado in grados:
-        profesores.append(grado.pr)
+    asignaturas = Asignatura.objects.filter(usuarios=usuario)
+    profesores = {}
+    for asignatura in asignaturas:
+        profesores[asignatura.nombre] = asignatura.profesores.all()
+    print profesores
+    return render_to_response('misAsignaturas.html', {'profesores': profesores}, context)
