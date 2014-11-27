@@ -31,6 +31,9 @@ class GradoForm(forms.Form):
 class GradoRemoveForm(forms.Form):
     identificador = forms.CharField(label="Identificador", max_length=3)
 
+class GradoReadForm(forms.Form):
+    titulo = forms.CharField(label="Titulo", max_length=100)
+
 
 DIAS_DE_LA_SEMANA = (
     ('L', 'Lunes'),

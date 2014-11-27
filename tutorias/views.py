@@ -340,6 +340,26 @@ def read_asignatura(request):
     form = AsignaturaReadForm()
     return render_to_response('readAsignatura.html', {'form': form, 'asignaturas': asignaturas}, context)
 
+def read_grado(request):
+    context = RequestContext(request)
+    if request.method == 'POST':
+        form = GradoReadForm(request.POST)
+        if form.is_valid():
+            titulo = form.cleaned_data['titulo']
+            grado = Grado.objects.filter(titulo__icontains=titulo)
+            return render_to_response('readGrado.html', {'form': form, 'grado': grado}, context)
+    grado_lista = Grado.objects.all()
+    paginator = Paginator(grado_lista, 10)
+    page = request.GET.get('page')
+    try:
+        grados = paginator.page(page)
+    except PageNotAnInteger:
+        grados = paginator.page(1)
+    except EmptyPage:
+        grados = paginator.page(paginator.num_pages)
+    form = AsignaturaReadForm()
+    return render_to_response('readGrado.html', {'form': form, 'grados': grados}, context)
+
 
 def notificacionesProfesor(request):
     context = RequestContext(request)
