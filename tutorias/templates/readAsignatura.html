@@ -33,6 +33,7 @@
                 <th>Codigo</th>
                 <th>Grado</th>
                 <th>Curso</th>
+                <th>Editar</th>
             </tr>
             {% for as in asignatura %}
             <tr>
@@ -47,6 +48,11 @@
                 </td>
                 <td class="active">
                     {{as.curso}}
+                </td>
+                <td class="active">
+                    <form action="{% url 'update_asignatura' %}" method="get"> {% csrf_token %}
+                        <button class="btn btn-link" name="id" value="{{as.id}}">Editar {{as.nombre}}</button>
+                    </form>
                 </td>
             </tr>
             {% endfor %}

@@ -410,3 +410,38 @@ def pedirTutoria(request):
         profesores[asignatura.nombre] = asignatura.profesores.all()
     print profesores
     return render_to_response('misAsignaturas.html', {'profesores': profesores}, context)
+
+def update_asignatura(request):
+    context = RequestContext(request)
+
+    if request.method == 'POST':
+        form = AsignaturaUpdateForm(request.POST)
+
+        if form.is_valid():
+            nombre = form.cleaned_data['nombre']
+            codigo = form.cleaned_data['codigo']
+            curso = form.cleaned_data['curso']
+
+            asignatura = Asignatura.objects.get(codigo=codigo)
+            asignatura.nombre = nombre
+            asignatura.codigo = codigo
+            asignatura.curso = curso
+
+            asignatura.save()
+
+            asignaturas_lista = Asignatura.objects.all()
+            paginator = Paginator(asignaturas_lista, 10)
+            page = request.GET.get('page')
+            try:
+                asignaturas = paginator.page(page)
+            except PageNotAnInteger:
+                asignaturas = paginator.page(1)
+            except EmptyPage:
+                asignaturas = paginator.page(paginator.num_pages)
+            form = AsignaturaReadForm()
+            return render_to_response('readAsignatura.html', {'form': form, 'asignaturas': asignaturas}, context)
+    id = request.GET.get('id')
+    asignatura = Asignatura.objects.get(id=id)
+    form = AsignaturaUpdateForm()
+    return render_to_response('updateAsignatura.html', {'form': form, 'asignatura': asignatura}, context)
+
