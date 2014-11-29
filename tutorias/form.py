@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.forms.widgets import ChoiceInput
 
 
+
 class UserForm(forms.Form):
     username = forms.CharField(label="Usuario", max_length=50)
     first_name = forms.CharField(label="Nombre", max_length=50)
@@ -48,6 +49,7 @@ class HorarioForm(forms.Form):
     dia_semana = forms.ChoiceField(widget=forms.Select(attrs={'class': 'form-control'}), choices=DIAS_DE_LA_SEMANA,
                                    label="Dia de la Semana")
     hora_inicio = forms.TimeField(widget=forms.TimeInput(format='%H:%M', attrs={'class': 'form-control'}), label="Hora")
+    hora_final = forms.TimeField(widget=forms.TimeInput(format='%H:%M', attrs={'class': 'form-control'}), label="Hora")
 
 
 class AsignaturaForm(forms.Form):

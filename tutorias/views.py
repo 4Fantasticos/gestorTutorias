@@ -9,6 +9,7 @@ from django.template import RequestContext
 from django.utils.datetime_safe import datetime
 from tutorias.models import *
 from tutorias.form import *
+import datetime
 
 
 def esProfesor(user):
@@ -184,9 +185,18 @@ def add_horario(request):
             user = request.user
             dia_semana = form.cleaned_data['dia_semana']
             hora_inicio = form.cleaned_data['hora_inicio']
-
-            horario = Horario(dia_semana=dia_semana, hora_inicio=hora_inicio, profesor=user)
-            horario.save()
+            hora_final = form.cleaned_data['hora_final']
+            date_inicio = datetime.datetime.combine(datetime.date.today(),hora_inicio)
+            date_fin = datetime.datetime.combine(datetime.date.today(),hora_final)
+            diff = date_fin - date_inicio
+            minutos = diff.total_seconds()/60
+            intervalos = minutos//15
+            mas15 = datetime.timedelta(0,900)
+            for i in range(int(intervalos)):
+                horario = Horario(dia_semana=dia_semana, hora_inicio=date_inicio.time(),profesor=user)
+                horario.save()
+                date_inicio=date_inicio+mas15
+            
 
             return HttpResponseRedirect(reverse('miPanel'))
         else:

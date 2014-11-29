@@ -18,11 +18,17 @@
             <div class="form-group">
                 {{form.dia_semana}}
             </div>
-            <div class="form-group">
+            <div class="form-group"> Hora inicio
                 {% if form.hora_inicio.errors %}
                 <label class="control-label alert-danger">La hora debe tener el formato: HH:MM</label>
                 {% endif %}
                 {{form.hora_inicio }}
+            </div>
+             <div class="form-group"> Hora final
+                {% if form.hora_final.errors %}
+                <label class="control-label alert-danger">La hora debe tener el formato: HH:MM</label>
+                {% endif %}
+                {{form.hora_final }}
             </div>
             <button type="submit" class="btn btn-default" name="guardar">Guardar</button>
         </form>
