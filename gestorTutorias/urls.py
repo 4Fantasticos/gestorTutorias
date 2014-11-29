@@ -16,6 +16,7 @@ urlpatterns = patterns('',
                        url(r'^admin/addGrado/$', views.add_grado, name='add_grado'),
                        url(r'^admin/removeGrado/$', views.remove_grado, name='remove_grado'),
                        url(r'^admin/readGrado/$', views.read_grado, name='read_grado'),
+                       url(r'^admin/updateGrado/$', views.update_grado, name='update_grado'),
                        #Asignaturas
                        url(r'^admin/addAsignatura/$', views.add_asignatura, name='add_asignatura'),
                        url(r'^admin/removeAsignatura/$', views.remove_asignatura, name='remove_asignatura'),

@@ -455,3 +455,33 @@ def update_asignatura(request):
     form = AsignaturaUpdateForm()
     return render_to_response('updateAsignatura.html', {'form': form, 'asignatura': asignatura}, context)
 
+def update_grado(request):
+    context = RequestContext(request)
+
+    if request.method == 'POST':
+        form = GradoForm(request.POST)
+
+        if form.is_valid():
+            titulo = form.cleaned_data['titulo']
+            identificador = form.cleaned_data['identificador']
+
+            grado = Grado.objects.get(identificador=identificador)
+            grado.titulo=titulo
+
+            grado.save()
+
+            grado_lista = Grado.objects.all()
+            paginator = Paginator(grado_lista, 10)
+            page = request.GET.get('page')
+            try:
+                grados = paginator.page(page)
+            except PageNotAnInteger:
+                grados = paginator.page(1)
+            except EmptyPage:
+                grados = paginator.page(paginator.num_pages)
+            return render_to_response('readGrado.html', {'form': form, 'grados': grados}, context)
+
+    id=request.GET.get('id')
+    grado= Grado.objects.get(id=id)
+    form = GradoUpdateForm()
+    return render_to_response('updateGrado.html', {'form': form, 'grado': grado}, context)

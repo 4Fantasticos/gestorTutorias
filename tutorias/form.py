@@ -97,3 +97,7 @@ class AsignaturaUpdateForm(forms.Form):
     nombre = forms.CharField(max_length=100)
     codigo = forms.CharField(max_length=6)
     curso = forms.CharField(max_length=1)
+
+class GradoUpdateForm(forms.Form):
+    titulo = forms.CharField(label="Titulo", max_length=100)
+    identificador = forms.CharField(label="Identificador", max_length=3)
