@@ -92,3 +92,8 @@ class AddGradosForm(forms.Form):
             lista = lista + (sublista,)
         super(AddGradosForm, self).__init__(*args, **kwargs)
         self.fields['choices'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=lista)
+
+class AsignaturaUpdateForm(forms.Form):
+    nombre = forms.CharField(max_length=100)
+    codigo = forms.CharField(max_length=6)
+    curso = forms.CharField(max_length=1)

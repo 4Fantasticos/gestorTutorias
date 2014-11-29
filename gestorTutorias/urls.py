@@ -20,6 +20,7 @@ urlpatterns = patterns('',
                        url(r'^admin/addAsignatura/$', views.add_asignatura, name='add_asignatura'),
                        url(r'^admin/removeAsignatura/$', views.remove_asignatura, name='remove_asignatura'),
                        url(r'^admin/readAsignatura/$', views.read_asignatura, name='read_asignatura'),
+                       url(r'^admin/updateAsignatura/$', views.update_asignatura, name='update_asignatura'),
                        #Horarios
                        url(r'^admin/addHorario/$', views.add_horario, name='add_horario'),
                        url(r'^misHorarios/$', views.mis_horarios, name='misHorarios'),
