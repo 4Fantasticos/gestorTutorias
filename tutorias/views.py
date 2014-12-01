@@ -490,13 +490,13 @@ def update_grado(request):
     return render_to_response('updateGrado.html', {'form': form, 'grado': grado}, context)
 
 def horarios_profesores(request, profesor_id):
+    context = RequestContext(request)
     horarios = Horario.objects.filter(profesor=profesor_id)
-    nombre = ""
     hoy = datetime.datetime.now()
-
-    for h in horarios:
-        nombre = h.profesor
-    return HttpResponse("Plantilla por hacer %s" % nombre)
+    dossemanas = hoy + datetime.timedelta(14, 0)
+    reservas = Reserva.objects.filter(profesor=profesor_id).filter(date__range=[hoy, dossemanas])
+    return render_to_response('crearReserva.html', {'horarios': horarios, 'reservas': reservas,
+                                                    'profesor_id': profesor_id}, context)
 
 def update_user(request):
     context = RequestContext(request)
