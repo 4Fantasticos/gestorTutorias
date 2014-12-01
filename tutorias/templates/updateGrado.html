@@ -12,14 +12,14 @@
         <img src="/static/img/logo2.png"/>
     </div>
     <div class="col-md-5 col-md-offset-3">
-        <h2>Modificar Asignatura</h2>
+        <h2>Modificar Grado</h2>
 
         <form action="{% url 'update_grado' %}" method="post"> {% csrf_token %}
             <div class="form-group">
                 {% if form.titulo.errors %}
-                <label class="control-label alert-danger">El titulo es necesario</label>
+                <label class="control-label alert-danger">El t&iacute;tulo es necesario</label>
                 {% endif %}
-                <label class="sr-only" for="titulo">Titulo</label>
+                <label class="sr-only" for="titulo">T&iacute;tulo</label>
                 <input type="text" class="form-control" id="titulo" name="titulo"
                        value="{{grado.titulo}}">
             </div>

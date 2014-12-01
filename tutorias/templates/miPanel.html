@@ -4,7 +4,7 @@
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/css/tutoria.css" rel="stylesheet">
     <meta charset="UTF-8">
-    <title>Inicio</title>
+    <title>Mi Panel</title>
 </head>
 <body>
 <div class="container">
@@ -21,17 +21,20 @@
                 <h3>Usuarios <span class="badge">{{datos.usuarios}}</span></h3>
                 <a href="{% url 'add_users' %}" class="btn btn-primary btn-xs saltoLinea">A&ntilde;adir usuario</a><br/>
                 <a href="{% url 'read_user' %}" class="btn btn-primary btn-xs saltoLinea">Ver usuarios</a><br/>
+               <!-- <a href="{% url 'update_user' %}" class="btn btn-primary btn-xs saltoLinea">Actualizar usuarios</a><br/>-->
                 <a href="{% url 'remove_user' %}" class="btn btn-primary btn-xs saltoLinea">Eliminar usuario</a><br/>
                 <hr/>
                 <h3>Grados <span class="badge">{{datos.grados}}</span></h3>
                 <a href="{% url 'add_grado' %}" class="btn btn-primary btn-xs saltoLinea">A&ntilde;adir grado</a><br/>
                 <a href="{% url 'read_grado' %}" class="btn btn-primary btn-xs saltoLinea">Ver grados</a><br/>
+               <!-- <a href="{% url 'update_grado' %}" class="btn btn-primary btn-xs saltoLinea">Actualizar grados</a><br/>-->
                 <a href="{% url 'remove_grado' %}" class="btn btn-primary btn-xs saltoLinea">Eliminar grado</a><br/>
                 <hr/>
                 <h3>Asignaturas <span class="badge">{{datos.asignaturas}}</span></h3>
                 <a href="{% url 'add_asignatura' %}" class="btn btn-primary btn-xs saltoLinea">A&ntilde;adir
                     asignatura</a><br/>
                 <a href="{% url 'read_asignatura' %}" class="btn btn-primary btn-xs saltoLinea">Ver asignaturas</a><br/>
+                <!--<a href="{% url 'update_asignatura' %}" class="btn btn-primary btn-xs saltoLinea">Actualizar asignaturas</a><br/>-->
                 <a href="{% url 'remove_asignatura' %}" class="btn btn-primary btn-xs saltoLinea">Eliminar
                     asignatura</a><br/>
             </div>
