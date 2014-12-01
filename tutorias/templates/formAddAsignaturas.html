@@ -12,12 +12,15 @@
         <img src="/static/img/logo2.png"/>
     </div>
     <div class="col-md-5 col-md-offset-3">
+        {% if form.choices.errors %}
+                <label class="control-label alert-danger">El nombre es necesario</label>
+                {% endif %}
         <h2>A&ntilde;adir Asignaturas</h2>
         {% if profesor %}
         <form action="{% url 'add_asignaturas_profesor' %}" method="post"> {% csrf_token %}
             <div class="form-group">
                 {% for asignatura in asignaturas %}
-                <input type="checkbox" value="{{asignatura.id}}" name="choices"/>{{asignatura.nombre}}
+                <input type="checkbox" value="{{asignatura.codigo}}" name="choices"/>{{asignatura.nombre}}
                 {% endfor %}
             </div>
 
@@ -28,7 +31,7 @@
         <form action="{% url 'add_asignaturas_alumno' %}" method="post"> {% csrf_token %}
             <div class="form-group">
                 {% for asignatura in asignaturas %}
-                <input type="checkbox" value="{{asignatura.id}}" name="choices"/>{{asignatura.nombre}}
+                <input type="checkbox" value="{{asignatura.codigo}}" name="choices"/>{{asignatura.nombre}}
                 {% endfor %}
             </div>
 

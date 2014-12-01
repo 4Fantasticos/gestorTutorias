@@ -416,10 +416,13 @@ def pedirTutoria(request):
     usuario = request.user
     asignaturas = Asignatura.objects.filter(usuarios=usuario)
     profesores = {}
+    codeasig = {}
     for asignatura in asignaturas:
         profesores[asignatura.nombre] = asignatura.profesores.all()
-    print profesores
-    return render_to_response('misAsignaturas.html', {'profesores': profesores}, context)
+        codeasig[asignatura.nombre] = asignatura.id
+    return render_to_response('misAsignaturas.html',
+                              {'profesores': profesores, 'codeasig': codeasig},
+                              context)
 
 def update_asignatura(request):
     context = RequestContext(request)
@@ -485,3 +488,12 @@ def update_grado(request):
     grado= Grado.objects.get(id=id)
     form = GradoUpdateForm()
     return render_to_response('updateGrado.html', {'form': form, 'grado': grado}, context)
+
+def horarios_profesores(request, profesor_id):
+    horarios = Horario.objects.filter(profesor=profesor_id)
+    nombre = ""
+    hoy = datetime.datetime.now()
+
+    for h in horarios:
+        nombre = h.profesor
+    return HttpResponse("Plantilla por hacer %s" % nombre)

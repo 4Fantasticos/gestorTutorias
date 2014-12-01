@@ -16,11 +16,16 @@
         <h2>Mis asignaturas</h2>
         {% for id in profesores.keys %}
             <h3>{{id}}</h3>
+        <p>Profesores:</p>
+            <ul>
             {% for prof in profesores|get_item:id %}
-                {% for horario in prof.horario_set.all %}
-                {{horario.hora_inicio}}<br />
+                <li>{{prof.first_name}} {{prof.last_name}}
+                <a href="{% url 'hprofesor' prof.id %}">Ver Horario</a></li>
+                <!--{% for horario in prof.horario_set.all %}
+                {{codeasig|get_item:id}} {{id}} {{horario.id}} {{horario.hora_inicio}} {{prof.id}}<br />
                 {% endfor %}
-            {% endfor %}
+            -->{% endfor %}
+                </ul>
         {% endfor%}
     </div>
 
