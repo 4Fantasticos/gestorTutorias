@@ -12,6 +12,7 @@ urlpatterns = patterns('',
                        url(r'^admin/addUser/$', views.add_users, name='add_users'),
                        url(r'^admin/removeUser/$', views.remove_user, name='remove_user'),
                        url(r'^admin/readUser/$', views.read_user, name='read_user'),
+                       url(r'^admin/updateUser/$', views.update_user, name='update_user'),
                        #Grados
                        url(r'^admin/addGrado/$', views.add_grado, name='add_grado'),
                        url(r'^admin/removeGrado/$', views.remove_grado, name='remove_grado'),
