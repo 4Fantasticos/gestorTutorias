@@ -103,7 +103,6 @@ class Reserva(models.Model):
     dia = models.DateField()
     alumnos = models.ForeignKey(User, related_name='alumnos', null=True)
     horario = models.ForeignKey(Horario, null=True)
-    profesor = models.ForeignKey(User, related_name='profesor', null=True)
 
     def __unicode__(self):
         return str(self.id)

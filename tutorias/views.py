@@ -501,9 +501,27 @@ def horarios_profesores(request, profesor_id):
     horarios = Horario.objects.filter(profesor=profesor_id)
     hoy = datetime.datetime.now()
     dossemanas = hoy + datetime.timedelta(14, 0)
-    reservas = Reserva.objects.filter(profesor=profesor_id).filter(date__range=[hoy, dossemanas])
-    return render_to_response('crearReserva.html', {'horarios': horarios, 'reservas': reservas,
-                                                    'profesor_id': profesor_id}, context)
+    lunes=[]
+    martes=[]
+    miercoles=[]
+    jueves=[]
+    viernes=[]
+    for h in horarios:
+        if h.dia_semana=='L':
+            lunes.append(h)
+        elif h.dia_semana=='M':
+            martes.append(h)
+        elif h.dia_semana=='X':
+            miercoles.append(h)
+        elif h.dia_semana=='J':
+            jueves.append(h)
+        else:
+            viernes.append(h)
+
+    reservas = Reserva.objects.filter(profesor=profesor_id).filter(dia__range=[hoy, dossemanas])
+    return render_to_response('crearReserva.html', {'lunes': lunes, 'martes': martes, 'miercoles': miercoles,
+                                                    'jueves': jueves, 'viernes': viernes, 'reservas': reservas,
+                                                    'profesor_id': profesor_id},context)
 
 def update_user(request):
     context = RequestContext(request)
