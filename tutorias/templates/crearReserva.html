@@ -18,13 +18,13 @@
         <h2>Tutor&iacute;a</h2>
         <select id="dia" class="form-control" name="dia_semana"
                 onchange="Dajaxice.tutorias.sayHello(escribe,{'data':{
-                                                                        'dia':$('#dia option:selected').text(),
+                                                                        'dia':$('#dia option:selected').val(),
                                                                         'profesor':{{profesor_id}},
                                                                         'alumno':{{request.user.id }}
                                                                         }})">
             <option>Seleccionar d&iacute;a</option>
             {% for dia in lista_dias %}
-            <option>{{dia|date:"d-m-Y - l"}}</option>
+            <option value="{{dia|date:'d-m-Y'}}">{{dia|date:"d-m-Y - l"}}</option>
             {% endfor %}
         </select>
 
@@ -43,6 +43,10 @@
 <script>
     function escribe(data){
         $('#oculto').show();
+        alert(data);
+        //REALLY?!
+        var horas = data.split(',');
+        alert(horas);
     }
 </script>
 <!-- /container -->
