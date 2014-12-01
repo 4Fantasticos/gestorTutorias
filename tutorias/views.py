@@ -499,29 +499,31 @@ def update_grado(request):
 def horarios_profesores(request, profesor_id):
     context = RequestContext(request)
     horarios = Horario.objects.filter(profesor=profesor_id)
+    lista_dias=[]
     hoy = datetime.datetime.now()
+    mas1dia = datetime.timedelta(1, 0)
     dossemanas = hoy + datetime.timedelta(14, 0)
-    lunes=[]
-    martes=[]
-    miercoles=[]
-    jueves=[]
-    viernes=[]
+    lunes, martes, miercoles, jueves, viernes = -1,-1,-1,-1,-1
     for h in horarios:
         if h.dia_semana=='L':
-            lunes.append(h)
+            lunes==0
         elif h.dia_semana=='M':
-            martes.append(h)
+            martes==1
         elif h.dia_semana=='X':
-            miercoles.append(h)
+            miercoles==2
         elif h.dia_semana=='J':
-            jueves.append(h)
+            jueves==3
         else:
-            viernes.append(h)
+            viernes==4
 
-    reservas = Reserva.objects.filter(profesor=profesor_id).filter(dia__range=[hoy, dossemanas])
-    return render_to_response('crearReserva.html', {'lunes': lunes, 'martes': martes, 'miercoles': miercoles,
-                                                    'jueves': jueves, 'viernes': viernes, 'reservas': reservas,
-                                                    'profesor_id': profesor_id},context)
+    while hoy != dossemanas:
+        d = hoy.weekday()
+        if d == lunes or d == martes or d == miercoles or d == jueves or d == viernes:
+            lista_dias.append(hoy)
+        hoy = hoy + mas1dia
+    reservas = Reserva.objects.filter(horario__profesor__id=profesor_id).filter(dia__range=[hoy, dossemanas])
+    return render_to_response('crearReserva.html', {'lista_dias': lista_dias, 'reservas': reservas,
+                                                    'profesor_id': profesor_id}, context)
 
 def update_user(request):
     context = RequestContext(request)
