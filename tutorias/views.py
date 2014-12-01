@@ -450,6 +450,10 @@ def update_asignatura(request):
                 asignaturas = paginator.page(paginator.num_pages)
             form = AsignaturaReadForm()
             return render_to_response('readAsignatura.html', {'form': form, 'asignaturas': asignaturas}, context)
+        else:
+            codigo = form.cleaned_data['codigo']
+            asignatura = Asignatura.objects.get(codigo=codigo)
+            return render_to_response('updateAsignatura.html', {'form': form, 'asignatura': asignatura}, context)
     id = request.GET.get('id')
     asignatura = Asignatura.objects.get(id=id)
     form = AsignaturaUpdateForm()
@@ -480,7 +484,10 @@ def update_grado(request):
             except EmptyPage:
                 grados = paginator.page(paginator.num_pages)
             return render_to_response('readGrado.html', {'form': form, 'grados': grados}, context)
-
+        else:
+            identificador = form.cleaned_data['identificador']
+            grado = Grado.objects.get(identificador=identificador)
+            return render_to_response('updateGrado.html', {'form': form, 'grado': grado}, context)
     id=request.GET.get('id')
     grado= Grado.objects.get(id=id)
     form = GradoUpdateForm()
