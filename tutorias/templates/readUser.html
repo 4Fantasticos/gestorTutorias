@@ -36,6 +36,7 @@
                 <th>DNI</th>
                 <th>Email</th>
                 <th>¿Profesor?</th>
+                <th>Editar</th>
             </tr>
             {% for us in users %}
             <tr>
@@ -60,6 +61,11 @@
                     {% else %}
                     No
                     {% endif %}
+                </td>
+                <td class="active">
+                    <form action="{% url 'update_user' %}" method="get"> {% csrf_token %}
+                        <button class="btn btn-link" name="username" value="{{us.username}}">Editar {{us.username}}</button>
+                    </form>
                 </td>
             </tr>
             {% endfor %}

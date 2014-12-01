@@ -497,3 +497,43 @@ def horarios_profesores(request, profesor_id):
     for h in horarios:
         nombre = h.profesor
     return HttpResponse("Plantilla por hacer %s" % nombre)
+
+def update_user(request):
+    context = RequestContext(request)
+
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            es_profesor = form.cleaned_data['es_profesor']
+            dni = form.cleaned_data['dni']
+            email = form.cleaned_data['email']
+
+            user = User.objects.get(username = username)
+            user.es_profesor = es_profesor
+            user.first_name = first_name
+            user.last_name = last_name
+            user.email = email
+            user.dni = dni
+            user.save()
+
+            usuarios_list = User.objects.exclude(username='admin')
+            paginator = Paginator(usuarios_list, 10)
+            page = request.GET.get('page')
+            try:
+                usuarios = paginator.page(page)
+            except PageNotAnInteger:
+                usuarios = paginator.page(1)
+            except EmptyPage:
+                usuarios = paginator.page(paginator.num_pages)
+            return render_to_response('readUser.html', {'form': form, 'usuarios': usuarios}, context)
+        else:
+            username = form.cleaned_data['username']
+            usuario = User.objects.get(username=username)
+            return render_to_response('updateUser.html', {'form': form, 'usuario': usuario}, context)
+    username=request.GET.get('username')
+    usuario= User.objects.get(username=username)
+    form = GradoUpdateForm()
+    return render_to_response('updateUser.html', {'form': form, 'usuario': usuario}, context)
