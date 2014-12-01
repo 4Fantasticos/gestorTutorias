@@ -11,6 +11,7 @@ Puede que realizar las pruebas unitarias y demás métricas de calidad sea más 
 - [Python 2.7](https://www.python.org/downloads/)
 - [Pip](https://pip.pypa.io/en/latest/installing.html)
 - Django 1.7
+- Dajaxice (Ajax y Django de forma facil)
 - virtualenv _Opcional_
 
 ###Instalación
@@ -23,6 +24,8 @@ hacemos la creación del entorno con el comando `virtualenv proyectoCalidad`
 
 Entramos dentro de la carpeta y después dentro de Script, ejecutamos **activate** y ya estará corriendo el entorno virtual. 
 Nos vamos a la carpeta principal e instalamos django con el comando `pip install Django`
+
+`pip install django-dajaxice`
 
 Hasta aquí para tener las herramientas de desarrollo, después descargar de Github el proyecto. 
 
