@@ -79,6 +79,7 @@ class AddAsignaturasForm(forms.Form):
         for asig in asignaturas:
             sublista = (asig.codigo, asig.nombre)
             lista = lista + (sublista,)
+        print lista
         super(AddAsignaturasForm, self).__init__(*args, **kwargs)
         self.fields['choices'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=lista)
 
