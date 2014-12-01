@@ -6,6 +6,8 @@
     <meta charset="UTF-8">
     <title>Crear reserva</title>
     {% load app_filters %}
+    {% load dajaxice_templatetags %}
+    {% dajaxice_js_import%}
 </head>
 <body>
 <div class="container">
@@ -13,30 +15,24 @@
         <img src="/static/img/logo2.png"/>
     </div>
     <div class="col-md-5 col-md-offset-3">
-        <h2>Mis asignaturas</h2>
-        {% for id in profesores.keys %}
-        <h3>{{id}}</h3>
-        <table class="table table-hover">
-            <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th></th>
-            </tr>
-            {% for prof in profesores|get_item:id %}
-            <tr>
-                <td>
-                    {{prof.first_name}}
-                </td>
-                <td>
-                    {{prof.last_name}}
-                </td>
-                <td>
-                    <a href="{% url 'hprofesor' prof.id %}">Ver Horario</a>
-                </td>
-            </tr>
+        <h2>Tutor&iacute;a</h2>
+        <select id="dia" class="form-control" name="dia_semana"
+                onchange="Dajaxice.tutorias.sayHello(escribe,{'data':{
+                                                                        'dia':$('#dia option:selected').text(),
+                                                                        'profesor':{{profesor_id}},
+                                                                        'alumno':{{request.user.id }}
+                                                                        }})">
+            <option>Seleccionar d&iacute;a</option>
+            {% for dia in lista_dias %}
+            <option>{{dia|date:"d-m-Y - l"}}</option>
             {% endfor %}
-        </table>
-        {% endfor %}
+        </select>
+
+        <div id="oculto" style="display:none;">
+            <select id="horas" class="form-control" name="horas">
+
+            </select>
+        </div>
     </div>
 
     <div class="col-md-offset-10 col-md-2">
@@ -44,7 +40,14 @@
         <a href="{% url 'logout' %}">Logout</a>
     </div>
 </div>
+<script>
+    function escribe(data){
+        $('#oculto').show();
+    }
+</script>
 <!-- /container -->
+<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
 <script src="./js/bootstrap.min.js"></script>
 </body>
+
 </html>

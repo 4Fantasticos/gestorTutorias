@@ -497,6 +497,10 @@ def update_grado(request):
     return render_to_response('updateGrado.html', {'form': form, 'grado': grado}, context)
 
 def horarios_profesores(request, profesor_id):
+
+    if request.is_ajax():
+        print "toma candela morena"
+        return HttpResponse("hola guapa")
     context = RequestContext(request)
     horarios = Horario.objects.filter(profesor=profesor_id)
     lista_dias=[]
@@ -506,20 +510,20 @@ def horarios_profesores(request, profesor_id):
     lunes, martes, miercoles, jueves, viernes = -1,-1,-1,-1,-1
     for h in horarios:
         if h.dia_semana=='L':
-            lunes==0
+            lunes=0
         elif h.dia_semana=='M':
-            martes==1
+            martes=1
         elif h.dia_semana=='X':
-            miercoles==2
+            miercoles=2
         elif h.dia_semana=='J':
-            jueves==3
+            jueves=3
         else:
-            viernes==4
+            viernes=4
 
-    while hoy != dossemanas:
+    while hoy.day != dossemanas.day:
         d = hoy.weekday()
         if d == lunes or d == martes or d == miercoles or d == jueves or d == viernes:
-            lista_dias.append(hoy)
+            lista_dias.append(hoy.date)
         hoy = hoy + mas1dia
     reservas = Reserva.objects.filter(horario__profesor__id=profesor_id).filter(dia__range=[hoy, dossemanas])
     return render_to_response('crearReserva.html', {'lista_dias': lista_dias, 'reservas': reservas,
