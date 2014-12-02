@@ -577,3 +577,5 @@ def reservar_tutoria(request):
             reserva.save()
 
             return HttpResponseRedirect(reverse('miPanel'))
+        else:
+            return HttpResponse("Esto es una mierda")
