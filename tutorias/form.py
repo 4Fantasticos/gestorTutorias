@@ -77,7 +77,7 @@ class AddAsignaturasForm(forms.Form):
         asignaturas = kwargs.pop('asignaturas')
         lista = ()
         for asig in asignaturas:
-            sublista = (asig.codigo, asig.nombre)
+            sublista = (asig.id, asig.nombre)
             lista = lista + (sublista,)
         print lista
         super(AddAsignaturasForm, self).__init__(*args, **kwargs)
@@ -89,7 +89,7 @@ class AddGradosForm(forms.Form):
         grados = kwargs.pop('grados')
         lista = ()
         for grado in grados:
-            sublista = (grado.identificador, grado.titulo)
+            sublista = (grado.id, grado.titulo)
             lista = lista + (sublista,)
         super(AddGradosForm, self).__init__(*args, **kwargs)
         self.fields['choices'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=lista)

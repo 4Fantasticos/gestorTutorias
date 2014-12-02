@@ -26,6 +26,7 @@ urlpatterns = patterns('',
                        url(r'^admin/removeAsignatura/$', views.remove_asignatura, name='remove_asignatura'),
                        url(r'^admin/readAsignatura/$', views.read_asignatura, name='read_asignatura'),
                        url(r'^admin/updateAsignatura/$', views.update_asignatura, name='update_asignatura'),
+                       url(r'^admin/estadisticas/$',views.metricas, name='estadisticas'),
                        #Horarios
                        url(r'^admin/addHorario/$', views.add_horario, name='add_horario'),
                        url(r'^misHorarios/$', views.mis_horarios, name='misHorarios'),

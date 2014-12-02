@@ -3,25 +3,12 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import user_passes_test
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
-from django.http.response import HttpResponse, HttpResponseRedirect
+from django.http.response import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from tutorias.models import *
 from tutorias.form import *
 import datetime
-
-
-def esProfesor(user):
-    return user.es_profesor
-
-
-def esALumno(user):
-    return not user.es_profesor
-
-
-def esAdmin(user):
-    return user.is_superuser
-
 
 def user_login(request):
     context = RequestContext(request)
@@ -47,8 +34,7 @@ def user_logout(request):
 
 
 '''@user_passes_test(esProfesor, login_url='/') NO ENTRA SI LA FUNCIÓN DEVUELVE TRUE'''
-
-
+@user_passes_test(lambda u: u.is_superuser, login_url='/')
 def add_grado(request):
     context = RequestContext(request)
 
@@ -69,7 +55,7 @@ def add_grado(request):
     form = GradoForm()
     return render_to_response('formularioGrado.html', {'form': form}, context)
 
-
+@user_passes_test(lambda u: u.is_superuser, login_url='/')
 def add_users(request):
     context = RequestContext(request)
 
@@ -110,7 +96,7 @@ def add_users(request):
     form = UserForm()
     return render_to_response('formularioUser.html', {'form': form, 'grados': grados}, context)
 
-
+@user_passes_test(lambda u: u.is_superuser, login_url='/')
 def addAsignaturasAlumnos(request):
     context = RequestContext(request)
     user = get_object_or_404(User, pk=request.session['alumno'])
@@ -120,7 +106,8 @@ def addAsignaturasAlumnos(request):
         form = AddAsignaturasForm(request.POST, asignaturas=asignaturas)
         if form.is_valid():
             for item in form.cleaned_data['choices']:
-                asig = Asignatura.objects.get(codigo=item)
+                print item
+                asig = Asignatura.objects.get(id=item)
                 asig.usuarios.add(user)
             return HttpResponseRedirect(reverse('miPanel'))
         else:
@@ -129,7 +116,7 @@ def addAsignaturasAlumnos(request):
     form = AddAsignaturasForm(asignaturas=asignaturas)
     return render_to_response('formAddAsignaturas.html', {'form': form, 'asignaturas': asignaturas}, context)
 
-
+@user_passes_test(lambda u: u.is_superuser, login_url='/')
 def addGradosProfesor(request):
     context = RequestContext(request)
     user = get_object_or_404(User, pk=request.session['profesor'])
@@ -138,7 +125,7 @@ def addGradosProfesor(request):
         form = AddGradosForm(request.POST, grados=grados)
         if form.is_valid():
             for item in form.cleaned_data['choices']:
-                grado = Grado.objects.get(identificador=item)
+                grado = Grado.objects.get(id=item)
                 grado.profesores.add(user)
         request.session['profesor'] = user.id
         return HttpResponseRedirect(reverse('add_asignaturas_profesor'))
@@ -148,7 +135,7 @@ def addGradosProfesor(request):
     form = AddGradosForm(grados=grados)
     return render_to_response('formAddGrados.html', {'form': form, 'grados': grados}, context)
 
-
+@user_passes_test(lambda u: u.is_superuser, login_url='/')
 def addAsignaturasProfesor(request):
     context = RequestContext(request)
     user = get_object_or_404(User, pk=request.session['profesor'])
@@ -162,7 +149,7 @@ def addAsignaturasProfesor(request):
         form = AddAsignaturasForm(request.POST, asignaturas=asignaturas)
         if form.is_valid():
             for item in form.cleaned_data['choices']:
-                asig = Asignatura.objects.get(codigo=item)
+                asig = Asignatura.objects.get(id=item)
                 asig.profesores.add(user)
             return HttpResponseRedirect(reverse('miPanel'))
         else:
@@ -173,7 +160,7 @@ def addAsignaturasProfesor(request):
     return render_to_response('formAddAsignaturas.html', {'profesor': True, 'form': form, 'asignaturas': asignaturas},
                               context)
 
-
+@user_passes_test(lambda u: u.is_superuser, login_url='/')
 def add_horario(request):
     context = RequestContext(request)
 
@@ -203,7 +190,7 @@ def add_horario(request):
     form = HorarioForm()
     return render_to_response('formularioHorario.html', {'form': form, 'dias': DIAS_DE_LA_SEMANA}, context)
 
-
+@user_passes_test(lambda u: u.is_superuser, login_url='/')
 def add_asignatura(request):
     context = RequestContext(request)
 
@@ -245,14 +232,14 @@ def miPanel(request):
     else:
         return render_to_response('miPanel.html', {}, context)
 
-
+@user_passes_test(lambda u: u.es_profesor, login_url='/')
 def mis_horarios(request):
     context = RequestContext(request)
     user = request.user
     horarios = Horario.objects.filter(profesor=user)
     return render_to_response('misHorarios.html', {'horarios': horarios}, context)
 
-
+@user_passes_test(lambda u: u.is_superuser, login_url='/')
 def remove_asignatura(request):
     context = RequestContext(request)
 
@@ -270,7 +257,7 @@ def remove_asignatura(request):
     form = AsignaturaRemoveForm()
     return render_to_response('removeAsignatura.html', {'form': form, 'asignaturas': asignaturas}, context)
 
-
+@user_passes_test(lambda u: u.is_superuser, login_url='/')
 def remove_grado(request):
     context = RequestContext(request)
 
@@ -288,7 +275,7 @@ def remove_grado(request):
     form = GradoRemoveForm()
     return render_to_response('removeGrado.html', {'form': form, 'grados': grados}, context)
 
-
+@user_passes_test(lambda u: u.is_superuser, login_url='/')
 def remove_user(request):
     context = RequestContext(request)
 
@@ -306,7 +293,7 @@ def remove_user(request):
     form = UserRemoveForm()
     return render_to_response('removeUser.html', {'form': form, 'users': users}, context)
 
-
+@user_passes_test(lambda u: u.is_superuser, login_url='/')
 def read_user(request):
     context = RequestContext(request)
     if request.method == 'POST':
@@ -327,7 +314,7 @@ def read_user(request):
     form = UserReadForm()
     return render_to_response('readUser.html', {'form': form, 'usuarios': usuarios}, context)
 
-
+@user_passes_test(lambda u: u.is_superuser, login_url='/')
 def read_asignatura(request):
     context = RequestContext(request)
     if request.method == 'POST':
@@ -348,7 +335,7 @@ def read_asignatura(request):
     form = AsignaturaReadForm()
     return render_to_response('readAsignatura.html', {'form': form, 'asignaturas': asignaturas}, context)
 
-
+@user_passes_test(lambda u: u.is_superuser, login_url='/')
 def read_grado(request):
     context = RequestContext(request)
     if request.method == 'POST':
@@ -369,7 +356,7 @@ def read_grado(request):
     form = AsignaturaReadForm()
     return render_to_response('readGrado.html', {'form': form, 'grados': grados}, context)
 
-
+@user_passes_test(lambda u: u.es_profesor, login_url='/')
 def notificacionesProfesor(request):
     context = RequestContext(request)
     if 'aceptar' in request.POST:
@@ -411,6 +398,7 @@ def notificacionesProfesor(request):
                                'aceptadas': aceptadas},
                               context)
 
+@user_passes_test(lambda u: not u.es_profesor, login_url='/')
 def notificacionesAlumno(request):
     context = RequestContext(request)
     notificaciones = Reserva.objects.filter(alumnos=request.user).filter(estado='P')
@@ -440,7 +428,7 @@ def notificacionesAlumno(request):
                                'aceptadas': aceptadas},
                               context)
 
-
+@user_passes_test(lambda u: not u.es_profesor, login_url='/')
 def pedirTutoria(request):
     context = RequestContext(request)
     usuario = request.user
@@ -454,7 +442,7 @@ def pedirTutoria(request):
                               {'profesores': profesores, 'codeasig': codeasig},
                               context)
 
-
+@user_passes_test(lambda u: u.is_superuser, login_url='/')
 def update_asignatura(request):
     context = RequestContext(request)
 
@@ -493,7 +481,7 @@ def update_asignatura(request):
     form = AsignaturaUpdateForm()
     return render_to_response('updateAsignatura.html', {'form': form, 'asignatura': asignatura}, context)
 
-
+@user_passes_test(lambda u: u.is_superuser, login_url='/')
 def update_grado(request):
     context = RequestContext(request)
 
@@ -528,7 +516,7 @@ def update_grado(request):
     form = GradoUpdateForm()
     return render_to_response('updateGrado.html', {'form': form, 'grado': grado}, context)
 
-
+@user_passes_test(lambda u: not u.es_profesor, login_url='/')
 def horarios_profesores(request, profesor_id):
     context = RequestContext(request)
     horarios = Horario.objects.filter(profesor=profesor_id)
@@ -558,7 +546,7 @@ def horarios_profesores(request, profesor_id):
     return render_to_response('crearReserva.html', {'lista_dias': lista_dias, 'reservas': reservas,
                                                     'profesor_id': profesor_id}, context)
 
-
+@user_passes_test(lambda u: u.is_superuser, login_url='/')
 def update_user(request):
     context = RequestContext(request)
 
@@ -599,7 +587,7 @@ def update_user(request):
     form = GradoUpdateForm()
     return render_to_response('updateUser.html', {'form': form, 'usuario': usuario}, context)
 
-
+@user_passes_test(lambda u: not u.es_profesor, login_url='/')
 def reservar_tutoria(request):
     context = RequestContext(request)
     form = ReservaTutoriasForm(request.POST)
@@ -619,3 +607,40 @@ def reservar_tutoria(request):
         return HttpResponseRedirect(reverse('miPanel'))
     else:
         return render_to_response('crearReserva.html', {'form':form}, context)
+
+@user_passes_test(lambda u: u.is_superuser, login_url='/')
+def metricas(request):
+    context = RequestContext(request)
+
+    alumnos = User.objects.filter(es_profesor=False)
+    max = -1
+    alumno_dic = {}
+    for alumno in alumnos:
+        num = Reserva.objects.filter(alumnos=alumno).count()
+        if num > max:
+            alumno_dic['alumno'] = alumno
+            alumno_dic['num'] = num
+            max = num
+
+    profesores = User.objects.filter(es_profesor=True)
+    profesores_dic = {}
+    for profesor in profesores:
+        profesor_datos = {}
+        total = Reserva.objects.filter(horario__profesor=profesor).count()
+        aceptadas = Reserva.objects.filter(horario__profesor=profesor).filter(estado='R').count()
+        canceladas = Reserva.objects.filter(horario__profesor=profesor).filter(estado='C').count()
+        profesor_datos['total'] = total
+        profesor_datos['aceptadas'] = aceptadas
+        profesor_datos['canceladas'] = canceladas
+        profesores_dic[profesor.username] = profesor_datos
+
+    grados = Grado.objects.all()
+    max = -1
+    grado_max = {}
+    for grado in grados:
+        num = User.objects.filter(usuarios=grado).count()
+        if num > max:
+            max = num
+            grado_max['grado'] = grado
+            grado_max['num'] = num
+    return render_to_response('estadisticas.html', {'alumno_dic':alumno_dic,'profesores_dic':profesores_dic,'grado_max':grado_max}, context)

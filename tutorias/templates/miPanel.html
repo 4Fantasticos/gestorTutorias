@@ -37,6 +37,8 @@
                 <!--<a href="{% url 'update_asignatura' %}" class="btn btn-primary btn-xs saltoLinea">Actualizar asignaturas</a><br/>-->
                 <a href="{% url 'remove_asignatura' %}" class="btn btn-primary btn-xs saltoLinea">Eliminar
                     asignatura</a><br/>
+
+                <a href="{% url 'estadisticas' %}" class="btn btn-primary btn-xs saltoLinea">Estadisticas</a><br/>
             </div>
             {% elif user.es_profesor %}
             <div class="col-md-5 col-md-offset-3">

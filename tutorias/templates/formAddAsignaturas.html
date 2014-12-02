@@ -20,7 +20,7 @@
         <form action="{% url 'add_asignaturas_profesor' %}" method="post"> {% csrf_token %}
             <div class="form-group">
                 {% for asignatura in asignaturas %}
-                <input type="checkbox" value="{{asignatura.codigo}}" name="choices"/>{{asignatura.nombre}}
+                <input type="checkbox" value="{{asignatura.id}}" name="choices"/>{{asignatura.nombre}}
                 {% endfor %}
             </div>
 
@@ -31,7 +31,7 @@
         <form action="{% url 'add_asignaturas_alumno' %}" method="post"> {% csrf_token %}
             <div class="form-group">
                 {% for asignatura in asignaturas %}
-                <input type="checkbox" value="{{asignatura.codigo}}" name="choices"/>{{asignatura.nombre}}
+                <input type="checkbox" value="{{asignatura.id}}" name="choices"/>{{asignatura.nombre}}
                 {% endfor %}
             </div>
 
