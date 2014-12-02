@@ -15,12 +15,11 @@
         <img src="/static/img/logo2.png"/>
     </div>
 
-    <form action="{% url 'reservar_tutoria' %}">
+    <form action="{% url 'reservar_tutoria' %}" method="post"> {% csrf_token %}
         <div class="col-md-5 col-md-offset-3">
             <h2>Tutor&iacute;a</h2>
-
             <div class="form-group">
-                <select id="dia" class="form-control" name="dia_semana"
+                <select id="dia" class="form-control" name="dia"
                         onchange="Dajaxice.tutorias.getHoras(verDia,{'data':{
                                                                         'dia':$('#dia option:selected').val(),
                                                                         'profesor':{{profesor_id}},
@@ -33,15 +32,17 @@
                 </select>
             </div>
             <div style="display:none;" class="oculto form-group">
-                <select id="horas" class="form-control" name="horas" onchange="hora"></select>
+                <select id="horas" class="form-control" name="horario_id" onchange="hora"></select>
             </div>
 
             <div style="display:none;" class="oculto form-group">
                 <label class="col-md-6 control-label">Comentario para el profesor</label>
-                <textarea id="textoAlumno" class="form-control" name="textoAlumno"></textarea>
+                <textarea id="textoAlumno" class="form-control" name="mensajealumno"></textarea>
             </div>
 
-            <button type="submit" style="display:none;"  class="oculto btn btn-default" onsubmit="return comprobar()">Enviar</button>
+            <button type="submit" style="display:none;" class="oculto btn btn-default" onsubmit="return comprobar()">
+                Enviar
+            </button>
         </div>
     </form>
 
@@ -61,6 +62,7 @@
             }));
         }
     }
+
 </script>
 <!-- /container -->
 <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
