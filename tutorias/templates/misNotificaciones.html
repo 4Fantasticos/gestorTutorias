@@ -30,7 +30,7 @@
                 {% for notificacion in notificaciones %}
                 <tr>
                     <td>{{notificacion.dia}}</td>
-                    <td>{{notificacion.horarios}}</td>
+                    <td>{{notificacion.horario}}</td>
                     <td>{{notificacion.alumnos}}</td>
                     <td>{{notificacion.mensajeAlumno}}</td>
                     <form action="{% url 'mis_notificaciones' %}" method="POST"> {% csrf_token %}
@@ -62,7 +62,7 @@
                 {% for reserva in reservas%}
                 <tr>
                     <td>{{reserva.dia}}</td>
-                    <td>{{reserva.horarios}}</td>
+                    <td>{{reserva.horario}}</td>
                     <td>{{reserva.alumnos}}</td>
                     <td>{{reserva.mensajeAlumno}}</td>
                 </tr>
@@ -84,7 +84,7 @@
                 {% for acept in aceptadas%}
                 <tr>
                     <td>{{acept.dia}}</td>
-                    <td>{{acept.horarios}}</td>
+                    <td>{{acept.horario}}</td>
                     <td>{{acept.alumnos}}</td>
                     <td>{{acept.mensajeAlumno}}</td>
                 </tr>
@@ -126,7 +126,7 @@
                 {% for canc in canceladas%}
                 <tr>
                     <td>{{canc.dia}}</td>
-                    <td>{{canc.horarios}}</td>
+                    <td>{{canc.horario}}</td>
                     <td>{{canc.alumnos}}</td>
                     <td>{{canc.mensajeAlumno}}</td>
                     <td>{{canc.mensajeCancel}}</td>

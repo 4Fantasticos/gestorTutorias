@@ -17,9 +17,11 @@ User.add_to_class('es_profesor', models.BooleanField(default=False, blank=True))
 MÉTODOS MODELO USER
 """
 
+
 def getAsignaturas(self):
     lista = self.asignatura_set.all()
     return lista
+
 
 User.add_to_class('getAsignaturas', getAsignaturas)
 
@@ -59,7 +61,7 @@ class Horario(models.Model):
     hora_inicio = models.TimeField()
 
     def __unicode__(self):
-        return self.profesor.username + " - " + self.dia_semana + " - " + str(self.hora_inicio)
+        return self.dia_semana + " - " + str(self.hora_inicio)
 
     class Meta:
         ordering = ('dia_semana',)

@@ -16,22 +16,21 @@
     </div>
     <div class="col-md-5 col-md-offset-3">
         <h2>Tutor&iacute;a</h2>
-        <select id="dia" class="form-control" name="dia_semana"
-                onchange="Dajaxice.tutorias.sayHello(escribe,{'data':{
+        <div class="form-group">
+            <select id="dia" class="form-control" name="dia_semana"
+                    onchange="Dajaxice.tutorias.sayHello(escribe,{'data':{
                                                                         'dia':$('#dia option:selected').val(),
                                                                         'profesor':{{profesor_id}},
                                                                         'alumno':{{request.user.id }}
                                                                         }})">
-            <option>Seleccionar d&iacute;a</option>
-            {% for dia in lista_dias %}
-            <option value="{{dia|date:'d-m-Y'}}">{{dia|date:"d-m-Y - l"}}</option>
-            {% endfor %}
-        </select>
-
-        <div id="oculto" style="display:none;">
-            <select id="horas" class="form-control" name="horas">
-
+                <option>Seleccionar d&iacute;a</option>
+                {% for dia in lista_dias %}
+                <option value="{{dia|date:'d-m-Y'}}">{{dia|date:"d-m-Y - l"}}</option>
+                {% endfor %}
             </select>
+        </div>
+        <div id="oculto" style="display:none;" class="form-group">
+            <select id="horas" class="form-control" name="horas"></select>
         </div>
     </div>
 
@@ -43,11 +42,15 @@
 <script>
     function escribe(data){
         $('#oculto').show();
-        alert(data);
-        //REALLY?!
-        var horas = data.split(',');
-        alert(horas);
+        $('#horas option').remove();
+        for (i = 0; i<data.length;i++){
+            $('#horas').append($('<option>', {
+                value: data[i],
+                text: data[i]
+            }));
+        }
     }
+
 </script>
 <!-- /container -->
 <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>

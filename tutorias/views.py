@@ -385,9 +385,9 @@ def notificacionesProfesor(request):
         reserva.mensajeCancel = textoProfesor
         reserva.estado = 'C'
         reserva.save()
-    notificaciones = Reserva.objects.filter(profesor=request.user).filter(estado='P')
-    reservas = Reserva.objects.filter(profesor=request.user).filter(estado='R').filter(dia__gt=datetime.now)
-    aceptadas_lista = Reserva.objects.filter(profesor=request.user).filter(estado='R').filter(dia__lt=datetime.now)
+    notificaciones = Reserva.objects.filter(horario__profesor=request.user).filter(estado='P')
+    reservas = Reserva.objects.filter(horario__profesor=request.user).filter(estado='R').filter(dia__gt=datetime.datetime.now)
+    aceptadas_lista = Reserva.objects.filter(horario__profesor=request.user).filter(estado='R').filter(dia__lt=datetime.datetime.now)
     paginator_aceptadas = Paginator(aceptadas_lista, 10)
     page_aceptadas = request.GET.get('page_a')
     try:
@@ -396,7 +396,7 @@ def notificacionesProfesor(request):
         aceptadas = paginator_aceptadas.page(1)
     except EmptyPage:
         aceptadas = paginator_aceptadas.page(paginator_aceptadas.num_pages)
-    canceladas_lista = Reserva.objects.filter(profesor=request.user).filter(estado='C')
+    canceladas_lista = Reserva.objects.filter(horario__profesor=request.user).filter(estado='C')
     paginator_canceladas = Paginator(canceladas_lista, 10)
     page_canceladas = request.GET.get('page_c')
     try:
