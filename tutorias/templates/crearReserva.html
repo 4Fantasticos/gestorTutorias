@@ -14,25 +14,36 @@
     <div class="col-lg-12 tituloLogin text-center">
         <img src="/static/img/logo2.png"/>
     </div>
-    <div class="col-md-5 col-md-offset-3">
-        <h2>Tutor&iacute;a</h2>
-        <div class="form-group">
-            <select id="dia" class="form-control" name="dia_semana"
-                    onchange="Dajaxice.tutorias.sayHello(escribe,{'data':{
+
+    <form action="{% url 'reservar_tutoria' %}">
+        <div class="col-md-5 col-md-offset-3">
+            <h2>Tutor&iacute;a</h2>
+
+            <div class="form-group">
+                <select id="dia" class="form-control" name="dia_semana"
+                        onchange="Dajaxice.tutorias.getHoras(verDia,{'data':{
                                                                         'dia':$('#dia option:selected').val(),
                                                                         'profesor':{{profesor_id}},
                                                                         'alumno':{{request.user.id }}
                                                                         }})">
-                <option>Seleccionar d&iacute;a</option>
-                {% for dia in lista_dias %}
-                <option value="{{dia|date:'d-m-Y'}}">{{dia|date:"d-m-Y - l"}}</option>
-                {% endfor %}
-            </select>
+                    <option>Seleccionar d&iacute;a</option>
+                    {% for dia in lista_dias %}
+                    <option value="{{dia|date:'d-m-Y'}}">{{dia|date:"d-m-Y - l"}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div style="display:none;" class="oculto form-group">
+                <select id="horas" class="form-control" name="horas" onchange="hora"></select>
+            </div>
+
+            <div style="display:none;" class="oculto form-group">
+                <label class="col-md-6 control-label">Comentario para el profesor</label>
+                <textarea id="textoAlumno" class="form-control" name="textoAlumno"></textarea>
+            </div>
+
+            <button type="submit" style="display:none;"  class="oculto btn btn-default" onsubmit="return comprobar()">Enviar</button>
         </div>
-        <div id="oculto" style="display:none;" class="form-group">
-            <select id="horas" class="form-control" name="horas"></select>
-        </div>
-    </div>
+    </form>
 
     <div class="col-md-offset-10 col-md-2">
         <a href="{% url 'miPanel' %}">Volver</a> |
@@ -40,17 +51,16 @@
     </div>
 </div>
 <script>
-    function escribe(data){
-        $('#oculto').show();
+    function verDia(data){
+        $('.oculto').show();
         $('#horas option').remove();
         for (i = 0; i<data.length;i++){
             $('#horas').append($('<option>', {
-                value: data[i],
-                text: data[i]
+                value: data[i][1],
+                text: data[i][0]
             }));
         }
     }
-
 </script>
 <!-- /container -->
 <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>

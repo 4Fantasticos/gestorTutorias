@@ -11,12 +11,12 @@ DIAS_DE_LA_SEMANA = {0: 'L', 1: 'M', 2: 'X', 3: 'J', 4: 'V'}
 
 
 @dajaxice_register
-def sayHello(request, data):
+def getHoras(request, data):
     dia = time.strptime(data['dia'], '%d-%m-%Y')
     dia_semana = dia.tm_wday
     dia = datetime.fromtimestamp(time.mktime(dia))
     profesor = User.objects.get(pk=data['profesor'])
-    reservas = Reserva.objects.filter(profesor=profesor).filter(dia=dia).filter(Q(estado__exact='P') | Q(estado__exact='R'))
+    reservas = Reserva.objects.filter(horario__profesor=profesor).filter(dia=dia).filter(Q(estado__exact='P') | Q(estado__exact='R'))
     if len(reservas) > 0:
         horas_no = []
         for r in reservas:
@@ -27,7 +27,7 @@ def sayHello(request, data):
 
     enviar = []
     for hora in horarios:
-        enviar.append(hora.hora_inicio.strftime("%H:%M"))
+        enviar.append([hora.hora_inicio.strftime("%H:%M"),hora.id])
 
     data = json.dumps(enviar)
     return data

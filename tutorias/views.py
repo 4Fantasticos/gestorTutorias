@@ -6,7 +6,6 @@ from django.core.urlresolvers import reverse
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
-from django.utils.datetime_safe import datetime
 from tutorias.models import *
 from tutorias.form import *
 import datetime
@@ -241,7 +240,7 @@ def miPanel(request):
         datos = {'usuarios': len(usuarios), 'grados': len(grados), 'asignaturas': len(asignaturas)}
         return render_to_response('miPanel.html', {'datos': datos}, context)
     elif request.user.es_profesor:
-        reservas = Reserva.objects.filter(profesor=request.user, estado='P')
+        reservas = Reserva.objects.filter(horario__profesor=request.user, estado='P')
         datos = {'reservas': len(reservas)}
         return render_to_response('miPanel.html', {'datos': datos}, context)
     else:
