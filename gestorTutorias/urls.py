@@ -30,6 +30,7 @@ urlpatterns = patterns('',
                        url(r'^admin/addHorario/$', views.add_horario, name='add_horario'),
                        url(r'^misHorarios/$', views.mis_horarios, name='misHorarios'),
                        url(r'^profesores/(?P<profesor_id>\d+)/$', views.horarios_profesores, name='hprofesor'),
+                       url(r'^miPanel/reservarTutoria$', views.reservar_tutoria, name="reservar_tutoria"),
                        #Panel
                        url(r'^miPanel/$', views.miPanel, name='miPanel'),
                        url(r'^miPanel/addAsignaturasAlumno', views.addAsignaturasAlumnos,
