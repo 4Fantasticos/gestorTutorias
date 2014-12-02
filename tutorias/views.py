@@ -185,17 +185,16 @@ def add_horario(request):
             dia_semana = form.cleaned_data['dia_semana']
             hora_inicio = form.cleaned_data['hora_inicio']
             hora_final = form.cleaned_data['hora_final']
-            date_inicio = datetime.datetime.combine(datetime.date.today(),hora_inicio)
-            date_fin = datetime.datetime.combine(datetime.date.today(),hora_final)
+            date_inicio = datetime.datetime.combine(datetime.date.today(), hora_inicio)
+            date_fin = datetime.datetime.combine(datetime.date.today(), hora_final)
             diff = date_fin - date_inicio
-            minutos = diff.total_seconds()/60
-            intervalos = minutos//15
-            mas15 = datetime.timedelta(0,900)
+            minutos = diff.total_seconds() / 60
+            intervalos = minutos // 15
+            mas15 = datetime.timedelta(0, 900)
             for i in range(int(intervalos)):
-                horario = Horario(dia_semana=dia_semana, hora_inicio=date_inicio.time(),profesor=user)
+                horario = Horario(dia_semana=dia_semana, hora_inicio=date_inicio.time(), profesor=user)
                 horario.save()
-                date_inicio=date_inicio+mas15
-            
+                date_inicio = date_inicio + mas15
 
             return HttpResponseRedirect(reverse('miPanel'))
         else:
@@ -349,6 +348,7 @@ def read_asignatura(request):
     form = AsignaturaReadForm()
     return render_to_response('readAsignatura.html', {'form': form, 'asignaturas': asignaturas}, context)
 
+
 def read_grado(request):
     context = RequestContext(request)
     if request.method == 'POST':
@@ -385,8 +385,10 @@ def notificacionesProfesor(request):
         reserva.estado = 'C'
         reserva.save()
     notificaciones = Reserva.objects.filter(horario__profesor=request.user).filter(estado='P')
-    reservas = Reserva.objects.filter(horario__profesor=request.user).filter(estado='R').filter(dia__gt=datetime.datetime.now)
-    aceptadas_lista = Reserva.objects.filter(horario__profesor=request.user).filter(estado='R').filter(dia__lt=datetime.datetime.now)
+    reservas = Reserva.objects.filter(horario__profesor=request.user).filter(estado='R').filter(
+        dia__gt=datetime.datetime.now)
+    aceptadas_lista = Reserva.objects.filter(horario__profesor=request.user).filter(estado='R').filter(
+        dia__lt=datetime.datetime.now)
     paginator_aceptadas = Paginator(aceptadas_lista, 10)
     page_aceptadas = request.GET.get('page_a')
     try:
@@ -422,6 +424,7 @@ def pedirTutoria(request):
     return render_to_response('misAsignaturas.html',
                               {'profesores': profesores, 'codeasig': codeasig},
                               context)
+
 
 def update_asignatura(request):
     context = RequestContext(request)
@@ -461,6 +464,7 @@ def update_asignatura(request):
     form = AsignaturaUpdateForm()
     return render_to_response('updateAsignatura.html', {'form': form, 'asignatura': asignatura}, context)
 
+
 def update_grado(request):
     context = RequestContext(request)
 
@@ -472,7 +476,7 @@ def update_grado(request):
             identificador = form.cleaned_data['identificador']
 
             grado = Grado.objects.get(identificador=identificador)
-            grado.titulo=titulo
+            grado.titulo = titulo
 
             grado.save()
 
@@ -490,30 +494,31 @@ def update_grado(request):
             identificador = form.cleaned_data['identificador']
             grado = Grado.objects.get(identificador=identificador)
             return render_to_response('updateGrado.html', {'form': form, 'grado': grado}, context)
-    id=request.GET.get('id')
-    grado= Grado.objects.get(id=id)
+    id = request.GET.get('id')
+    grado = Grado.objects.get(id=id)
     form = GradoUpdateForm()
     return render_to_response('updateGrado.html', {'form': form, 'grado': grado}, context)
+
 
 def horarios_profesores(request, profesor_id):
     context = RequestContext(request)
     horarios = Horario.objects.filter(profesor=profesor_id)
-    lista_dias=[]
+    lista_dias = []
     hoy = datetime.datetime.now()
     mas1dia = datetime.timedelta(1, 0)
     dossemanas = hoy + datetime.timedelta(14, 0)
-    lunes, martes, miercoles, jueves, viernes = -1,-1,-1,-1,-1
+    lunes, martes, miercoles, jueves, viernes = -1, -1, -1, -1, -1
     for h in horarios:
-        if h.dia_semana=='L':
-            lunes=0
-        elif h.dia_semana=='M':
-            martes=1
-        elif h.dia_semana=='X':
-            miercoles=2
-        elif h.dia_semana=='J':
-            jueves=3
+        if h.dia_semana == 'L':
+            lunes = 0
+        elif h.dia_semana == 'M':
+            martes = 1
+        elif h.dia_semana == 'X':
+            miercoles = 2
+        elif h.dia_semana == 'J':
+            jueves = 3
         else:
-            viernes=4
+            viernes = 4
 
     while hoy.day != dossemanas.day:
         d = hoy.weekday()
@@ -523,6 +528,7 @@ def horarios_profesores(request, profesor_id):
     reservas = Reserva.objects.filter(horario__profesor__id=profesor_id).filter(dia__range=[hoy, dossemanas])
     return render_to_response('crearReserva.html', {'lista_dias': lista_dias, 'reservas': reservas,
                                                     'profesor_id': profesor_id}, context)
+
 
 def update_user(request):
     context = RequestContext(request)
@@ -537,7 +543,7 @@ def update_user(request):
             dni = form.cleaned_data['dni']
             email = form.cleaned_data['email']
 
-            user = User.objects.get(username = username)
+            user = User.objects.get(username=username)
             user.es_profesor = es_profesor
             user.first_name = first_name
             user.last_name = last_name
@@ -559,20 +565,28 @@ def update_user(request):
             username = form.cleaned_data['username']
             usuario = User.objects.get(username=username)
             return render_to_response('updateUser.html', {'form': form, 'usuario': usuario}, context)
-    username=request.GET.get('username')
-    usuario= User.objects.get(username=username)
+    username = request.GET.get('username')
+    usuario = User.objects.get(username=username)
     form = GradoUpdateForm()
     return render_to_response('updateUser.html', {'form': form, 'usuario': usuario}, context)
 
-def reservar_tutoria(request):
-        form = ReservaTutoriasForm(request.POST)
-        if form.is_valid():
-            mensajealumno = form.cleaned_data['mensajealumno']
-            dia = form.cleaned_data['dia']
-            horario_id = form.cleaned_data['horario_id']
-            usuario_id = request.user.id
-            reserva = Reserva(estado='P', mensajeAlumno=mensajealumno, mensajeCancel="",
-                              dia=dia,alumnos=usuario_id,horario=horario_id)
-            reserva.save()
 
-            return HttpResponseRedirect(reverse('miPanel'))
+def reservar_tutoria(request):
+    context = RequestContext(request)
+    form = ReservaTutoriasForm(request.POST)
+    if form.is_valid():
+        mensajealumno = form.cleaned_data['mensajealumno']
+        dia = form.cleaned_data['dia']
+        dia = dia.split('-')
+
+        diab =datetime.datetime(int(dia[2]),int(dia[1]),int(dia[0]))
+        horario_id = form.cleaned_data['horario_id']
+        usuario = request.user
+        horario = Horario.objects.get(pk=horario_id)
+        reserva = Reserva(estado='P', mensajeAlumno=mensajealumno, mensajeCancel="",
+                          dia=diab, alumnos=usuario, horario=horario)
+        reserva.save()
+
+        return HttpResponseRedirect(reverse('miPanel'))
+    else:
+        return render_to_response('crearReserva.html', {'form':form}, context)

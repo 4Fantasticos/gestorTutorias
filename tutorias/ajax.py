@@ -16,7 +16,7 @@ def getHoras(request, data):
     dia_semana = dia.tm_wday
     dia = datetime.fromtimestamp(time.mktime(dia))
     profesor = User.objects.get(pk=data['profesor'])
-    reservas = Reserva.objects.filter(horario__profesor=profesor).filter(dia=dia).filter(Q(estado__exact='P') | Q(estado__exact='R'))
+    reservas = Reserva.objects.filter(horario__profesor=profesor).filter(dia=dia)
     if len(reservas) > 0:
         horas_no = []
         for r in reservas:
