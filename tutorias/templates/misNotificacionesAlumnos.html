@@ -4,7 +4,7 @@
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/css/tutoria.css" rel="stylesheet">
     <meta charset="UTF-8">
-    <title>Mis notificaciones</title>
+    <title>Mis notificaciones Alumnos</title>
 </head>
 <body>
 <div class="container">
@@ -20,10 +20,8 @@
                 <tr>
                     <th>D&iacute;a</th>
                     <th>Horario</th>
-                    <th>Alumno</th>
+                    <th>Profesor</th>
                     <th>Mensaje</th>
-                    <th>Aceptar</th>
-                    <th>Declinar</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -31,18 +29,8 @@
                 <tr>
                     <td>{{notificacion.dia}}</td>
                     <td>{{notificacion.horario}}</td>
-                    <td>{{notificacion.alumnos}}</td>
+                    <td>{{notificacion.horario.profesor}}</td>
                     <td>{{notificacion.mensajeAlumno}}</td>
-                    <form action="{% url 'mis_notificaciones' %}" method="POST"> {% csrf_token %}
-                        <input type="hidden" name="id" value="{{notificacion.id}}"/>
-                        <td>
-                            <button class="btn btn-success" name="aceptar">Aceptar</button>
-                        </td>
-                        <td><input type="text" name="texto"/></td>
-                        <td>
-                            <button class="btn btn-danger" name="declinar">Declinar</button>
-                        </td>
-                    </form>
                 </tr>
                 {% endfor %}
                 </tbody>
@@ -54,7 +42,7 @@
                 <tr>
                     <th>D&iacute;a</th>
                     <th>Horario</th>
-                    <th>Alumno</th>
+                    <th>Profesor</th>
                     <th>Mensaje</th>
                 </tr>
                 </thead>
@@ -62,8 +50,8 @@
                 {% for reserva in reservas%}
                 <tr>
                     <td>{{reserva.dia}}</td>
-                    <td>{{reserva.horarios}}</td>
-                    <td>{{reserva.alumnos}}</td>
+                    <td>{{reserva.horario}}</td>
+                    <td>{{reserva.horario.profesor}}</td>
                     <td>{{reserva.mensajeAlumno}}</td>
                 </tr>
                 {% endfor %}
@@ -84,8 +72,8 @@
                 {% for acept in aceptadas%}
                 <tr>
                     <td>{{acept.dia}}</td>
-                    <td>{{acept.horarios}}</td>
-                    <td>{{acept.alumnos}}</td>
+                    <td>{{acept.horario}}</td>
+                    <td>{{acept.horario.profesor}}</td>
                     <td>{{acept.mensajeAlumno}}</td>
                 </tr>
                 {% endfor %}
@@ -117,8 +105,9 @@
                 <tr>
                     <th>D&iacute;a</th>
                     <th>Horario</th>
-                    <th>Alumno</th>
+                    <th>Profesor</th>
                     <th>Mensaje</th>
+                    <th>Estado</th>
                     <th>Mensaje Profesor</th>
                 </tr>
                 </thead>
@@ -126,9 +115,10 @@
                 {% for canc in canceladas%}
                 <tr>
                     <td>{{canc.dia}}</td>
-                    <td>{{canc.horarios}}</td>
-                    <td>{{canc.alumnos}}</td>
+                    <td>{{canc.horario}}</td>
+                    <td>{{canc.horario.profesor}}</td>
                     <td>{{canc.mensajeAlumno}}</td>
+                    <td>{{canc.estado}}</td>
                     <td>{{canc.mensajeCancel}}</td>
                 </tr>
                 {% endfor %}

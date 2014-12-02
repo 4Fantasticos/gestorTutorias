@@ -38,6 +38,7 @@ urlpatterns = patterns('',
                        url(r'^miPanel/addGradosProfesor', views.addGradosProfesor, name='add_grados_profesor'),
                        url(r'^miPanel/addAsignaturasProfesor', views.addAsignaturasProfesor,
                            name='add_asignaturas_profesor'),
+                       url(r'^miPanel/notificacionesAlumno',views.notificacionesAlumno, name='notificaciones_alumnos'),
                        url(r'^miPanel/notificaciones', views.notificacionesProfesor, name='notificaciones_profesor'),
                        #Alumnos
                        url(r'^miPanel/pedirTutoria', views.pedirTutoria, name='pedir_tutoria'),
