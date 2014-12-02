@@ -110,3 +110,8 @@ class UserUpdateForm(forms.Form):
     email = forms.CharField(label="Email", max_length=100)
     es_profesor = forms.BooleanField(label="¿Es profesor?", initial=False, required=False)
     dni = forms.CharField(label="Dni", max_length=10)
+
+class ReservaTutoriasForm(forms.Form):
+    mensajealumno = forms.CharField(label="mensajeAlumno",max_length=500)
+    dia = forms.CharField(label="diaDelMesReseva",max_length=10)
+    horario_id = forms.CharField(label="IdentificadorHorario",max_length=8)

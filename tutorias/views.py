@@ -497,10 +497,6 @@ def update_grado(request):
     return render_to_response('updateGrado.html', {'form': form, 'grado': grado}, context)
 
 def horarios_profesores(request, profesor_id):
-
-    if request.is_ajax():
-        print "toma candela morena"
-        return HttpResponse("hola guapa")
     context = RequestContext(request)
     horarios = Horario.objects.filter(profesor=profesor_id)
     lista_dias=[]
@@ -568,3 +564,16 @@ def update_user(request):
     usuario= User.objects.get(username=username)
     form = GradoUpdateForm()
     return render_to_response('updateUser.html', {'form': form, 'usuario': usuario}, context)
+
+def reservar_tutoria(request):
+        form = ReservaTutoriasForm(request.POST)
+        if form.is_valid():
+            mensajealumno = form.cleaned_data['mensajealumno']
+            dia = form.cleaned_data['dia']
+            horario_id = form.cleaned_data['horario_id']
+            usuario_id = request.user.id
+            reserva = Reserva(estado='P', mensajeAlumno=mensajealumno, mensajeCancel="",
+                              dia=dia,alumnos=usuario_id,horario=horario_id)
+            reserva.save()
+
+            return HttpResponseRedirect(reverse('miPanel'))
