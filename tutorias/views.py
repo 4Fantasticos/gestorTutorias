@@ -177,9 +177,12 @@ def add_horario(request):
             minutos = diff.total_seconds() / 60
             intervalos = minutos // 15
             mas15 =datetime.timedelta(0, 900)
+            horarios_en_bd = Horario.objects.filter(profesor=user).filter(dia_semana=dia_semana)
             for i in range(int(intervalos)):
                 horario =Horario(dia_semana=dia_semana, hora_inicio=date_inicio.time(), profesor=user)
-                horario.save()
+                horarios_en_bd = Horario.objects.filter(profesor=user).filter(dia_semana=dia_semana).filter(hora_inicio=date_inicio.time)
+                if horarios_en_bd == null:
+                    horario.save()
                 date_inicio = date_inicio + mas15
 
             return HttpResponseRedirect(reverse('miPanel'))
