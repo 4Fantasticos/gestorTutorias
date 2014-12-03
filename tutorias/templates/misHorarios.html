@@ -19,6 +19,7 @@
                 <tr>
                     <th>Dia de la Semana</th>
                     <th>Hora</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -26,6 +27,7 @@
                         <tr>
                             <td>{{horario.get_dia_semana_display}}</td>
                             <td>{{horario.hora_inicio}}</td>
+                            <td><a href="{% url 'eliminar_horario' horario.id %}">Eliminar</a></td>
                         </tr>
                     {% endfor %}
                 </tbody>

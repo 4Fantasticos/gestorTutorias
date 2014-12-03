@@ -638,3 +638,9 @@ def metricas(request):
             grado_max['grado'] = grado
             grado_max['num'] = num
     return render_to_response('estadisticas.html', {'alumno_dic':alumno_dic,'profesores_dic':profesores_dic,'grado_max':grado_max}, context)
+
+@user_passes_test(lambda u: u.es_profesor, login_url='/')
+def eliminar_horario(request, horario_id):
+    horario = Horario.objects.filter(profesor=request.user).filter(pk=horario_id)
+    horario.delete()
+    return HttpResponseRedirect(reverse('misHorarios'))

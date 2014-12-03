@@ -29,9 +29,11 @@ urlpatterns = patterns('',
                        url(r'^admin/estadisticas/$',views.metricas, name='estadisticas'),
                        #Horarios
                        url(r'^admin/addHorario/$', views.add_horario, name='add_horario'),
-                       url(r'^misHorarios/$', views.mis_horarios, name='misHorarios'),
+                       url(r'^miPanel/misHorarios/eliminar/(?P<horario_id>\d+)/$', views.eliminar_horario, name="eliminar_horario"),
+                       url(r'^miPanel/misHorarios/$', views.mis_horarios, name='misHorarios'),
                        url(r'^profesores/(?P<profesor_id>\d+)/$', views.horarios_profesores, name='hprofesor'),
                        url(r'^miPanel/reservarTutoria$', views.reservar_tutoria, name="reservar_tutoria"),
+                       url(r'^miPanel/misHorarios/eliminar/(?P<horario_id>\d+)/$', views.eliminar_horario, name="eliminar_horario"),
                        #Panel
                        url(r'^miPanel/$', views.miPanel, name='miPanel'),
                        url(r'^miPanel/addAsignaturasAlumno', views.addAsignaturasAlumnos,name='add_asignaturas_alumno'),
