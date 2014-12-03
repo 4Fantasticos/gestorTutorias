@@ -159,7 +159,7 @@ def addAsignaturasProfesor(request):
     return render_to_response('formAddAsignaturas.html', {'profesor': True, 'form': form, 'asignaturas': asignaturas},
                               context)
 
-@user_passes_test(lambda u: u.is_superuser, login_url='/')
+@user_passes_test(lambda u: u.es_profesor, login_url='/')
 def add_horario(request):
     context = RequestContext(request)
 
@@ -180,8 +180,10 @@ def add_horario(request):
             horarios_en_bd = Horario.objects.filter(profesor=user).filter(dia_semana=dia_semana)
             for i in range(int(intervalos)):
                 horario =Horario(dia_semana=dia_semana, hora_inicio=date_inicio.time(), profesor=user)
-                horarios_en_bd = Horario.objects.filter(profesor=user).filter(dia_semana=dia_semana).filter(hora_inicio=date_inicio.time)
-                if horarios_en_bd == null:
+                horarios_en_bd = list(Horario.objects.filter(profesor=user).filter(dia_semana=dia_semana).filter(hora_inicio=date_inicio.time))
+                print ('#######DEBUG######')
+                print horarios_en_bd
+                if horarios_en_bd == []:
                     horario.save()
                 date_inicio = date_inicio + mas15
 
