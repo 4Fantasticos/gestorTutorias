@@ -199,7 +199,7 @@ def add_asignatura(request):
     context = RequestContext(request)
 
     if request.method == 'POST':
-        form = AsignaturaForm(request.POST)
+        form =AsignaturaForm(request.POST)
 
         if form.is_valid():
             nombre =form.cleaned_data['nombre']
