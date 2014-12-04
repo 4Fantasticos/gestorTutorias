@@ -12,6 +12,15 @@ from tutorias.form import *
 
 
 def user_login(request):
+    """
+    Vista de login del usuario
+
+    El siguiente método recoge vía request los parametros de un form, los evalua y logea al usuario si procede, en caso
+    contrario deriva al template index.html
+
+    :param request: Request
+    :return: A la vista index.html
+    """
     context = RequestContext(request)
     if request.user.is_authenticated():
         return HttpResponseRedirect(reverse('miPanel'))
@@ -30,6 +39,15 @@ def user_login(request):
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/')
 def add_users(request):
+    """
+    Vista añadir usuario.
+
+    El siguiente método recoge vía request los parametros de un form, los evalua y añade un usuario si procede, en caso
+    contrario deriva al template formularioUser.html
+
+    :param request: Request
+    :return: Al formulario formularioUser.html
+    """
     context = RequestContext(request)
 
     if request.method == 'POST':
@@ -72,6 +90,15 @@ def add_users(request):
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/')
 def remove_user(request):
+    """
+    Elimina un usuario del sistema.
+
+    El siguiente método recoge vía request los parametros de un form, los evalua y elimina un usuario si procede, en
+    caso contrario deriva al template removeUser.html
+
+    :param request: request
+    :return: Vista removeUser.html
+    """
     context = RequestContext(request)
 
     if request.method == 'POST':
@@ -91,6 +118,15 @@ def remove_user(request):
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/')
 def read_user(request):
+    """
+    Consultar un usuario del sistema.
+
+    El siguiente método recoge vía request los parametros de un form, los evalua y muestra los datos de un usuario si
+    procede, en caso contrario deriva al template readUser.html
+
+    :param request: request
+    :return: Vista readUser.html
+    """
     context = RequestContext(request)
     if request.method == 'POST':
         form = UserReadForm(request.POST)
@@ -114,6 +150,15 @@ def read_user(request):
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/')
 def update_user(request):
+    """
+    Modifica mina un usuario del sistema.
+
+    El siguiente método recoge vía request los parametros de un form, los evalua y modifica un usuario si procede, en
+    caso contrario deriva al template updateUser.html
+
+    :param request: request
+    :return: Vista updateUser.html
+    """
     context = RequestContext(request)
 
     if request.method == 'POST':
@@ -162,6 +207,15 @@ def user_logout(request):
 
 @user_passes_test(lambda u: not u.es_profesor, login_url='/')
 def pedir_tutoria(request):
+    """
+    Pedir tutoría a un profesor.
+
+    El siguiente método recoge vía request los parametros de un form, los evalua y crea una tutoria si procede, en
+    caso contrario deriva al template misAsignaturas.html
+
+    :param request: request
+    :return: Vista misAsignaturas.html
+    """
     context = RequestContext(request)
     usuario = request.user
     asignaturas = Asignatura.objects.filter(usuarios=usuario)
@@ -171,4 +225,3 @@ def pedir_tutoria(request):
         profesores[asignatura.nombre] = asignatura.profesores.all()
         codeasig[asignatura.nombre] = asignatura.id
     return render_to_response('misAsignaturas.html', {'profesores': profesores, 'codeasig': codeasig}, context)
-
