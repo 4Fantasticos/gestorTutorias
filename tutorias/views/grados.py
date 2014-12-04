@@ -1,14 +1,14 @@
 __author__ = 'usuario'
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import user_passes_test
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
 from django.http.response import HttpResponseRedirect
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response
 from django.template import RequestContext
+
 from tutorias.models import *
 from tutorias.form import *
-import datetime
+
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/')
 def add_grado(request):
@@ -31,27 +31,29 @@ def add_grado(request):
     form = GradoForm()
     return render_to_response('formularioGrado.html', {'form': form}, context)
 
+
 @user_passes_test(lambda u: u.is_superuser, login_url='/')
 def remove_grado(request):
-    context =RequestContext(request)
+    context = RequestContext(request)
 
     if request.method == 'POST':
-        form =GradoRemoveForm(request.POST)
+        form = GradoRemoveForm(request.POST)
 
         if form.is_valid():
-            id =form.cleaned_data['identificador']
-            grado =Grado.objects.get(pk=id)
+            identificador = form.cleaned_data['identificador']
+            grado = Grado.objects.get(pk=identificador)
             grado.delete()
 
             return HttpResponseRedirect(reverse('miPanel'))
 
-    grados =Grado.objects.all()
-    form =GradoRemoveForm()
-    return render_to_response('removeGrado.html', {'form': form, 'grados': grados},context)
+    grados = Grado.objects.all()
+    form = GradoRemoveForm()
+    return render_to_response('removeGrado.html', {'form': form, 'grados': grados}, context)
+
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/')
 def read_grado(request):
-    context =RequestContext(request)
+    context = RequestContext(request)
     if request.method == 'POST':
         form = GradoReadForm(request.POST)
         if form.is_valid():
@@ -62,17 +64,18 @@ def read_grado(request):
     paginator = Paginator(grado_lista, 10)
     page = request.GET.get('page')
     try:
-        grados =paginator.page(page)
+        grados = paginator.page(page)
     except PageNotAnInteger:
         grados = paginator.page(1)
     except EmptyPage:
-        grados =paginator.page(paginator.num_pages)
+        grados = paginator.page(paginator.num_pages)
     form = AsignaturaReadForm()
     return render_to_response('readGrado.html', {'form': form, 'grados': grados}, context)
 
+
 @user_passes_test(lambda u: u.is_superuser, login_url='/')
 def update_grado(request):
-    context =RequestContext(request)
+    context = RequestContext(request)
 
     if request.method == 'POST':
         form = GradoForm(request.POST)
@@ -95,13 +98,13 @@ def update_grado(request):
                 grados = paginator.page(1)
             except EmptyPage:
                 grados = paginator.page(paginator.num_pages)
-            return render_to_response('readGrado.html', {'form': form, 'grados': grados},context)
+            return render_to_response('readGrado.html', {'form': form, 'grados': grados}, context)
         else:
             identificador = form.cleaned_data['identificador']
             grado = Grado.objects.get(identificador=identificador)
             return render_to_response('updateGrado.html', {'form': form, 'grado': grado}, context)
-    id = request.GET.get('id')
-    grado = Grado.objects.get(id=id)
+    identificador = request.GET.get('id')
+    grado = Grado.objects.get(id=identificador)
     form = GradoUpdateForm()
     return render_to_response('updateGrado.html', {'form': form, 'grado': grado}, context)
 
