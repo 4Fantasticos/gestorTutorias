@@ -12,6 +12,14 @@ import datetime
 
 
 def mi_panel(request):
+    """
+    Vista de panel del usuario
+
+    El siguiente método recoge vía request el usuario logeado y muestra su menu.
+
+    :param request: Request
+    :return: A la vista miPanel.html
+    """
     context = RequestContext(request)
     if request.user.is_superuser:
         usuarios = User.objects.exclude(username='admin')
@@ -29,6 +37,15 @@ def mi_panel(request):
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/')
 def add_asignaturas_alumnos(request):
+    """
+    Vista de add_asignaturas_alumnos
+
+    El siguiente método recoge vía request los parametros de un form, los evalua y añade las asignaturas al usuario si
+    procede, en caso contrario deriva al template formAddAsignaturas.html
+
+    :param request: Request
+    :return: A la vista formAddAsignaturas.html
+    """
     context = RequestContext(request)
     user = get_object_or_404(User, pk=request.session['alumno'])
     grado = get_object_or_404(Grado, identificador=request.session['grado'])
@@ -49,6 +66,15 @@ def add_asignaturas_alumnos(request):
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/')
 def add_grados_profesor(request):
+    """
+    Vista de add_grados_profesor
+
+    El siguiente método recoge vía request los parametros de un form, los evalua y añade los grados al usuario si
+    procede, en caso contrario deriva al template formAddGrados.html
+
+    :param request: Request
+    :return: A la vista formAddGrados.html
+    """
     context = RequestContext(request)
     user = get_object_or_404(User, pk=request.session['profesor'])
     grados = Grado.objects.all()
@@ -69,6 +95,15 @@ def add_grados_profesor(request):
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/')
 def add_asignaturas_profesor(request):
+    """
+    Vista de add_asignaturas_profesor
+
+    El siguiente método recoge vía request los parametros de un form, los evalua y añade las asignaturas al usuario si
+    procede, en caso contrario deriva al template formAddAsignaturas.html
+
+    :param request: Request
+    :return: A la vista formAddAsignaturas.html
+    """
     context = RequestContext(request)
     user = get_object_or_404(User, pk=request.session['profesor'])
     lista_asignaturas = []
@@ -96,6 +131,15 @@ def add_asignaturas_profesor(request):
 
 @user_passes_test(lambda u: u.es_profesor, login_url='/')
 def notificaciones_profesor(request):
+    """
+    Vista de notificaciones_profesor
+
+    El siguiente método recoge via request el id de la reserva y la acepta o declina. En caso contrario deriva al
+    template misNotificaciones.html
+
+    :param request: Request
+    :return: A la vista misNotificaciones.html
+    """
     context = RequestContext(request)
     if 'aceptar' in request.POST:
         id_reserva = request.POST.get('id')
@@ -138,6 +182,14 @@ def notificaciones_profesor(request):
 
 @user_passes_test(lambda u: not u.es_profesor, login_url='/')
 def notificaciones_alumno(request):
+    """
+    Vista de notificaciones_alumnos
+
+    El siguiente método recoge via request el usuario y muestra el template misNotificacionesAlumnos.html
+
+    :param request: Request
+    :return: A la vista misNotificaciones.html
+    """
     context = RequestContext(request)
     notificaciones = Reserva.objects.filter(alumnos=request.user).filter(estado='P')
     reservas = Reserva.objects.filter(alumnos=request.user).filter(estado='R').filter(

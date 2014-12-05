@@ -29,10 +29,9 @@ def user_login(request):
         password = request.POST['password']
 
         user = authenticate(username=username, password=password)
-        if user:
-            if user.is_active:
-                login(request, user)
-                return HttpResponseRedirect(reverse('miPanel'))
+        if user and user.is_active:
+            login(request, user)
+            return HttpResponseRedirect(reverse('miPanel'))
 
     return render_to_response('index.html', {}, context)
 
