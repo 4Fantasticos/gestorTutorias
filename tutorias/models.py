@@ -2,7 +2,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from django.contrib.auth.hashers import make_password
 # Ejemplos sobre relaciones en django
 # https://docs.djangoproject.com/en/1.7/topics/db/examples/
 # Usuario, extendemos el User por defecto de Django
@@ -10,20 +9,20 @@ from django.contrib.auth.hashers import make_password
 """
 MODELO USER MODIFICADO
 """
-User.add_to_class('dni',models.CharField(max_length=9, unique=True, null=True))
-User.add_to_class('es_profesor',models.BooleanField(default=False, blank=True))
+User.add_to_class('dni', models.CharField(max_length=9, unique=True, null=True))
+User.add_to_class('es_profesor', models.BooleanField(default=False, blank=True))
 
 """
 MÉTODOS MODELO USER
 """
 
 
-def getAsignaturas(self):
+def get_asignaturas(self):
     lista = self.asignatura_set.all()
     return lista
 
 
-User.add_to_class('getAsignaturas',getAsignaturas)
+User.add_to_class('getAsignaturas', get_asignaturas)
 
 """
 MODELO GRADO
@@ -33,8 +32,8 @@ MODELO GRADO
 class Grado(models.Model):
     titulo = models.CharField(max_length=200)
     identificador = models.CharField(max_length=3)
-    usuarios = models.ManyToManyField(User,related_name="usuarios")
-    profesores = models.ManyToManyField(User,related_name="profesores")
+    usuarios = models.ManyToManyField(User, related_name="usuarios")
+    profesores = models.ManyToManyField(User, related_name="profesores")
 
     def __unicode__(self):
         return self.titulo
@@ -57,7 +56,7 @@ DIAS_DE_LA_SEMANA = (
 
 class Horario(models.Model):
     profesor = models.ForeignKey(User)
-    dia_semana = models.CharField(max_length=1,choices=DIAS_DE_LA_SEMANA)
+    dia_semana = models.CharField(max_length=1, choices=DIAS_DE_LA_SEMANA)
     hora_inicio = models.TimeField()
 
     def __unicode__(self):
@@ -77,11 +76,11 @@ class Asignatura(models.Model):
     codigo = models.CharField(max_length=6)
     grados = models.ForeignKey(Grado)
     curso = models.CharField(max_length=1)
-    usuarios = models.ManyToManyField(User,related_name="usuarios_asignatura")
-    profesores = models.ManyToManyField(User,related_name="profesores_asignatura")
+    usuarios = models.ManyToManyField(User, related_name="usuarios_asignatura")
+    profesores = models.ManyToManyField(User, related_name="profesores_asignatura")
 
     def __unicode__(self):
-        return str(self.codigo) + " - " + self.nombre
+        return str(self.codigo + " - " + self.nombre)
 
     class Meta:
         ordering = ('curso',)
@@ -103,8 +102,8 @@ class Reserva(models.Model):
     mensajeAlumno = models.CharField(max_length=500)
     mensajeCancel = models.CharField(max_length=500, blank=True)
     dia = models.DateField()
-    alumnos = models.ForeignKey(User,related_name='alumnos', null=True)
-    horario = models.ForeignKey(Horario,null=True)
+    alumnos = models.ForeignKey(User, related_name='alumnos', null=True)
+    horario = models.ForeignKey(Horario, null=True)
 
     def __unicode__(self):
         return str(self.id)
