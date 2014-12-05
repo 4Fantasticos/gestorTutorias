@@ -12,8 +12,15 @@ from tutorias.form import *
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/')
 def add_grado(request):
-    context = RequestContext(request)
+    """ Vista añadir grado
 
+    El siguiente método recoge vía request los parametros de un form, los evalua y añade un grado si procede, en caso
+    contrario deriva al template formularioGrado.html
+
+    :param request: Request.
+    :return: formularioGrado.html.
+    """
+    context = RequestContext(request)
     if request.method == 'POST':
         form = GradoForm(request.POST)
 
@@ -34,6 +41,14 @@ def add_grado(request):
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/')
 def remove_grado(request):
+    """Elimina un grado del sistema
+
+    El siguiente método recoge vía request los parametros de un form, los evalua y elimina un grado si procede, en
+    caso contrario deriva al template removeGrado.html.
+
+    :param request: request
+    :return: Vista removeGrado.html
+    """
     context = RequestContext(request)
 
     if request.method == 'POST':
@@ -53,6 +68,14 @@ def remove_grado(request):
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/')
 def read_grado(request):
+    """Consultar un grado del sistema.
+
+    El siguiente método recoge vía request los parametros de un form, los evalua y muestra los datos de un grado si
+    procede, en caso contrario deriva al template readGrado.html
+
+    :param request: request
+    :return: Vista readGrado.html
+    """
     context = RequestContext(request)
     if request.method == 'POST':
         form = GradoReadForm(request.POST)
@@ -75,6 +98,14 @@ def read_grado(request):
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/')
 def update_grado(request):
+    """Modifica mina un usuario del sistema.
+
+    El siguiente método recoge vía request los parametros de un form, los evalua y modifica un grado si procede, en
+    caso contrario deriva al template updateGrado.html
+
+    :param request: request
+    :return: Vista updateGrado.html
+    """
     context = RequestContext(request)
 
     if request.method == 'POST':
