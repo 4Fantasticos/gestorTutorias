@@ -26,24 +26,28 @@ def add_horario(request):
             hora_final = form.cleaned_data['hora_final']
             date_inicio = datetime.datetime.combine(datetime.date.today(), hora_inicio)
             date_fin = datetime.datetime.combine(datetime.date.today(), hora_final)
-            diff = date_fin - date_inicio
-            minutos = diff.total_seconds() / 60
-            intervalos = minutos // 15
-            mas15 = datetime.timedelta(0, 900)
-            for i in range(int(intervalos)):
-                horario = Horario(dia_semana=dia_semana, hora_inicio=date_inicio.time(), profesor=user)
-                horarios_en_bd = list(Horario.objects.filter(profesor=user).filter(dia_semana=dia_semana).filter(
-                    hora_inicio=date_inicio.time))
-                if horarios_en_bd == []:
-                    horario.save()
-                date_inicio = date_inicio + mas15
-
+            _introduce_horario(user, dia_semana, date_inicio, date_fin)
             return HttpResponseRedirect(reverse('miPanel'))
         else:
             return render_to_response('formularioHorario.html', {'form': form}, context)
 
     form = HorarioForm()
     return render_to_response('formularioHorario.html', {'form': form, 'dias': DIAS_DE_LA_SEMANA}, context)
+
+
+def _introduce_horario(user, dia_semana, date_inicio, date_fin):
+    diff = date_fin - date_inicio
+    minutos = diff.total_seconds() / 60
+    intervalos = minutos // 15
+    mas15 = datetime.timedelta(0, 900)
+    for i in range(int(intervalos)):
+        horario = Horario(dia_semana=dia_semana, hora_inicio=date_inicio.time(), profesor=user)
+        horarios_en_bd = list(Horario.objects.filter(profesor=user).filter(dia_semana=dia_semana).
+                              filter(hora_inicio=date_inicio.time))
+        if horarios_en_bd == []:
+            horario.save()
+            date_inicio = date_inicio + mas15
+
 
 
 @user_passes_test(lambda u: u.es_profesor, login_url='/')

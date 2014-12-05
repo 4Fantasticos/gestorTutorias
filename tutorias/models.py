@@ -57,7 +57,7 @@ DIAS_DE_LA_SEMANA = (
 
 class Horario(models.Model):
     profesor = models.ForeignKey(User)
-    dia_semana = models.CharField(max_length=1,choices=DIAS_DE_LA_SEMANA)
+    dia_semana = models.CharField(max_length=1, choices=DIAS_DE_LA_SEMANA)
     hora_inicio = models.TimeField()
 
     def __unicode__(self):
@@ -103,8 +103,8 @@ class Reserva(models.Model):
     mensajeAlumno = models.CharField(max_length=500)
     mensajeCancel = models.CharField(max_length=500, blank=True)
     dia = models.DateField()
-    alumnos = models.ForeignKey(User,related_name='alumnos', null=True)
-    horario = models.ForeignKey(Horario,null=True)
+    alumnos = models.ForeignKey(User, related_name='alumnos', null=True)
+    horario = models.ForeignKey(Horario, null=True)
 
     def __unicode__(self):
         return str(self.id)
