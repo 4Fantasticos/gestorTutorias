@@ -98,7 +98,7 @@ def read_grado(request):
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/')
 def update_grado(request):
-    """Modifica mina un usuario del sistema.
+    """Modifica un grado del sistema.
 
     El siguiente método recoge vía request los parametros de un form, los evalua y modifica un grado si procede, en
     caso contrario deriva al template updateGrado.html
