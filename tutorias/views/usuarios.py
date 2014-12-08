@@ -132,7 +132,6 @@ def read_user(request):
         usuario = None
         if form.is_valid():
             username = form.cleaned_data['username']
-            print username
             usuario = User.objects.filter(username__icontains=username)
         return render_to_response('readUser.html', {'form': form, 'users': usuario}, context)
     usuarios_list = User.objects.exclude(username='admin')

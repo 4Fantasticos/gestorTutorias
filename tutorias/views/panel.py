@@ -114,14 +114,14 @@ def add_asignaturas_profesor(request):
         for asignatura in asignaturas:
             lista_asignaturas.append(asignatura)
     if request.method == 'POST':
-        form = AddAsignaturasForm(request.POST, asignaturas=asignaturas)
+        form = AddAsignaturasForm(request.POST, asignaturas=lista_asignaturas)
         if form.is_valid():
             for item in form.cleaned_data['choices']:
                 asig = Asignatura.objects.get(id=item)
                 asig.profesores.add(user)
             return HttpResponseRedirect(reverse('miPanel'))
         else:
-            form = AddAsignaturasForm(request.POST, asignaturas=asignaturas)
+            form = AddAsignaturasForm(request.POST, asignaturas=lista_asignaturas)
             return render_to_response('formAddAsignaturas.html',
                                       {'profesor': True, 'form': form, 'asignaturas': asignaturas}, context)
     form = AddAsignaturasForm(asignaturas=asignaturas)

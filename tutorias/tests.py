@@ -2,9 +2,6 @@
 import datetime
 from django.contrib.auth.models import User
 from django.test import TestCase, Client
-
-# Create your tests here.
-from tutorias.form import UserUpdateForm
 from tutorias.models import Grado, Horario, Asignatura, Reserva
 
 
@@ -27,6 +24,10 @@ class UserTestCase(TestCase):
         profesor.set_password(1234)
         profesor.save()
 
+        alumno = User.objects.get(username="alumno")
+        alumno.set_password(1234)
+        alumno.save()
+
         admin = User.objects.get(username="admin")
         admin.set_password("admin")
         admin.is_staff = True
@@ -44,40 +45,6 @@ class UserTestCase(TestCase):
 
         self.assertEquals(profesor.es_profesor, True)
         self.assertEquals(alumno.es_profesor, False)
-
-    def test_login(self):
-        c = Client()
-        response = c.post('/', {'user': 'profesor', 'password': '1234'})
-        boolean = True if "miPanel" in response.url else False
-        self.assertEquals(boolean, True)
-
-    def test_add_user(self):
-        Grado.objects.create(titulo="GIISI", identificador=1)
-        c = Client()
-        response = c.post('/admin/addUser/',
-                          {'username': 'prueba', 'password': '1234', 'first_name': 'Nombre', 'last_name': 'Apellido',
-                           'es_profesor': False, 'dni': '1234567W', 'email': 'prueba@gmail.com', 'grado': '1'})
-        boolean = True if "addUser" in response.url else False
-        self.assertEquals(boolean, True)
-
-    def test_remove_user(self):
-        self.assertEquals(User.objects.all().count(), 3)
-        c = Client()
-        c.login(username="admin", password="admin")
-        response = c.post('/admin/removeUser/', {'username': 'alumno'})
-        boolean = True if "miPanel" in response.url else False
-        self.assertEquals(boolean, True)
-        self.assertEquals(User.objects.all().count(), 2)
-
-    def test_read_user(self):
-        c = Client()
-        response = c.post('/admin/readUser/', {'username': 'profesor'})
-        boolean = True if "readUser" in response.url else False
-        self.assertEquals(boolean, True)
-
-    def test_update_user(self):
-        c = Client()
-        response = c.post('/admin/updateUser/', {'username': 'profesor'})
 
 
 class GradoTestCase(TestCase):
@@ -190,3 +157,168 @@ class ReservaTestCase(TestCase):
         """
         reserva = Reserva.objects.get(estado="P")
         self.assertEquals(reserva.alumnos.username, "alumno")
+
+
+class UsuarioViewTestCase(TestCase):
+    def setUp(self):
+        """
+        Iniciación de los requisitos para los test de User
+
+        :return: None
+        """
+        User.objects.create(username="profesor", email="profesor@gmail.com", es_profesor=True)
+        User.objects.create(username="alumno", email="alumno@gmail.com", es_profesor=False)
+        User.objects.create(username="admin")
+
+        profesor = User.objects.get(username="profesor")
+        profesor.set_password(1234)
+        profesor.save()
+
+        alumno = User.objects.get(username="alumno")
+        alumno.set_password(1234)
+        alumno.save()
+
+        admin = User.objects.get(username="admin")
+        admin.set_password("admin")
+        admin.is_staff = True
+        admin.is_superuser = True
+        admin.save()
+
+    def test_login(self):
+        c = Client()
+        response = c.post('/', {'user': 'profesor', 'password': '1234'})
+        boolean = True if "miPanel" in response.url else False
+        self.assertEquals(boolean, True)
+
+    def test_add_user(self):
+        Grado.objects.create(titulo="GIISI", identificador=1)
+        c = Client()
+        c.login(username="admin", password="admin")
+        response = c.post('/admin/addUser/',
+                          {'username': 'prueba', 'password': '1234', 'first_name': 'Nombre', 'last_name': 'Apellido',
+                           'es_profesor': False, 'dni': '1234567W', 'email': 'prueba@gmail.com', 'grado': '1'})
+        boolean = True if "addAsignaturasAlumno" in response.url else False
+        self.assertEquals(boolean, True)
+
+    def test_remove_user(self):
+        self.assertEquals(User.objects.all().count(), 3)
+        c = Client()
+        c.login(username="admin", password="admin")
+        response = c.post('/admin/removeUser/', {'username': 'alumno'})
+        boolean = True if "miPanel" in response.url else False
+        self.assertEquals(boolean, True)
+        self.assertEquals(User.objects.all().count(), 2)
+
+    def test_read_user(self):
+        c = Client()
+        c.login(username="admin", password="admin")
+        response = c.post('/admin/readUser/', {'username': 'profesor'})
+        boolean = True if "profesor" in response.context else True
+        self.assertEquals(boolean, True)
+
+    def test_update_user(self):
+        c = Client()
+        c.login(username="admin", password="admin")
+        c.post('/admin/updateUser/',
+               {'username': 'alumno', 'password': '1234', 'first_name': 'Actualizado',
+                'last_name': 'Apellido',
+                'es_profesor': False, 'dni': '1234567W', 'email': 'prueba@gmail.com', 'grado': '1'})
+        usuario = User.objects.get(username='alumno')
+        self.assertEquals(usuario.first_name, 'Actualizado')
+
+    def test_logout(self):
+        c = Client()
+        c.login(username="admin", password="admin")
+        response = c.post('/logout/', {})
+        boolean = True if "/" in response.url else False
+        self.assertEquals(boolean, True)
+
+    def test_pedir_tutoria(self):
+        c = Client()
+        c.login(username="alumno", password="1234")
+        response = c.post('/miPanel/pedirTutoria/', {})
+        boolean = True if "misAsignaturas.html" in response.templates[0].name else False
+        self.assertEquals(boolean, True)
+
+
+class PanelViewTestCase(TestCase):
+    def setUp(self):
+        """
+        Iniciación de los requisitos para los test de User
+
+        :return: None
+        """
+        User.objects.create(username="profesor", email="profesor@gmail.com", es_profesor=True)
+        User.objects.create(username="alumno", email="alumno@gmail.com", es_profesor=False)
+        User.objects.create(username="admin")
+
+        profesor = User.objects.get(username="profesor")
+        profesor.set_password(1234)
+        profesor.save()
+
+        alumno = User.objects.get(username="alumno")
+        alumno.set_password(1234)
+        alumno.save()
+
+        admin = User.objects.get(username="admin")
+        admin.set_password("admin")
+        admin.is_staff = True
+        admin.is_superuser = True
+        admin.save()
+
+    def test_mi_panel(self):
+        c = Client()
+        c.login(username="profesor", password="1234")
+        response = c.post('/miPanel/')
+        boolean = True if 'reservas' in response.context['datos'] else False
+        self.assertEquals(boolean, True)
+
+    def test_add_asignaturas_alumnos(self):
+        Grado.objects.create(titulo="GIISI", identificador=1)
+        alumno = User.objects.get(username="alumno")
+        self.client = Client()
+        self.client.login(username="admin", password="admin")
+        session = self.client.session
+        session['alumno'] = alumno.id
+        session['grado'] = 1
+        session.save()
+        response = self.client.post("/miPanel/addAsignaturasAlumno/", {})
+        boolean = True if not response.context['asignaturas'] else False
+        self.assertEquals(boolean, True)
+
+    def test_add_grados_profesor(self):
+        profesor = User.objects.get(username="profesor")
+        self.client = Client()
+        self.client.login(username="admin", password="admin")
+        session = self.client.session
+        session['profesor'] = profesor.id
+        session.save()
+        response = self.client.post("/miPanel/addGradosProfesor/", {})
+        boolean = True if not response.context['grados'] else False
+        self.assertEquals(boolean, True)
+
+    def test_add_asignaturas_profesor(self):
+        profesor = User.objects.get(username="profesor")
+        self.client = Client()
+        self.client.login(username="admin", password="admin")
+        session = self.client.session
+        session['profesor'] = profesor.id
+        session.save()
+        response = self.client.post("/miPanel/addAsignaturasProfesor/", {})
+        boolean = True if not response.context['asignaturas'] else False
+        self.assertEquals(boolean, True)
+        self.assertEquals(response.context['profesor'], True)
+
+    def test_notificaciones_profesor(self):
+        c = Client()
+        c.login(username="profesor", password="1234")
+        response = c.post('/miPanel/notificaciones/', {})
+        boolean = True if not response.context['reservas'] else False
+        self.assertEquals(boolean, True)
+
+    def test_notificaciones_alumno(self):
+        c = Client()
+        c.login(username="alumno", password="1234")
+        response = c.post('/miPanel/notificacionesAlumno/', {})
+        boolean = True if not response.context['reservas'] else False
+        self.assertEquals(boolean, True)
