@@ -12,6 +12,16 @@ from tutorias.form import *
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/')
 def add_asignatura(request):
+    """
+    Añadir asignatura
+
+    El siguiente método recoge vía request los parametros de un form,
+    los evalua y crea una asignatura si procede, en caso contrario
+    deriva al template formularioAsignatura.html
+
+    :param request: request
+    :return: Vista de miPanel o de formularioAsignatura.html si algo falla
+    """
     context = RequestContext(request)
 
     if request.method == 'POST':
@@ -39,6 +49,15 @@ def add_asignatura(request):
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/')
 def remove_asignatura(request):
+    """
+    Eliminar asignatura
+
+    El siguiente método recoge vía request los parametros de un form,
+    los evalua y elimina una asignatura
+
+    :param request: request
+    :return: Vista de miPanel
+    """
     context = RequestContext(request)
 
     if request.method == 'POST':
@@ -58,6 +77,15 @@ def remove_asignatura(request):
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/')
 def read_asignatura(request):
+    """
+    Consultar asignatura
+
+    El siguiente método recoge vía request los parametros de un form,
+    los evalua y muestra una asignatura
+
+    :param request: request
+    :return: Vista de readAsignatura.html si algo falla
+    """
     context = RequestContext(request)
     if request.method == 'POST':
         form = AsignaturaReadForm(request.POST)
@@ -80,6 +108,17 @@ def read_asignatura(request):
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/')
 def update_asignatura(request):
+    """
+    Modificar asignatura
+
+    El siguiente método recoge vía request los parametros de un form,
+    los evalua y modifica una asignatura si procede, en caso contrario
+    deriva al template updateAsignatura.html
+
+    :param request: request
+    :return: Vista de readAsignatura.html o
+            de updateAsignatura.html si algo falla
+    """
     context = RequestContext(request)
 
     if request.method == 'POST':
@@ -120,6 +159,17 @@ def update_asignatura(request):
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/')
 def metricas(request):
+    """
+    Metricas de alumnos, profesores y grados
+
+    El siguiente método calcula estadísticas para conocer
+    el alumno con más reservas hechas,
+    el numero de reservas totales, aceptadas y canceladas
+    por los profesores y el grado con mayor alumnado
+
+    :param request: request
+    :return: Vista de miPanel o de formularioAsignatura.html si algo falla
+    """
     context = RequestContext(request)
 
     alumnos = User.objects.filter(es_profesor=False)
