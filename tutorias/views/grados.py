@@ -1,3 +1,4 @@
+#encoding:utf-8
 __author__ = 'usuario'
 from django.contrib.auth.decorators import user_passes_test
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
