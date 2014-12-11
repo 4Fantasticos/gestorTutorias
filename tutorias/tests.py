@@ -2,6 +2,7 @@
 import datetime
 from django.contrib.auth.models import User
 from django.test import TestCase, Client
+
 # encoding:utf-8
 import datetime
 from django.contrib.auth.models import User
