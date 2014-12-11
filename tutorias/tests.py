@@ -1,14 +1,10 @@
 # encoding:utf-8
 import datetime
-from django.contrib.auth.models import User
-from django.test import TestCase, Client
-import datetime
 
-# encoding:utf-8
-import datetime
 from django.contrib.auth.models import User
 from django.test import TestCase, Client
-from tutorias.models import Grado, Horario, Asignatura, Reserva
+
+from tutorias.models import Horario, Asignatura, Reserva, Grado
 
 
 def inicializacion():
@@ -304,8 +300,8 @@ class PanelViewTestCase(TestCase):
         c.login(username="alumno", password="1234")
         response = c.post('/miPanel/notificacionesAlumno/', {})
         boolean = True if not response.context['reservas'] else False
-        self.assertEquals(boolean, True)# Create your tests here.
-from tutorias.models import Grado
+        self.assertEquals(boolean, True)
+
 
 class GradoViewTestCase(TestCase):
     def setUp(self):
@@ -328,11 +324,11 @@ class GradoViewTestCase(TestCase):
         Metodo que comprueba si se agraga un grado correctamente
         :return: None
         """
-        c =Client()
+        c = Client()
         c.login(username="admin", password="admin")
-        response = c.post('/admin/addGrado/',{'titulo':'GIISI','identificador':'1'})
+        response = c.post('/admin/addGrado/', {'titulo': 'GIISI', 'identificador': '1'})
         boolean = True if "miPanel" in response.url else False
-        self.assertEquals(boolean,True)
+        self.assertEquals(boolean, True)
 
     def test_remove_grado(self):
         """
@@ -358,7 +354,6 @@ class GradoViewTestCase(TestCase):
         boolean = True if "grado" in response.context else False
         self.assertEquals(boolean, True)
 
-
     def test_update_grado(self):
         """
         Metodo que comprueba si se edita un grado correctamente
@@ -366,18 +361,9 @@ class GradoViewTestCase(TestCase):
         """
         c = Client()
         c.login(username="admin", password="admin")
-        c.post('/admin/updateGrado/',{'titulo':'GIISIActualizado','identificador':'1'})
+        c.post('/admin/updateGrado/', {'titulo': 'GIISIActualizado', 'identificador': '1'})
         grado = Grado.objects.get(identificador=1)
-        self.assertEquals(grado.titulo,'GIISIActualizado')
-
-
-from django.contrib.auth.models import User
-from django.test import TestCase, Client
-
-from tutorias.models import Grado, Asignatura, Reserva
-
-
-__author__ = 'Laura'
+        self.assertEquals(grado.titulo, 'GIISIActualizado')
 
 
 class TestAsignatura(TestCase):
