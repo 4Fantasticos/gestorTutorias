@@ -49,7 +49,6 @@ def _introduce_horario(user, dia_semana, date_inicio, date_fin):
             date_inicio = date_inicio + mas15
 
 
-
 @user_passes_test(lambda u: u.es_profesor, login_url='/')
 def eliminar_horario(request, horario_id):
     horario = Horario.objects.filter(profesor=request.user).filter(pk=horario_id)
@@ -66,29 +65,34 @@ def mis_horarios(request):
 
 
 @user_passes_test(lambda u: not u.es_profesor, login_url='/')
+def __busca_dia_semana_horario(profesor_id):
+    semana = [-1, -1, -1, -1, -1]
+    horarios = Horario.objects.filter(profesor=profesor_id)
+    for h in horarios:
+        if h.dia_semana == 'L':
+            semana[0] = 0
+        elif h.dia_semana == 'M':
+            semana[1] = 1
+        elif h.dia_semana == 'X':
+            semana[2] = 2
+        elif h.dia_semana == 'J':
+            semana[3] = 3
+        else:
+            semana[4] = 4
+
+    return semana
+
+
 def horarios_profesores(request, profesor_id):
     context = RequestContext(request)
-    horarios = Horario.objects.filter(profesor=profesor_id)
     lista_dias = []
     hoy = datetime.datetime.now()
     mas1dia = datetime.timedelta(1, 0)
     dossemanas = hoy + datetime.timedelta(14, 0)
-    lunes, martes, miercoles, jueves, viernes = -1, -1, -1, -1, -1
-    for h in horarios:
-        if h.dia_semana == 'L':
-            lunes = 0
-        elif h.dia_semana == 'M':
-            martes = 1
-        elif h.dia_semana == 'X':
-            miercoles = 2
-        elif h.dia_semana == 'J':
-            jueves = 3
-        else:
-            viernes = 4
-
+    semana = __busca_dia_semana_horario(profesor_id)
     while hoy.day != dossemanas.day:
         d = hoy.weekday()
-        if d == lunes or d == martes or d == miercoles or d == jueves or d == viernes:
+        if d == semana[0] or d == semana[1] or d == semana[2] or d == semana[3] or d == semana[4]:
             lista_dias.append(hoy.date)
         hoy = hoy + mas1dia
     reservas = Reserva.objects.filter(horario__profesor__id=profesor_id).filter(dia__range=[hoy, dossemanas])
