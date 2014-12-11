@@ -33,17 +33,19 @@ class TestAsignatura(TestCase):
         alumno2.es_profesor = False
         alumno2.save()
 
+        Reserva.objects.create(estado="P", mensajeAlumno="Tutoria12",
+                               dia=datetime.datetime(2014, 07, 06), alumnos=alumno2)
+        Reserva.objects.create(estado="P", mensajeAlumno="Tutoria22",
+                               dia=datetime.datetime(2014, 10, 11), alumnos=alumno2)
 
-        Reserva.objects.create(estado = "P", mensajeAlumno="Tutoria12", dia = datetime.datetime(2014,07,06), alumnos=alumno2)
-        Reserva.objects.create(estado = "P", mensajeAlumno="Tutoria22", dia = datetime.datetime(2014,10,11), alumnos=alumno2)
-
-        Reserva.objects.create(estado = "P", mensajeAlumno="Tutoria11", dia = datetime.datetime(2014,03,06), alumnos=alumno)
+        Reserva.objects.create(estado="P", mensajeAlumno="Tutoria11",
+                               dia=datetime.datetime(2014, 03, 06), alumnos=alumno)
 
         Asignatura.objects.create(nombre="Calidad", codigo=1, curso=4, grados=grado)
 
     def test_add_asignatura(self):
-        asignatura = Asignatura.objects.get(codigo=1)
-        grado = Grado.objects.get(identificador=1)
+        Asignatura.objects.get(codigo=1)
+        Grado.objects.get(identificador=1)
         c = Client()
         c.login(username="admin", password="admin")
         response = c.post('/admin/addAsignatura/',
@@ -70,7 +72,7 @@ class TestAsignatura(TestCase):
     def test_metricas(self):
         c = Client()
         c.login(username="admin", password="admin")
-        alumno2 = User.objects.get(username = "alumno2")
+        alumno2 = User.objects.get(username="alumno2")
         self.assertEquals(Reserva.objects.filter(alumnos=alumno2).count(), 2)
         response = c.post('/admin/estadisticas/', {})
         dic = response.context['alumno_dic']
