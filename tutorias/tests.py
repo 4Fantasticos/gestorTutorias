@@ -43,9 +43,9 @@ class UserTestCase(TestCase):
         """
         inicializacion()
 
-    def test_user_password(self):
+    def test_user(self):
         """
-        La contraseña debe guardarse bien
+        Los usuarios existen después de crearse
 
         """
         profesor = User.objects.get(username="profesor")
@@ -160,20 +160,31 @@ class ReservaTestCase(TestCase):
 
 
 class UsuarioViewTestCase(TestCase):
+    """
+    Test de las vistas de Usuario
+    """
     def setUp(self):
         """
-        Iniciación de los requisitos para los test de User
+        Iniciación de los requisitos para los test de User.
 
         """
         inicializacion()
 
     def test_login(self):
+        """
+        Comprueba que la view Login al pasarle usuarios registrados te loguea.
+
+        """
         c = Client()
         response = c.post('/', {'user': 'profesor', 'password': '1234'})
         boolean = True if "miPanel" in response.url else False
         self.assertEquals(boolean, True)
 
     def test_add_user(self):
+        """
+        Comprueba que la vista add_user agrega corretamente un usuario al sistema.
+
+        """
         Grado.objects.create(titulo="GIISI", identificador=1)
         c = Client()
         c.login(username="admin", password="admin")
@@ -184,6 +195,10 @@ class UsuarioViewTestCase(TestCase):
         self.assertEquals(boolean, True)
 
     def test_remove_user(self):
+        """
+        Comprueba que la vista remove_user elimina correctamente un usuario existente.
+
+        """
         self.assertEquals(User.objects.all().count(), 3)
         c = Client()
         c.login(username="admin", password="admin")
@@ -193,6 +208,10 @@ class UsuarioViewTestCase(TestCase):
         self.assertEquals(User.objects.all().count(), 2)
 
     def test_read_user(self):
+        """
+        Comprueba que la vista read_user devuelve el usuario consultado.
+
+        """
         c = Client()
         c.login(username="admin", password="admin")
         response = c.post('/admin/readUser/', {'username': 'profesor'})
@@ -200,6 +219,10 @@ class UsuarioViewTestCase(TestCase):
         self.assertEquals(boolean, True)
 
     def test_update_user(self):
+        """
+        Comprueba que la vista update_user actualiza correctamente un usuario.
+
+        """
         c = Client()
         c.login(username="admin", password="admin")
         c.post('/admin/updateUser/',
@@ -210,6 +233,10 @@ class UsuarioViewTestCase(TestCase):
         self.assertEquals(usuario.first_name, 'Actualizado')
 
     def test_logout(self):
+        """
+        Comprueba que la vista logout, elimina la sesion del usuario
+
+        """
         c = Client()
         c.login(username="admin", password="admin")
         response = c.post('/logout/', {})
@@ -217,6 +244,10 @@ class UsuarioViewTestCase(TestCase):
         self.assertEquals(boolean, True)
 
     def test_pedir_tutoria(self):
+        """
+        Comprueba que la vista pedir_tutoria muestra las asignaturas al alumno logueado
+
+        """
         c = Client()
         c.login(username="alumno", password="1234")
         response = c.post('/miPanel/pedirTutoria/', {})
@@ -225,6 +256,9 @@ class UsuarioViewTestCase(TestCase):
 
 
 class PanelViewTestCase(TestCase):
+    """
+    Test de las vistas de Panel
+    """
     def setUp(self):
         """
         Iniciación de los requisitos para los test de User
@@ -233,6 +267,10 @@ class PanelViewTestCase(TestCase):
         inicializacion()
 
     def test_mi_panel(self):
+        """
+        Comprueba que la vista mi_panel muestra las reservas del profesor
+
+        """
         c = Client()
         c.login(username="profesor", password="1234")
         response = c.post('/miPanel/')
@@ -240,6 +278,10 @@ class PanelViewTestCase(TestCase):
         self.assertEquals(boolean, True)
 
     def test_add_asignaturas_alumnos(self):
+        """
+        Comprueba que la vista add_asignatura_alumnos se muestra al añadir un alumno
+
+        """
         Grado.objects.create(titulo="GIISI", identificador=1)
         alumno = User.objects.get(username="alumno")
         self.client = Client()
@@ -253,6 +295,10 @@ class PanelViewTestCase(TestCase):
         self.assertEquals(boolean, True)
 
     def test_add_grados_profesor(self):
+        """
+        Comprueba que la vista add_grados_profesor se muestra al añadir un profesor
+
+        """
         profesor = User.objects.get(username="profesor")
         self.client = Client()
         self.client.login(username="admin", password="admin")
@@ -264,6 +310,10 @@ class PanelViewTestCase(TestCase):
         self.assertEquals(boolean, True)
 
     def test_add_asignaturas_profesor(self):
+        """
+        Comprueba que la vista add_asignatura_profesor se muestra al añadir un grado de profesor
+
+        """
         profesor = User.objects.get(username="profesor")
         self.client = Client()
         self.client.login(username="admin", password="admin")
@@ -276,6 +326,10 @@ class PanelViewTestCase(TestCase):
         self.assertEquals(response.context['profesor'], True)
 
     def test_notificaciones_profesor(self):
+        """
+        Comprueba que la vista notificaciones_profesor devuelve las reservas del profesor
+
+        """
         c = Client()
         c.login(username="profesor", password="1234")
         response = c.post('/miPanel/notificaciones/', {})
@@ -283,6 +337,10 @@ class PanelViewTestCase(TestCase):
         self.assertEquals(boolean, True)
 
     def test_notificaciones_alumno(self):
+        """
+        Comprueba que la vista notificaciones_alumno devuelve las reservas del alumno
+
+        """
         c = Client()
         c.login(username="alumno", password="1234")
         response = c.post('/miPanel/notificacionesAlumno/', {})
@@ -291,6 +349,9 @@ class PanelViewTestCase(TestCase):
 
 
 class GradoViewTestCase(TestCase):
+    """
+    Test de las vistas de Grado
+    """
     def setUp(self):
         """
         Iniciación de los requisitos para los test de Grados
@@ -346,7 +407,7 @@ class GradoViewTestCase(TestCase):
         Test de modificar grado
 
         Metodo que comprueba si se edita un grado correctamente
-        :return: None
+
         """
         c = Client()
         c.login(username="admin", password="admin")
@@ -356,6 +417,9 @@ class GradoViewTestCase(TestCase):
 
 
 class TestAsignatura(TestCase):
+    """
+    Test de las vistas de Asignatura
+    """
     def setUp(self):
         """
         Iniciación de los requisitos para los test de Asignaturas
@@ -472,43 +536,92 @@ class TestAsignatura(TestCase):
 
 
 class FormTest(TestCase):
+    """
+    Test de los formularios del archivo Form.py
+    """
+
     def test_UserForm(self):
+        """
+        Comprueba que el form UserForm recibe los datos correctamente.
+        Comprueba que el Dni no puede tener más de 10 caracteres.
+
+        """
         form = UserForm(
             {'username': 'Alumno', 'first_name': 'Name', 'last_name': 'LastName', 'email': 'alumno@gmail.com',
              'password': 'Password', 'es_profesor': 'True', 'dni': '1234123'})
         self.assertEquals(form.is_valid(), True)
 
+        form = UserForm(
+            {'username': 'Alumno', 'first_name': 'Name', 'last_name': 'LastName', 'email': 'alumno@gmail.com',
+             'password': 'Password', 'es_profesor': 'True', 'dni': '123412312123213213123123'})
+        self.assertEquals(form.is_valid(), False)
+
     def test_UserRemoveForm(self):
+        """
+        Comprueba que el form UserRemoveForm recibe los datos correctamente.
+
+        """
         form = UserRemoveForm({'username': 'Alumno'})
         self.assertEquals(form.is_valid(), True)
 
     def test_UserReadForm(self):
+        """
+        Comprueba que el form UserReadForm recibe los datos correctamente.
+
+        """
         form = UserReadForm({'username': 'Alumno'})
         self.assertEquals(form.is_valid(), True)
 
     def test_UserUpdateForm(self):
+        """
+        Comprueba que el form UserUpdateForm recibe los datos correctamente.
+
+        """
         form = UserUpdateForm(
             {'username': 'Alumno', 'first_name': 'Name', 'last_name': 'LastName', 'email': 'alumno@gmail.com',
              'password': 'Password', 'es_profesor': 'True', 'dni': '1234123'})
         self.assertEquals(form.is_valid(), True)
 
     def test_GradoForm(self):
+        """
+        Comprueba que el form GradoForm recibe los datos correctamente.
+
+        """
         form = GradoForm({'titulo': 'GIISI', 'identificador': '1'})
         self.assertEquals(form.is_valid(), True)
 
     def test_GradoRemoveForm(self):
+        """
+        Comprueba que el form GradoRemoveForm recibe los datos correctamente.
+
+        """
         form = GradoRemoveForm({'identificador': '1'})
         self.assertEquals(form.is_valid(), True)
 
     def test_GradoReadForm(self):
+        """
+        Comprueba que el form GradoReadForm recibe los datos correctamente.
+
+        """
         form = GradoReadForm({'titulo': 'GIISI'})
         self.assertEquals(form.is_valid(), True)
 
     def test_GradoUpdateForm(self):
+        """
+        Comprueba que el form GradoUpdateForm recibe los datos correctamente.
+
+        """
         form = GradoUpdateForm({'titulo': 'GIISI', 'identificador': '1'})
         self.assertEquals(form.is_valid(), True)
 
     def test_HorarioForm(self):
+        """
+        Comprueba que el form HorarioForm recibe los datos correctamente.
+
+        Comprueba que la semana tiene que estar dentro del choice, L,M,X,J,V
+        Comprueba que la hora de inicio y la hora de fin tiene formato de horas.
+
+        """
         form = HorarioForm({'dia_semana': 'L', 'hora_inicio': '10:30', 'hora_final': '12:30'})
         self.assertEquals(form.is_valid(), True)
 
@@ -519,21 +632,41 @@ class FormTest(TestCase):
         self.assertEquals(form.is_valid(), False)
 
     def test_AsignaturaForm(self):
+        """
+        Comprueba que el form AsignaturaForm recibe los datos correctamente.
+
+        """
         form = AsignaturaForm({'nombre': 'Calidad', 'codigo': '1', 'curso': '1', 'grado': '1'})
         self.assertEquals(form.is_valid(), True)
 
     def test_AsignaturaRemoveForm(self):
+        """
+        Comprueba que el form AsignaturaRemoveForm recibe los datos correctamente.
+
+        """
         form = AsignaturaRemoveForm({'identificador': '1'})
         self.assertEquals(form.is_valid(), True)
 
     def test_AsignaturaReadForm(self):
+        """
+        Comprueba que el form AsignaturaReadForm recibe los datos correctamente.
+
+        """
         form = AsignaturaReadForm({'nombre': 'Calidad'})
         self.assertEquals(form.is_valid(), True)
 
     def test_AsignaturasUpdateForm(self):
+        """
+        Comprueba que el form AsignaturaupdateForm recibe los datos correctamente.
+
+        """
         form = AsignaturaUpdateForm({'nombre': 'Calidad', 'curso': '1', 'codigo': '12'})
         self.assertEquals(form.is_valid(), True)
 
     def test_ReservaTutoriasForm(self):
+        """
+        Comprueba que el form ReservaTutoriasForm recibe los datos correctamente.
+
+        """
         form = ReservaTutoriasForm({'mensajealumno': 'Prueba', 'dia': '3', 'horario_id': '3'})
         self.assertEquals(form.is_valid(), True)
