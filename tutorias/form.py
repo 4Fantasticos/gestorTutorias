@@ -58,8 +58,7 @@ class AsignaturaForm(forms.Form):
 
 
 class AsignaturaRemoveForm(forms.Form):
-    nombre = forms.CharField(max_length=100)
-    grado = forms.CharField(max_length=10)
+    identificador = forms.CharField(max_length=100)
 
 
 class AsignaturaReadForm(forms.Form):

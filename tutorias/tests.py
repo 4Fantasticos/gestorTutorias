@@ -8,6 +8,7 @@ import datetime
 import datetime
 from django.contrib.auth.models import User
 from django.test import TestCase, Client
+from tutorias.form import *
 from tutorias.models import Grado, Horario, Asignatura, Reserva
 
 
@@ -304,8 +305,11 @@ class PanelViewTestCase(TestCase):
         c.login(username="alumno", password="1234")
         response = c.post('/miPanel/notificacionesAlumno/', {})
         boolean = True if not response.context['reservas'] else False
-        self.assertEquals(boolean, True)# Create your tests here.
+        self.assertEquals(boolean, True)  # Create your tests here.
+
+
 from tutorias.models import Grado
+
 
 class GradoViewTestCase(TestCase):
     def setUp(self):
@@ -328,11 +332,11 @@ class GradoViewTestCase(TestCase):
         Metodo que comprueba si se agraga un grado correctamente
         :return: None
         """
-        c =Client()
+        c = Client()
         c.login(username="admin", password="admin")
-        response = c.post('/admin/addGrado/',{'titulo':'GIISI','identificador':'1'})
+        response = c.post('/admin/addGrado/', {'titulo': 'GIISI', 'identificador': '1'})
         boolean = True if "miPanel" in response.url else False
-        self.assertEquals(boolean,True)
+        self.assertEquals(boolean, True)
 
     def test_remove_grado(self):
         """
@@ -366,9 +370,9 @@ class GradoViewTestCase(TestCase):
         """
         c = Client()
         c.login(username="admin", password="admin")
-        c.post('/admin/updateGrado/',{'titulo':'GIISIActualizado','identificador':'1'})
+        c.post('/admin/updateGrado/', {'titulo': 'GIISIActualizado', 'identificador': '1'})
         grado = Grado.objects.get(identificador=1)
-        self.assertEquals(grado.titulo,'GIISIActualizado')
+        self.assertEquals(grado.titulo, 'GIISIActualizado')
 
 
 from django.contrib.auth.models import User
@@ -448,3 +452,71 @@ class TestAsignatura(TestCase):
         response = c.post('/admin/estadisticas/', {})
         dic = response.context['alumno_dic']
         self.assertEquals(dic['num'], 2)
+
+
+class FormTest(TestCase):
+    def test_UserForm(self):
+        form = UserForm(
+            {'username': 'Alumno', 'first_name': 'Name', 'last_name': 'LastName', 'email': 'alumno@gmail.com',
+             'password': 'Password', 'es_profesor': 'True', 'dni': '1234123'})
+        self.assertEquals(form.is_valid(), True)
+
+    def test_UserRemoveForm(self):
+        form = UserRemoveForm({'username': 'Alumno'})
+        self.assertEquals(form.is_valid(), True)
+
+    def test_UserReadForm(self):
+        form = UserReadForm({'username': 'Alumno'})
+        self.assertEquals(form.is_valid(), True)
+
+    def test_UserUpdateForm(self):
+        form = UserUpdateForm(
+            {'username': 'Alumno', 'first_name': 'Name', 'last_name': 'LastName', 'email': 'alumno@gmail.com',
+             'password': 'Password', 'es_profesor': 'True', 'dni': '1234123'})
+        self.assertEquals(form.is_valid(), True)
+
+    def test_GradoForm(self):
+        form = GradoForm({'titulo': 'GIISI', 'identificador': '1'})
+        self.assertEquals(form.is_valid(), True)
+
+    def test_GradoRemoveForm(self):
+        form = GradoRemoveForm({'identificador': '1'})
+        self.assertEquals(form.is_valid(), True)
+
+    def test_GradoReadForm(self):
+        form = GradoReadForm({'titulo': 'GIISI'})
+        self.assertEquals(form.is_valid(), True)
+
+    def test_GradoUpdateForm(self):
+        form = GradoUpdateForm({'titulo': 'GIISI', 'identificador': '1'})
+        self.assertEquals(form.is_valid(), True)
+
+    def test_HorarioForm(self):
+        form = HorarioForm({'dia_semana': 'L', 'hora_inicio': '10:30', 'hora_final': '12:30'})
+        self.assertEquals(form.is_valid(), True)
+
+        form = HorarioForm({'dia_semana': 'G', 'hora_inicio': '10:30', 'hora_final': '12:30'})
+        self.assertEquals(form.is_valid(), False)
+
+        form = HorarioForm({'dia_semana': 'L', 'hora_inicio': '30', 'hora_final': '12:30'})
+        self.assertEquals(form.is_valid(), False)
+
+    def test_AsignaturaForm(self):
+        form = AsignaturaForm({'nombre': 'Calidad', 'codigo': '1', 'curso': '1', 'grado': '1'})
+        self.assertEquals(form.is_valid(), True)
+
+    def test_AsignaturaRemoveForm(self):
+        form = AsignaturaRemoveForm({'identificador': '1'})
+        self.assertEquals(form.is_valid(), True)
+
+    def test_AsignaturaReadForm(self):
+        form = AsignaturaReadForm({'nombre': 'Calidad'})
+        self.assertEquals(form.is_valid(), True)
+
+    def test_AsignaturasUpdateForm(self):
+        form = AsignaturaUpdateForm({'nombre': 'Calidad', 'curso': '1', 'codigo': '12'})
+        self.assertEquals(form.is_valid(), True)
+
+    def test_ReservaTutoriasForm(self):
+        form = ReservaTutoriasForm({'mensajealumno': 'Prueba', 'dia': '3', 'horario_id': '3'})
+        self.assertEquals(form.is_valid(), True)
