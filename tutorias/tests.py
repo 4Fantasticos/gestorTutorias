@@ -468,3 +468,29 @@ class TestAsignatura(TestCase):
         response = c.post('/admin/estadisticas/', {})
         dic = response.context['alumno_dic']
         self.assertEquals(dic['num'], 2)
+
+
+class TestHorario(TestCase):
+    """
+    Test del View Horario
+    """
+    def setUp(self):
+        """
+        Iniciación de los requisitos para los test de la vista en la que interviene Horario
+
+        """
+        inicializacion()
+
+
+    def test_add_horario(self):
+        """
+        Comprueba que la vista addHorario redirige a miPanel si todo va bien.
+
+        """
+        c = Client()
+        c.login(username="profesor", password="1234")
+        response = c.post('/admin/addHorario/',
+                          {'dia_semana': 'L', 'hora_inicio': '10:00', 'hora_final': '10:30'})
+        boolean = True if "miPanel" in response.url else False
+        self.assertEqual(boolean, True)
+
