@@ -17,12 +17,12 @@ MÉTODOS MODELO USER
 """
 
 
-def getAsignaturas(self):
+def get_asignaturas(self):
     lista = self.asignatura_set.all()
     return lista
 
 
-User.add_to_class('getAsignaturas', getAsignaturas)
+User.add_to_class('getAsignaturas', get_asignaturas)
 
 """
 MODELO GRADO
@@ -80,7 +80,7 @@ class Asignatura(models.Model):
     profesores = models.ManyToManyField(User, related_name="profesores_asignatura")
 
     def __unicode__(self):
-        return str(self.codigo) + " - " + self.nombre
+        return str(self.codigo + " - " + self.nombre)
 
     class Meta:
         ordering = ('curso',)
