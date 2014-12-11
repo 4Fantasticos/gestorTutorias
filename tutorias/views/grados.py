@@ -10,7 +10,6 @@ from django.template import RequestContext
 from tutorias.models import *
 from tutorias.form import *
 
-
 @user_passes_test(lambda u: u.is_superuser, login_url='/')
 def add_grado(request):
     """ Vista añadir grado
