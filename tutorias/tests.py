@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase, Client
 
 from tutorias.models import Horario, Asignatura, Reserva, Grado
+from views.horarios import _introduce_horario
 
 
 def inicializacion():
@@ -481,7 +482,6 @@ class TestHorario(TestCase):
         """
         inicializacion()
 
-
     def test_add_horario(self):
         """
         Comprueba que la vista addHorario redirige a miPanel si todo va bien.
@@ -494,3 +494,33 @@ class TestHorario(TestCase):
         boolean = True if "miPanel" in response.url else False
         self.assertEqual(boolean, True)
 
+    def test__introduce_horario(self):
+        """
+        Comprueba que se crean el numero de intervalos cada 15 minutos y guarda los horarios
+
+        """
+        usuario = User.objects.get(username="profesor")
+        date_inicio = datetime.datetime.combine(datetime.date.today(), datetime.time(10, 30))
+        date_fin = datetime.datetime.combine(datetime.date.today(), datetime.time(11, 00))
+        numeroantes = Horario.objects.all().count()
+        _introduce_horario(usuario, "L", date_inicio, date_fin)
+        numerodespues = Horario.objects.all().count()
+        boolean = True if numeroantes+2 == numerodespues else False
+        self.assertEqual(boolean, True)
+
+    def test_eliminar_horario(self):
+        """
+        Elimina el horario de un profesor
+
+        """
+        c = Client()
+        c.login(username="profesor", password="1234")
+        profesor = User.objects.get(username="profesor")
+        Horario.objects.create(dia_semana='L', hora_inicio="12:30", profesor=profesor)
+        horario = Horario.objects.filter(dia_semana='L').filter(hora_inicio="12:30").filter(profesor=profesor)
+        response = c.post('/miPanel/misHorarios/eliminar/'+str(horario[0].id)+"/", {})
+        boolean = True if "misHorarios" in response.url else False
+        self.assertEqual(boolean, True)
+        horario = Horario.objects.filter(dia_semana='L').filter(hora_inicio="12:30").filter(profesor=profesor)
+        boolean = True if not horario else False
+        self.assertEqual(boolean, True)
