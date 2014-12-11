@@ -1,4 +1,4 @@
-#encoding:utf-8
+# encoding:utf-8
 __author__ = 'usuario'
 from django.contrib.auth.decorators import user_passes_test
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -9,6 +9,7 @@ from django.template import RequestContext
 
 from tutorias.models import *
 from tutorias.form import *
+
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/')
 def add_grado(request):

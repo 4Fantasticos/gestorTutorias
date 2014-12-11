@@ -1,3 +1,4 @@
+# encoding:utf-8
 from datetime import datetime
 import json
 import time
@@ -13,6 +14,15 @@ DIAS_DE_LA_SEMANA = {0: 'L', 1: 'M', 2: 'X', 3: 'J', 4: 'V'}
 
 @dajaxice_register
 def gethoras(request, data):
+    """
+    Metodo ajax para capturar horas
+
+    Este método recibe una fecha y un profesor via json y envia las horas disponibles para esa fecha como objeto json
+
+    :param request: Request
+    :param data: Objeto Json con profesor y dia de la semana
+    :return: Objeto json con horas de tutoria disponibles para dicho profesor
+    """
     dia = time.strptime(data['dia'], '%d-%m-%Y')
     dia_semana = dia.tm_wday
     dia = datetime.fromtimestamp(time.mktime(dia))

@@ -1,8 +1,10 @@
 # encoding:utf-8
 import datetime
+
 from django.contrib.auth.models import User
 from django.test import TestCase, Client
-from tutorias.models import Grado, Horario, Asignatura, Reserva
+
+from tutorias.models import Horario, Asignatura, Reserva, Grado
 
 
 def inicializacion():
@@ -350,9 +352,6 @@ class GradoViewTestCase(TestCase):
         c.post('/admin/updateGrado/', {'titulo': 'GIISIActualizado', 'identificador': '1'})
         grado = Grado.objects.get(identificador=1)
         self.assertEquals(grado.titulo, 'GIISIActualizado')
-
-
-__author__ = 'Laura'
 
 
 class TestAsignatura(TestCase):
