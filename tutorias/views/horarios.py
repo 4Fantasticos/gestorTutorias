@@ -14,6 +14,15 @@ from tutorias.form import *
 
 @user_passes_test(lambda u: u.es_profesor, login_url='/')
 def add_horario(request):
+    """
+    Vista añadir horario
+
+    El siguiente método recoge via request los parametros de un form, lo evalua y añade los horarios que procedan
+    por intervalos de 15 minutos. En caso contrario deriva al template formularioHorario.html
+
+    :param request: Request
+    :return: A la url miPanel
+    """
     context = RequestContext(request)
 
     if request.method == 'POST':
@@ -36,6 +45,18 @@ def add_horario(request):
 
 
 def _introduce_horario(user, dia_semana, date_inicio, date_fin):
+    """
+    Metodo que guarda un horario en la base de datos
+
+    El siguiente método privado recive un usuario que es profesor, el dia de la semana, una fecha de inicio y
+    una fecha de fin y guarda en la base de datos objetos horarios por intervalos de 15 minutos.
+
+    :param user: Es un objeto usario concretamente profesor
+    :param dia_semana: Dia de la semana
+    :param date_inicio: Hora de inicio
+    :param date_fin: Hora de fin
+
+    """
     diff = date_fin - date_inicio
     minutos = diff.total_seconds() / 60
     intervalos = minutos // 15
@@ -51,6 +72,16 @@ def _introduce_horario(user, dia_semana, date_inicio, date_fin):
 
 @user_passes_test(lambda u: u.es_profesor, login_url='/')
 def eliminar_horario(request, horario_id):
+    """
+    Elimina un horario de la base de datos
+
+    El siguiente método recoge vía request los parametros de un form, los evalua y elimina un horario y
+    deriva a la url misHorarios
+
+    :param request: Request
+    :param horario_id: Identificador del horario en la bd
+    :return: A la url misHorarios
+    """
     horario = Horario.objects.filter(profesor=request.user).filter(pk=horario_id)
     horario.delete()
     return HttpResponseRedirect(reverse('misHorarios'))
@@ -58,6 +89,14 @@ def eliminar_horario(request, horario_id):
 
 @user_passes_test(lambda u: u.es_profesor, login_url='/')
 def mis_horarios(request):
+    """
+    Vista que muestra los horarios del profesor
+
+    El siguiente método muestra al usuario que es profesor, una lista con sus horarios
+
+    :param request: Request
+    :return: A la url misHorarios
+    """
     context = RequestContext(request)
     user = request.user
     horarios = Horario.objects.filter(profesor=user)
@@ -65,6 +104,14 @@ def mis_horarios(request):
 
 
 def __busca_dia_semana_horario(profesor_id):
+    """
+    Metodo auxiliar para saber que dia de la semana un profesor tiene tutorias
+
+    El siguiente método auxiliar devuelve en un array los dias de la semana que un profesor tiene tutoria.
+
+    :param profesor_id: Id del usuario profesor en la base de datos
+    :return: Array cuyo contenido determina que dias de la semana tiene tutorias un profesor.
+    """
     horarios = Horario.objects.filter(profesor=profesor_id)
     semana = [-1, -1, -1, -1, -1]
     for h in horarios:
@@ -84,6 +131,16 @@ def __busca_dia_semana_horario(profesor_id):
 
 @user_passes_test(lambda u: not u.es_profesor, login_url='/')
 def horarios_profesores(request, profesor_id):
+    """
+    Vista que indica que horarios de tutoria tiene disponibles un profesor
+
+    El siguiente método dado un identificador de usuario que es profesor devuelve los horarios de tutorias disponibles
+    que se pueden solicitar para reservar una tutoria.
+
+    :param request: Request
+    :param profesor_id: Identificador de la base de datos del usuario, que es profesor.
+    :return: Al template crearRerserva.html
+    """
     context = RequestContext(request)
     lista_dias = []
     hoy = datetime.datetime.now()
@@ -102,6 +159,15 @@ def horarios_profesores(request, profesor_id):
 
 @user_passes_test(lambda u: not u.es_profesor, login_url='/')
 def reservar_tutoria(request):
+    """
+    Vista Reserva Tutoria
+
+    El siguiente método recoge via request los parametros de un form, lo evalua y añade la reserva de una tutoria.
+    En caso contrario deriva al template crearReserva.html
+
+    :param request: Request
+    :return: A la url miPanel
+    """
     context = RequestContext(request)
     form = ReservaTutoriasForm(request.POST)
     if form.is_valid():
