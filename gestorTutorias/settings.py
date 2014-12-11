@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -50,8 +51,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-
-
 ROOT_URLCONF = 'gestorTutorias.urls'
 
 WSGI_APPLICATION = 'gestorTutorias.wsgi.application'
@@ -87,27 +86,27 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 TEMPLATE_DIRS = (
-    BASE_DIR+"/tutorias/templates",
+    BASE_DIR + "/tutorias/templates",
 )
 
 TEMPLATE_LOADERS = (
- 'django.template.loaders.filesystem.Loader',
- 'django.template.loaders.app_directories.Loader',
- 'django.template.loaders.eggs.Loader',
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
+    'django.template.loaders.eggs.Loader',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
- 'django.contrib.auth.context_processors.auth',
- 'django.core.context_processors.debug',
- 'django.core.context_processors.i18n',
- 'django.core.context_processors.media',
- 'django.core.context_processors.static',
- 'django.core.context_processors.request',
- 'django.contrib.messages.context_processors.messages'
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.core.context_processors.request',
+    'django.contrib.messages.context_processors.messages'
 )
 
 STATICFILES_FINDERS = (
- 'django.contrib.staticfiles.finders.FileSystemFinder',
- 'django.contrib.staticfiles.finders.AppDirectoriesFinder',
- 'dajaxice.finders.DajaxiceFinder',
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'dajaxice.finders.DajaxiceFinder',
 )
