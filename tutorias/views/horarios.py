@@ -64,10 +64,9 @@ def mis_horarios(request):
     return render_to_response('misHorarios.html', {'horarios': horarios}, context)
 
 
-@user_passes_test(lambda u: not u.es_profesor, login_url='/')
 def __busca_dia_semana_horario(profesor_id):
-    semana = [-1, -1, -1, -1, -1]
     horarios = Horario.objects.filter(profesor=profesor_id)
+    semana = [-1, -1, -1, -1, -1]
     for h in horarios:
         if h.dia_semana == 'L':
             semana[0] = 0
@@ -83,6 +82,7 @@ def __busca_dia_semana_horario(profesor_id):
     return semana
 
 
+@user_passes_test(lambda u: not u.es_profesor, login_url='/')
 def horarios_profesores(request, profesor_id):
     context = RequestContext(request)
     lista_dias = []
