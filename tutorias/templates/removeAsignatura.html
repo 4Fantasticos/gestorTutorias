@@ -17,7 +17,7 @@
         <form action="{% url 'remove_asignatura' %}" method="post"> {% csrf_token %}
             <select class="form-control" name="identificador">
                 {% for asig in asignaturas %}
-                <option value="{{asig.nombre}}">{{asig.nombre}}</option>
+                <option value="{{asig.id}}">{{asig.nombre}}</option>
                 {% endfor %}
             </select>
 
