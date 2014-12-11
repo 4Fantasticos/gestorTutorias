@@ -5,6 +5,31 @@ from django.test import TestCase, Client
 from tutorias.models import Grado, Horario, Asignatura, Reserva
 
 
+def inicializacion():
+    """
+    Iniciación de los requisitos para los test
+
+    :return: None
+    """
+    User.objects.create(username="profesor", email="profesor@gmail.com", es_profesor=True)
+    User.objects.create(username="alumno", email="alumno@gmail.com", es_profesor=False)
+    User.objects.create(username="admin")
+
+    profesor = User.objects.get(username="profesor")
+    profesor.set_password(1234)
+    profesor.save()
+
+    alumno = User.objects.get(username="alumno")
+    alumno.set_password(1234)
+    alumno.save()
+
+    admin = User.objects.get(username="admin")
+    admin.set_password("admin")
+    admin.is_staff = True
+    admin.is_superuser = True
+    admin.save()
+
+
 class UserTestCase(TestCase):
     """
     Test del modelo User
@@ -12,27 +37,11 @@ class UserTestCase(TestCase):
 
     def setUp(self):
         """
-        Iniciación de los requisitos para los test de User
+        Inicialización de las variables necesarias
 
         :return: None
         """
-        User.objects.create(username="profesor", email="profesor@gmail.com", es_profesor=True)
-        User.objects.create(username="alumno", email="alumno@gmail.com", es_profesor=False)
-        User.objects.create(username="admin")
-
-        profesor = User.objects.get(username="profesor")
-        profesor.set_password(1234)
-        profesor.save()
-
-        alumno = User.objects.get(username="alumno")
-        alumno.set_password(1234)
-        alumno.save()
-
-        admin = User.objects.get(username="admin")
-        admin.set_password("admin")
-        admin.is_staff = True
-        admin.is_superuser = True
-        admin.save()
+        inicializacion()
 
     def test_user_password(self):
         """
@@ -166,23 +175,7 @@ class UsuarioViewTestCase(TestCase):
 
         :return: None
         """
-        User.objects.create(username="profesor", email="profesor@gmail.com", es_profesor=True)
-        User.objects.create(username="alumno", email="alumno@gmail.com", es_profesor=False)
-        User.objects.create(username="admin")
-
-        profesor = User.objects.get(username="profesor")
-        profesor.set_password(1234)
-        profesor.save()
-
-        alumno = User.objects.get(username="alumno")
-        alumno.set_password(1234)
-        alumno.save()
-
-        admin = User.objects.get(username="admin")
-        admin.set_password("admin")
-        admin.is_staff = True
-        admin.is_superuser = True
-        admin.save()
+        inicializacion()
 
     def test_login(self):
         c = Client()
@@ -248,23 +241,7 @@ class PanelViewTestCase(TestCase):
 
         :return: None
         """
-        User.objects.create(username="profesor", email="profesor@gmail.com", es_profesor=True)
-        User.objects.create(username="alumno", email="alumno@gmail.com", es_profesor=False)
-        User.objects.create(username="admin")
-
-        profesor = User.objects.get(username="profesor")
-        profesor.set_password(1234)
-        profesor.save()
-
-        alumno = User.objects.get(username="alumno")
-        alumno.set_password(1234)
-        alumno.save()
-
-        admin = User.objects.get(username="admin")
-        admin.set_password("admin")
-        admin.is_staff = True
-        admin.is_superuser = True
-        admin.save()
+        inicializacion()
 
     def test_mi_panel(self):
         c = Client()
