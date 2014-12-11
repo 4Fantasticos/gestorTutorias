@@ -62,10 +62,6 @@ class AsignaturaRemoveForm(forms.Form):
     grado = forms.CharField(max_length=10)
 
 
-class AsignaturaRemoveForm(forms.Form):
-    nombre = forms.CharField(max_length=100)
-
-
 class AsignaturaReadForm(forms.Form):
     nombre = forms.CharField(max_length=100)
 
@@ -77,7 +73,6 @@ class AddAsignaturasForm(forms.Form):
         for asig in asignaturas:
             sublista = (asig.id, asig.nombre)
             lista = lista + (sublista,)
-        print lista
         super(AddAsignaturasForm, self).__init__(*args, **kwargs)
         self.fields['choices'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=lista)
 
