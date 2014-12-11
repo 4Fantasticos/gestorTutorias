@@ -1,11 +1,6 @@
 # encoding:utf-8
 import datetime
-from django.contrib.auth.models import User
-from django.test import TestCase, Client
-import datetime
 
-# encoding:utf-8
-import datetime
 from django.contrib.auth.models import User
 from django.test import TestCase, Client
 from tutorias.form import *
@@ -16,7 +11,6 @@ def inicializacion():
     """
     Iniciación de los requisitos para los test
 
-    :return: None
     """
     User.objects.create(username="profesor", email="profesor@gmail.com", es_profesor=True)
     User.objects.create(username="alumno", email="alumno@gmail.com", es_profesor=False)
@@ -46,7 +40,6 @@ class UserTestCase(TestCase):
         """
         Inicialización de las variables necesarias
 
-        :return: None
         """
         inicializacion()
 
@@ -54,7 +47,6 @@ class UserTestCase(TestCase):
         """
         La contraseña debe guardarse bien
 
-        :return:
         """
         profesor = User.objects.get(username="profesor")
         alumno = User.objects.get(username="alumno")
@@ -72,7 +64,6 @@ class GradoTestCase(TestCase):
         """
         Iniciación de los requisitos para los test de Grado
 
-        :return: None
         """
         Grado.objects.create(titulo="GIISI", identificador=1)
 
@@ -80,7 +71,6 @@ class GradoTestCase(TestCase):
         """
         El grado se guarda correctamente
 
-        :return: None
         """
         grado = Grado.objects.get(identificador=1)
 
@@ -96,7 +86,6 @@ class HorarioTestCase(TestCase):
         """
         Iniciación de los requisitos para los test de Horario
 
-        :return: None
         """
         User.objects.create(username="profesor", email="profesor@gmail.com", es_profesor=True)
         profesor = User.objects.get(username="profesor")
@@ -106,7 +95,6 @@ class HorarioTestCase(TestCase):
         """
         El horario guarda correctamente el profesor que contiene el horario
 
-        :return: None
         """
         horario = Horario.objects.get(dia_semana='L')
         self.assertEquals(horario.profesor.username, "profesor")
@@ -121,7 +109,6 @@ class AsignaturaTestCase(TestCase):
         """
         Iniciación de los requisitos para los test de Asignatura
 
-        :return: None
         """
         User.objects.create(username="profesor", email="profesor@gmail.com", es_profesor=True)
         User.objects.create(username="alumno", email="alumno@gmail.com", es_profesor=False)
@@ -138,7 +125,6 @@ class AsignaturaTestCase(TestCase):
         """
         La asignatura guarda correctamente los alummos y profesores que la imparten
 
-        :return:
         """
         asignatura = Asignatura.objects.get(codigo=1)
         self.assertEquals(len(asignatura.usuarios.all()), 1)
@@ -154,7 +140,6 @@ class ReservaTestCase(TestCase):
         """
         Iniciación de los requisitos para los test de Reserva
 
-        :return: None
         """
         User.objects.create(username="profesor", email="profesor@gmail.com", es_profesor=True)
         profesor = User.objects.get(username="profesor")
@@ -169,7 +154,6 @@ class ReservaTestCase(TestCase):
         """
         La reserva se asigna al alumno correctamente.
 
-        :return: None
         """
         reserva = Reserva.objects.get(estado="P")
         self.assertEquals(reserva.alumnos.username, "alumno")
@@ -180,7 +164,6 @@ class UsuarioViewTestCase(TestCase):
         """
         Iniciación de los requisitos para los test de User
 
-        :return: None
         """
         inicializacion()
 
@@ -246,7 +229,6 @@ class PanelViewTestCase(TestCase):
         """
         Iniciación de los requisitos para los test de User
 
-        :return: None
         """
         inicializacion()
 
@@ -305,17 +287,14 @@ class PanelViewTestCase(TestCase):
         c.login(username="alumno", password="1234")
         response = c.post('/miPanel/notificacionesAlumno/', {})
         boolean = True if not response.context['reservas'] else False
-        self.assertEquals(boolean, True)  # Create your tests here.
-
-
-from tutorias.models import Grado
+        self.assertEquals(boolean, True)
 
 
 class GradoViewTestCase(TestCase):
     def setUp(self):
         """
         Iniciación de los requisitos para los test de Grados
-        :return: None
+
         """
         User.objects.create(username="admin")
         admin = User.objects.get(username="admin")
@@ -330,7 +309,7 @@ class GradoViewTestCase(TestCase):
     def test_add_grado(self):
         """
         Metodo que comprueba si se agraga un grado correctamente
-        :return: None
+
         """
         c = Client()
         c.login(username="admin", password="admin")
@@ -341,7 +320,7 @@ class GradoViewTestCase(TestCase):
     def test_remove_grado(self):
         """
         Metodo que comprueba si se elimina un grado correctamente
-        :return: None
+
         """
         self.assertEquals(Grado.objects.all().count(), 1)
         c = Client()
@@ -354,7 +333,7 @@ class GradoViewTestCase(TestCase):
     def test_read_grado(self):
         """
         Metodo que comprueba si se consulta un grado correctamente
-        :return: None
+
         """
         c = Client()
         c.login(username="admin", password="admin")
@@ -362,9 +341,10 @@ class GradoViewTestCase(TestCase):
         boolean = True if "grado" in response.context else False
         self.assertEquals(boolean, True)
 
-
     def test_update_grado(self):
         """
+        Test de modificar grado
+
         Metodo que comprueba si se edita un grado correctamente
         :return: None
         """
@@ -375,17 +355,15 @@ class GradoViewTestCase(TestCase):
         self.assertEquals(grado.titulo, 'GIISIActualizado')
 
 
-from django.contrib.auth.models import User
-from django.test import TestCase, Client
-
-from tutorias.models import Grado, Asignatura, Reserva
-
-
-__author__ = 'Laura'
-
-
 class TestAsignatura(TestCase):
     def setUp(self):
+        """
+        Iniciación de los requisitos para los test de Asignaturas
+
+        Se inicializa todos los objetos que serán necesarios para
+        los tests de Asignatura
+
+        """
         User.objects.create(username="admin")
         admin = User.objects.get(username="admin")
         admin.set_password("admin")
@@ -419,6 +397,12 @@ class TestAsignatura(TestCase):
         Asignatura.objects.create(nombre="Calidad", codigo=1, curso=4, grados=grado)
 
     def test_add_asignatura(self):
+        """
+        Test de añadir asignatura
+
+        Método que comprueba que se añade una asignatura correctamente
+
+        """
         Asignatura.objects.get(codigo=1)
         Grado.objects.get(identificador=1)
         c = Client()
@@ -429,6 +413,12 @@ class TestAsignatura(TestCase):
         self.assertEquals(boolean, True)
 
     def test_remove_asignatura(self):
+        """
+        Test de eliminar asignatura
+
+        Método que comprueba que se elimina una asignatura correctamente
+
+        """
         self.assertEquals(Asignatura.objects.all().count(), 1)
         c = Client()
         c.login(username="admin", password="admin")
@@ -438,13 +428,40 @@ class TestAsignatura(TestCase):
         self.assertEquals(Asignatura.objects.all().count(), 0)
 
     def test_read_asignatura(self):
+        """
+        Test de consultar asignatura
+
+        Método que comprueba que se puede consultar una asignatura
+        correctamente
+
+        """
         c = Client()
         c.login(username="admin", password="admin")
         response = c.post('/admin/readAsignatura/', {'nombre': 'Calidad'})
         boolean = True if "asignatura" in response.context else False
         self.assertEquals(boolean, True)
 
+    def test_update_asignatura(self):
+        """
+        Test de modificar asignatura
+
+        Metodo que comprueba que se edite una asignatura correctamente
+
+        """
+        c = Client()
+        c.login(username="admin", password="admin")
+        c.post('/admin/updateAsignatura/', {'nombre': 'Calidad_UPDATE', 'codigo': '1', 'curso': '4', 'grado': '1'})
+        asignatura = Asignatura.objects.get(codigo=1)
+        self.assertEquals(asignatura.nombre, 'Calidad_UPDATE')
+
     def test_metricas(self):
+        """
+        Test de métricas
+
+        Método que comprueba que funciona correctamente la métrica
+        del alumno con más números de reservas
+
+        """
         c = Client()
         c.login(username="admin", password="admin")
         alumno2 = User.objects.get(username="alumno2")
