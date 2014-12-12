@@ -17,7 +17,7 @@
         <form action="{% url 'add_grados_profesor' %}" method="post"> {% csrf_token %}
             <div class="form-group">
                 {% for grado in grados %}
-                <input type="checkbox" value="{{grado.identificador}}" name="choices"/>{{grado.titulo}}
+                <input type="checkbox" value="{{grado.id}}" name="choices"/>{{grado.titulo}}
                 {% endfor %}
             </div>
 
