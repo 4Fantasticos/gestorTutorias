@@ -175,8 +175,11 @@ class UsuarioViewTestCase(TestCase):
 
     def test_login(self):
         """
-        Comprueba que la view Login al pasarle usuarios registrados te loguea.
+        Comprobación de la vista user_login
 
+        Comprueba que al no pasarle datos te muestra el login.
+        Comprueba que al pasarle usuarios registrados te loguea.
+        Comprueba que al ya estar logueado no vuelve a loguear.
         """
         c = Client()
 
@@ -195,8 +198,12 @@ class UsuarioViewTestCase(TestCase):
 
     def test_add_user(self):
         """
-        Comprueba que la vista add_user agrega corretamente un usuario al sistema.
+        Comprueba la vista add_user
 
+        Comprueba que al agregar corretamente un usuario alumno te envía a agregarle asignaturas.
+        Comprueba que al agregar correctamente un usuario profesor te envía a agregarle grados.
+        Comprueba que si los datos no son válidos no registra.
+        Comprueba que si no se le pasa datos te muestra el formulario.
         """
         Grado.objects.create(titulo="GIISI", identificador=1)
         c = Client()
@@ -207,10 +214,28 @@ class UsuarioViewTestCase(TestCase):
         boolean = True if "addAsignaturasAlumno" in response.url else False
         self.assertEquals(boolean, True)
 
+        response = c.post('/admin/addUser/',
+                          {'username': 'prueba2', 'password': '1234', 'first_name': 'Nom2bre', 'last_name': 'Apelli2do',
+                           'es_profesor': True, 'dni': '12345627W', 'email': 'pru2eba@gmail.com', 'grado': '1'})
+        boolean = True if "addGradosProfesor" in response.url else False
+        self.assertEquals(boolean, True)
+
+        response = c.post('/admin/addUser/',
+                          {'userame': 'prueba', 'pasord': '1234', 'fit_name': 'Nombre', 'lastame': 'Apellido',
+                           'es_rofesor': True, 'dni': '1234567W', 'emal': 'prueba@gmail.com', 'grao': '1'})
+        boolean = True if "grados" in response.context else False
+        self.assertEquals(boolean, True)
+
+        response = c.post('/admin/addUser/', {})
+        boolean = True if "grados" in response.context else False
+        self.assertEquals(boolean, True)
+
     def test_remove_user(self):
         """
-        Comprueba que la vista remove_user elimina correctamente un usuario existente.
+        Comprueba la vista remove_user.
 
+        Comprueba que elimina correctamente un usuario existente.
+        Comprueba que si no se le pasa datos te muestra el formulario.
         """
         self.assertEquals(User.objects.all().count(), 3)
         c = Client()
@@ -220,10 +245,16 @@ class UsuarioViewTestCase(TestCase):
         self.assertEquals(boolean, True)
         self.assertEquals(User.objects.all().count(), 2)
 
+        response = c.post('/admin/removeUser/', {})
+        boolean = True if "users" in response.context else False
+        self.assertEquals(boolean, True)
+
     def test_read_user(self):
         """
-        Comprueba que la vista read_user devuelve el usuario consultado.
+        Comprueba la vista read_user.
 
+        Comprueba que devuelve el usuario consultado.
+        Comprueba que si no se le pasa nada te muestra los usuarios.
         """
         c = Client()
         c.login(username="admin", password="admin")
@@ -231,10 +262,25 @@ class UsuarioViewTestCase(TestCase):
         boolean = True if "profesor" in response.context else True
         self.assertEquals(boolean, True)
 
+        response = c.post('/admin/readUser/', {})
+        boolean = True if "usuarios" in response.context else True
+        self.assertEquals(boolean, True)
+
+        response = c.get('/admin/readUser/', {'page': '1'})
+        boolean = True if "usuarios" in response.context else True
+        self.assertEquals(boolean, True)
+
+        response = c.get('/admin/readUser/', {'page': 'asd'})
+        boolean = True if "usuarios" in response.context else True
+        self.assertEquals(boolean, True)
+
     def test_update_user(self):
         """
-        Comprueba que la vista update_user actualiza correctamente un usuario.
+        Comprueba la vista update_user.
 
+        Comprueba que actualiza correctamente un usuario.
+        Comprueba que si los datos no son correcto no lo actualiza.
+        Comprueba que si no se le pasan datos, te muestra el formulario.
         """
         c = Client()
         c.login(username="admin", password="admin")
@@ -245,10 +291,22 @@ class UsuarioViewTestCase(TestCase):
         usuario = User.objects.get(username='alumno')
         self.assertEquals(usuario.first_name, 'Actualizado')
 
+        response = c.post('/admin/updateUser/',
+                          {'username': 'alumno', 'password': '1234', 'first_name': 'Actualizado',
+                           '123': 'Apellido', 'es_profesor': False, 'dni': '1234567W',
+                           'email': 'prueba@gmail.com', 'grado': '1'})
+        boolean = True if "usuario" in response.context else True
+        self.assertEquals(boolean, True)
+
+        response = c.get('/admin/updateUser/', {'username': 'alumno'})
+        boolean = True if "usuario" in response.context else True
+        self.assertEquals(boolean, True)
+
     def test_logout(self):
         """
-        Comprueba que la vista logout, elimina la sesion del usuario
+        Comprueba la vista logout
 
+        Comprueba que elimina la sesion del usuario
         """
         c = Client()
         c.login(username="admin", password="admin")
@@ -258,13 +316,16 @@ class UsuarioViewTestCase(TestCase):
 
     def test_pedir_tutoria(self):
         """
-        Comprueba que la vista pedir_tutoria muestra las asignaturas al alumno logueado
+        Comprueba la vista pedir_tutoria
 
+        Comprueba que muestra las asignaturas al alumno logueado
         """
         c = Client()
         c.login(username="alumno", password="1234")
+        al = User.objects.get(username="alumno")
+        mixer.blend(Asignatura, usuarios=al, id=666)
         response = c.post('/miPanel/pedirTutoria/', {})
-        boolean = True if "misAsignaturas.html" in response.templates[0].name else False
+        boolean = True if "profesores" in response.context else False
         self.assertEquals(boolean, True)
 
 
@@ -282,8 +343,11 @@ class PanelViewTestCase(TestCase):
 
     def test_mi_panel(self):
         """
-        Comprueba que la vista mi_panel muestra las reservas del profesor
+        Comprueba la vista mi_panel
 
+        Comprueba que muestra las reservas del profesor si el usuario es un profesor
+        Comprueba que muestra los datos del admin si el usuario es un admin
+        Comprueba que muestra las opciones del alumno si el usuario es un alumno
         """
         c = Client()
         c.login(username="profesor", password="1234")
@@ -305,8 +369,11 @@ class PanelViewTestCase(TestCase):
 
     def test_add_asignaturas_alumnos(self):
         """
-        Comprueba que la vista add_asignatura_alumnos se muestra al añadir un alumno
+        Comprueba la vista add_asignatura_alumnos
 
+        Comprueba que si no se le pasa nada, se muestra el formulario.
+        Comprueba que se dirige a añadir las asignaturas al alumno
+        Comprueba que no te dirige a añadir las asignaturas al alumno si los datos no son correctos.
         """
         grado = mixer.blend(Grado, titulo="GIISI", identificador=1)
         alumno = User.objects.get(username="alumno")
@@ -331,8 +398,11 @@ class PanelViewTestCase(TestCase):
 
     def test_add_grados_profesor(self):
         """
-        Comprueba que la vista add_grados_profesor se muestra al añadir un profesor
+        Comprueba la vista add_grados_profesor
 
+        Comprueba que si no se le pasan datos muestra el formulario.
+        Comprueba que se muestra al añadir un profesor.
+        Comprueba que si no se le pasan los datos correctamente no te dirige a añadir los grados.
         """
         profesor = User.objects.get(username="profesor")
         mixer.blend(Grado, profesores=profesor, id=10)
@@ -355,8 +425,10 @@ class PanelViewTestCase(TestCase):
 
     def test_add_asignaturas_profesor(self):
         """
-        Comprueba que la vista add_asignatura_profesor se muestra al añadir un grado de profesor
+        Comprueba la vista add_asignaturas_profesor
 
+        Comprueba que si los datos no son correcto no muestra los grados.
+        Comprueba que se muestra al añadir un grado de profesor
         """
         profesor = User.objects.get(username="profesor")
         grado = mixer.blend(Grado, profesores=profesor, titulo="Calidad")
@@ -377,12 +449,14 @@ class PanelViewTestCase(TestCase):
 
     def test_notificaciones_profesor(self):
         """
-        Comprueba que la vista notificaciones_profesor devuelve las reservas del profesor
+        Comprueba la vista notificaciones_profesor
 
+        Comprueba que acepta las reservas.
+        Comprueba que declina las reservas.
         """
         profesor = User.objects.get(username="profesor")
-        reserva = mixer.blend(Reserva, profesor=profesor, estado='P', id=1)
-        reserva2 = mixer.blend(Reserva, profesor=profesor, estado='P', id=2)
+        mixer.blend(Reserva, profesor=profesor, estado='P', id=1)
+        mixer.blend(Reserva, profesor=profesor, estado='P', id=2)
         c = Client()
         c.login(username="profesor", password="1234")
         response = c.post('/miPanel/notificaciones/', {'aceptar': 'aceptar', 'id': '1'})
@@ -395,8 +469,9 @@ class PanelViewTestCase(TestCase):
 
     def test_notificaciones_alumno(self):
         """
-        Comprueba que la vista notificaciones_alumno devuelve las reservas del alumno
+        Comprueba la vista notificaciones_alumno
 
+        Comprueba que la vista notificaciones_alumno devuelve las reservas del alumno
         """
         c = Client()
         c.login(username="alumno", password="1234")
@@ -427,8 +502,11 @@ class GradoViewTestCase(TestCase):
 
     def test_add_grado(self):
         """
-        Metodo que comprueba si se agraga un grado correctamente
+        Comprueba la vista add_grado
 
+        Método que comprueba si se agrega un grado correctamente
+        Método que comprueba que si los datos no son correcto, no lo agrega
+        Método que comprueba que si no se le pasan datos, te muestra el formulario.
         """
         c = Client()
         c.login(username="admin", password="admin")
@@ -446,8 +524,10 @@ class GradoViewTestCase(TestCase):
 
     def test_remove_grado(self):
         """
-        Metodo que comprueba si se elimina un grado correctamente
+        Comprueba la vista remove_grado
 
+        Método que comprueba si se elimina un grado correctamente
+        Método que comprueba que si no se le pasan datos, muestra el formulario.
         """
         self.assertEquals(Grado.objects.all().count(), 1)
         c = Client()
@@ -463,8 +543,10 @@ class GradoViewTestCase(TestCase):
 
     def test_read_grado(self):
         """
-        Metodo que comprueba si se consulta un grado correctamente
+        Comprueba la vista read_grado
 
+        Método que comprueba si se consulta un grado correctamente
+        Método que comprueba que si no se le pasan datos, muestra el formulario.
         """
         c = Client()
         c.login(username="admin", password="admin")
@@ -478,10 +560,11 @@ class GradoViewTestCase(TestCase):
 
     def test_update_grado(self):
         """
-        Test de modificar grado
+        Comprueba la vista update_grado
 
-        Metodo que comprueba si se edita un grado correctamente
-
+        Método que comprueba si se edita un grado correctamente
+        Método que comprueba si los datos no son correcto no lo añade.
+        Método que comprueba si no se le pasan datos, muestra el formulario.
         """
         c = Client()
         c.login(username="admin", password="admin")
@@ -546,10 +629,11 @@ class TestAsignatura(TestCase):
 
     def test_add_asignatura(self):
         """
-        Test de añadir asignatura
+        Comprueba la vista add_asignatura
 
         Método que comprueba que se añade una asignatura correctamente
-
+        Método que comprueba que si los datos no son correcto, no añade.
+        Método que comprueba que si no se le pasan datos, muestra el formulario.
         """
         Asignatura.objects.get(codigo=1)
         Grado.objects.get(identificador=1)
@@ -560,12 +644,21 @@ class TestAsignatura(TestCase):
         boolean = True if "miPanel" in response.url else False
         self.assertEquals(boolean, True)
 
+        response = c.post('/admin/addAsignatura/',
+                          {'nombr': 'Calidad', 'codigo': '1', 'curso': '4', 'grado': '1'})
+        boolean = True if "grados" in response.context else False
+        self.assertEquals(boolean, True)
+
+        response = c.post('/admin/addAsignatura/', {})
+        boolean = True if "grados" in response.context else False
+        self.assertEquals(boolean, True)
+
     def test_remove_asignatura(self):
         """
-        Test de eliminar asignatura
+        Comprueba la vista remove_asignatura
 
         Método que comprueba que se elimina una asignatura correctamente
-
+        Método que comprueba que si no se le pasan datos muestra el formulario.
         """
         self.assertEquals(Asignatura.objects.all().count(), 1)
         c = Client()
@@ -575,13 +668,16 @@ class TestAsignatura(TestCase):
         self.assertEquals(boolean, True)
         self.assertEquals(Asignatura.objects.all().count(), 0)
 
+        response = c.post('/admin/removeAsignatura/', {})
+        boolean = True if 'asignaturas' in response.context else False
+        self.assertEquals(boolean, True)
+
     def test_read_asignatura(self):
         """
-        Test de consultar asignatura
+        Comprueba la vista read_asignatura
 
-        Método que comprueba que se puede consultar una asignatura
-        correctamente
-
+        Método que comprueba que se puede consultar una asignatura correctamente
+        Método que comprueba que si no se le pasan datos muestra todas las asignaturas
         """
         c = Client()
         c.login(username="admin", password="admin")
@@ -589,12 +685,25 @@ class TestAsignatura(TestCase):
         boolean = True if "asignatura" in response.context else False
         self.assertEquals(boolean, True)
 
+        response = c.post('/admin/readAsignatura/', {})
+        boolean = True if "asignaturas" in response.context else False
+        self.assertEquals(boolean, True)
+
+        response = c.get('/admin/readAsignatura/', {'page': '1'})
+        boolean = True if "asignaturas" in response.context else False
+        self.assertEquals(boolean, True)
+
+        response = c.get('/admin/readAsignatura/', {'page': 'asd'})
+        boolean = True if "asignaturas" in response.context else False
+        self.assertEquals(boolean, True)
+
     def test_update_asignatura(self):
         """
-        Test de modificar asignatura
+        Comprueba la vista update_asignatura
 
-        Metodo que comprueba que se edite una asignatura correctamente
-
+        Método que comprueba que se edite una asignatura correctamente
+        Método que comprueba que se si los datos no son correcto no lo actualiza.
+        Método que comprueba que si no se le pasa dato, muestra el formulario.
         """
         c = Client()
         c.login(username="admin", password="admin")
@@ -602,15 +711,25 @@ class TestAsignatura(TestCase):
         asignatura = Asignatura.objects.get(codigo=1)
         self.assertEquals(asignatura.nombre, 'Calidad_UPDATE')
 
+        response = c.post('/admin/updateAsignatura/',
+                          {'nomre': 'Calidad_UPDATE', 'codigo': '1', 'curso': '4', 'grado': '1'})
+        boolean = True if "asignatura" in response.context else False
+        self.assertEquals(boolean, True)
+
+        mixer.blend(Asignatura, id=10)
+        response = c.get('/admin/updateAsignatura/', {'id': '10'})
+        boolean = True if "asignatura" in response.context else False
+        self.assertEquals(boolean, True)
+
     def test_metricas(self):
         """
-        Test de métricas
+        Comprueba la vista métricas
 
-        Método que comprueba que funciona correctamente la métrica
-        del alumno con más números de reservas
-
+        Método que comprueba que funciona correctamente la métrica del alumno con más números de reservas
         """
         c = Client()
+        mixer.blend(Grado)
+        mixer.blend(Grado)
         c.login(username="admin", password="admin")
         alumno2 = User.objects.get(username="alumno2")
         self.assertEquals(Reserva.objects.filter(alumnos=alumno2).count(), 2)
@@ -633,20 +752,31 @@ class TestHorario(TestCase):
 
     def test_add_horario(self):
         """
-        Comprueba que la vista addHorario redirige a miPanel si todo va bien.
+        Comprueba la vista add_horario
 
+        Comprueba que redirige a miPanel si todo va bien.
+        Comprueba que si los datos no son correcto, no añade.
+        Comprueba que si no se le pasan datos, muestra el formulario.
         """
         c = Client()
         c.login(username="profesor", password="1234")
-        response = c.post('/admin/addHorario/',
-                          {'dia_semana': 'L', 'hora_inicio': '10:00', 'hora_final': '10:30'})
+        response = c.post('/admin/addHorario/', {'dia_semana': 'L', 'hora_inicio': '10:00', 'hora_final': '10:30'})
         boolean = True if "miPanel" in response.url else False
+        self.assertEqual(boolean, True)
+
+        response = c.post('/admin/addHorario/', {'dia_mana': 'L', 'hora_inicio': '10:00', 'hora_final': '10:30'})
+        boolean = True if "form" in response.context else False
+        self.assertEqual(boolean, True)
+
+        response = c.post('/admin/addHorario/', {})
+        boolean = True if "form" in response.context else False
         self.assertEqual(boolean, True)
 
     def test__introduce_horario(self):
         """
-        Comprueba que se crean el numero de intervalos cada 15 minutos y guarda los horarios
+        Comprueba el método auxiliar _introduce_horario
 
+        Comprueba que se crean el numero de intervalos cada 15 minutos y guarda los horarios
         """
         usuario = User.objects.get(username="profesor")
         date_inicio = datetime.datetime.combine(datetime.date.today(), datetime.time(10, 30))
@@ -659,8 +789,9 @@ class TestHorario(TestCase):
 
     def test_eliminar_horario(self):
         """
-        Elimina el horario de un profesor
+        Comprueba la vista eliminar_horario
 
+        Comprueba que elimina el horario señalado.
         """
         c = Client()
         c.login(username="profesor", password="1234")
@@ -676,18 +807,27 @@ class TestHorario(TestCase):
 
     def test__busca_dia_semana_horario(self):
         """
-        Comprueba que el método auxiliar crea la lista de dias de la semana con tutorias correctamente
+        Comprueba el método auxiliar _busca_dia_semana_horario
 
+        Comprueba que el método auxiliar crea la lista de dias de la semana con tutorias correctamente
         """
         usuario = User.objects.get(username="profesor")
         Horario.objects.create(dia_semana='M', hora_inicio="12:30", profesor=usuario)
+        mixer.blend(Horario, dia_semana='L', profesor=usuario)
+        mixer.blend(Horario, dia_semana='X', profesor=usuario)
+        mixer.blend(Horario, dia_semana='J', profesor=usuario)
+        mixer.blend(Horario, dia_semana='V', profesor=usuario)
         semana = _busca_dia_semana_horario(usuario.id)
-        self.assertEquals(semana[1], 1)
-        self.assertEquals(semana[4], -1)
+        self.assertEqual(semana[0], 0)
+        self.assertEqual(semana[1], 1)
+        self.assertEqual(semana[2], 2)
+        self.assertEqual(semana[3], 3)
+        self.assertEqual(semana[4], 4)
 
     def test_horarios_profesores(self):
         """
-        Comprueba que el context pasado al template es correcto
+        Comprueba la vista horarios_profesores
+
         Por cada horario de profesor con dia distinto tenemos dos dias en la lista
         Si creamos una reserva con una fecha pasada el context debe devolver una lista vacia
         """
@@ -709,8 +849,9 @@ class TestHorario(TestCase):
 
     def test_reservar_tutoria(self):
         """
-        Comprueba que la vista reservarTutoria redirige a miPanel si todo va bien.
+        Comprueba la vista reservar_tutoria
 
+        Comprueba que redirige a miPanel si todo va bien.
         """
         c = Client()
         c.login(username="alumno", password="1234")
@@ -721,6 +862,12 @@ class TestHorario(TestCase):
                           {'mensajealumno': 'hola', 'dia': '12-12-2014', 'horario_id': str(horario.id)})
 
         boolean = True if "miPanel" in response.url else False
+        self.assertEqual(boolean, True)
+
+        response = c.post('/miPanel/reservarTutoria',
+                          {'mensajelumno': 'hola', 'dia': '12-12-2014', 'horario_id': str(horario.id)})
+
+        boolean = True if "form" in response.context else False
         self.assertEqual(boolean, True)
 
 
@@ -859,4 +1006,3 @@ class FormTest(TestCase):
         """
         form = ReservaTutoriasForm({'mensajealumno': 'Prueba', 'dia': '3', 'horario_id': '3'})
         self.assertEquals(form.is_valid(), True)
-        
