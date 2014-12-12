@@ -636,7 +636,7 @@ class TestHorario(TestCase):
         horario = Horario.objects.get(dia_semana='X', hora_inicio="20:30", profesor=profesor)
         response = c.post('/miPanel/reservarTutoria',
                           {'mensajealumno': 'hola', 'dia': '12-12-2014', 'horario_id': str(horario.id)})
-        print response
+
         boolean = True if "miPanel" in response.url else False
         self.assertEqual(boolean, True)
 
@@ -775,4 +775,3 @@ class FormTest(TestCase):
         """
         form = ReservaTutoriasForm({'mensajealumno': 'Prueba', 'dia': '3', 'horario_id': '3'})
         self.assertEquals(form.is_valid(), True)
-        
