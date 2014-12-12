@@ -57,9 +57,6 @@ def add_asignaturas_alumnos(request):
                 asig = Asignatura.objects.get(id=item)
                 asig.usuarios.add(user)
             return HttpResponseRedirect(reverse('miPanel'))
-        else:
-            form = AddAsignaturasForm(request.POST, asignaturas=asignaturas)
-            return render_to_response('formAddAsignaturas.html', {'form': form, 'asignaturas': asignaturas}, context)
     form = AddAsignaturasForm(asignaturas=asignaturas)
     return render_to_response('formAddAsignaturas.html', {'form': form, 'asignaturas': asignaturas}, context)
 
@@ -86,9 +83,6 @@ def add_grados_profesor(request):
                 grado.profesores.add(user)
             request.session['profesor'] = user.id
             return HttpResponseRedirect(reverse('add_asignaturas_profesor'))
-        else:
-            form = AddGradosForm(request.POST, grados=grados)
-            return render_to_response('formAddGrados.html', {'form': form, 'grados': grados}, context)
     form = AddGradosForm(grados=grados)
     return render_to_response('formAddGrados.html', {'form': form, 'grados': grados}, context)
 
@@ -120,10 +114,6 @@ def add_asignaturas_profesor(request):
                 asig = Asignatura.objects.get(id=item)
                 asig.profesores.add(user)
             return HttpResponseRedirect(reverse('miPanel'))
-        else:
-            form = AddAsignaturasForm(request.POST, asignaturas=lista_asignaturas)
-            return render_to_response('formAddAsignaturas.html',
-                                      {'profesor': True, 'form': form, 'asignaturas': asignaturas}, context)
     form = AddAsignaturasForm(asignaturas=asignaturas)
     return render_to_response('formAddAsignaturas.html', {'profesor': True, 'form': form, 'asignaturas': asignaturas},
                               context)

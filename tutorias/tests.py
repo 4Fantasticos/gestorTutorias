@@ -165,6 +165,7 @@ class UsuarioViewTestCase(TestCase):
     """
     Test de las vistas de Usuario
     """
+
     def setUp(self):
         """
         Iniciación de los requisitos para los test de User.
@@ -178,6 +179,16 @@ class UsuarioViewTestCase(TestCase):
 
         """
         c = Client()
+
+        response = c.get('/', {})
+        boolean = True if "miPanel" not in response.context else False
+        self.assertEquals(boolean, True)
+
+        response = c.post('/', {'user': 'profesor', 'password': '1234'})
+        boolean = True if "miPanel" in response.url else False
+        self.assertEquals(boolean, True)
+
+        c.login(username="admin", password="admin")
         response = c.post('/', {'user': 'profesor', 'password': '1234'})
         boolean = True if "miPanel" in response.url else False
         self.assertEquals(boolean, True)
@@ -261,6 +272,7 @@ class PanelViewTestCase(TestCase):
     """
     Test de las vistas de Panel
     """
+
     def setUp(self):
         """
         Iniciación de los requisitos para los test de User
@@ -278,14 +290,27 @@ class PanelViewTestCase(TestCase):
         response = c.post('/miPanel/')
         boolean = True if 'reservas' in response.context['datos'] else False
         self.assertEquals(boolean, True)
+        c.logout()
+
+        c.login(username="admin", password="admin")
+        response = c.post('/miPanel/')
+        boolean = True if 'usuarios' in response.context['datos'] else False
+        self.assertEquals(boolean, True)
+        c.logout()
+
+        c.login(username="alumno", password="1234")
+        response = c.post('/miPanel/')
+        boolean = True if 'reservas' in response.context else False
+        self.assertEquals(boolean, False)
 
     def test_add_asignaturas_alumnos(self):
         """
         Comprueba que la vista add_asignatura_alumnos se muestra al añadir un alumno
 
         """
-        Grado.objects.create(titulo="GIISI", identificador=1)
+        grado = mixer.blend(Grado, titulo="GIISI", identificador=1)
         alumno = User.objects.get(username="alumno")
+        mixer.blend(Asignatura, grados=grado, id=10)
         self.client = Client()
         self.client.login(username="admin", password="admin")
         session = self.client.session
@@ -294,6 +319,14 @@ class PanelViewTestCase(TestCase):
         session.save()
         response = self.client.post("/miPanel/addAsignaturasAlumno/", {})
         boolean = True if not response.context['asignaturas'] else False
+        self.assertEquals(boolean, False)
+
+        response = self.client.post("/miPanel/addAsignaturasAlumno/", {'choices': 'error'})
+        boolean = True if not response.context['asignaturas'] else False
+        self.assertEquals(boolean, False)
+
+        response = self.client.post("/miPanel/addAsignaturasAlumno/", {'choices': '10'})
+        boolean = True if not response.context else False
         self.assertEquals(boolean, True)
 
     def test_add_grados_profesor(self):
@@ -302,6 +335,7 @@ class PanelViewTestCase(TestCase):
 
         """
         profesor = User.objects.get(username="profesor")
+        mixer.blend(Grado, profesores=profesor, id=10)
         self.client = Client()
         self.client.login(username="admin", password="admin")
         session = self.client.session
@@ -309,6 +343,14 @@ class PanelViewTestCase(TestCase):
         session.save()
         response = self.client.post("/miPanel/addGradosProfesor/", {})
         boolean = True if not response.context['grados'] else False
+        self.assertEquals(boolean, False)
+
+        response = self.client.post("/miPanel/addGradosProfesor/", {'choices': 'error'})
+        boolean = True if not response.context['grados'] else False
+        self.assertEquals(boolean, False)
+
+        response = self.client.post("/miPanel/addGradosProfesor/", {'choices': '10'})
+        boolean = True if not response.context else False
         self.assertEquals(boolean, True)
 
     def test_add_asignaturas_profesor(self):
@@ -317,24 +359,37 @@ class PanelViewTestCase(TestCase):
 
         """
         profesor = User.objects.get(username="profesor")
+        grado = mixer.blend(Grado, profesores=profesor, titulo="Calidad")
+        mixer.blend(Asignatura, grados=grado, id=10)
         self.client = Client()
         self.client.login(username="admin", password="admin")
         session = self.client.session
         session['profesor'] = profesor.id
         session.save()
-        response = self.client.post("/miPanel/addAsignaturasProfesor/", {})
+        response = self.client.post("/miPanel/addAsignaturasProfesor/", {'choices': 'error'})
         boolean = True if not response.context['asignaturas'] else False
-        self.assertEquals(boolean, True)
+        self.assertEquals(boolean, False)
         self.assertEquals(response.context['profesor'], True)
+
+        response = self.client.post("/miPanel/addAsignaturasProfesor/", {'choices': '10'})
+        boolean = True if not response.context else False
+        self.assertEquals(boolean, True)
 
     def test_notificaciones_profesor(self):
         """
         Comprueba que la vista notificaciones_profesor devuelve las reservas del profesor
 
         """
+        profesor = User.objects.get(username="profesor")
+        reserva = mixer.blend(Reserva, profesor=profesor, estado='P', id=1)
+        reserva2 = mixer.blend(Reserva, profesor=profesor, estado='P', id=2)
         c = Client()
         c.login(username="profesor", password="1234")
-        response = c.post('/miPanel/notificaciones/', {})
+        response = c.post('/miPanel/notificaciones/', {'aceptar': 'aceptar', 'id': '1'})
+        boolean = True if not response.context['reservas'] else False
+        self.assertEquals(boolean, True)
+
+        response = c.post('/miPanel/notificaciones/', {'declinar': 'declinar', 'id': '2', 'texto': 'qwerty'})
         boolean = True if not response.context['reservas'] else False
         self.assertEquals(boolean, True)
 
@@ -354,6 +409,7 @@ class GradoViewTestCase(TestCase):
     """
     Test de las vistas de Grado
     """
+
     def setUp(self):
         """
         Iniciación de los requisitos para los test de Grados
@@ -380,6 +436,14 @@ class GradoViewTestCase(TestCase):
         boolean = True if "miPanel" in response.url else False
         self.assertEquals(boolean, True)
 
+        response = c.post('/admin/addGrado/', {'prueba': 'GIISI', 'identificador': '1'})
+        boolean = True if "identificador" in response.context['form'] else False
+        self.assertEquals(boolean, False)
+
+        response = c.post('/admin/addGrado/', {})
+        boolean = True if "form" in response.context else False
+        self.assertEquals(boolean, True)
+
     def test_remove_grado(self):
         """
         Metodo que comprueba si se elimina un grado correctamente
@@ -393,6 +457,10 @@ class GradoViewTestCase(TestCase):
         self.assertEquals(boolean, True)
         self.assertEquals(Grado.objects.all().count(), 0)
 
+        response = c.post('/admin/removeGrado/', {})
+        boolean = True if "form" in response.context else False
+        self.assertEquals(boolean, True)
+
     def test_read_grado(self):
         """
         Metodo que comprueba si se consulta un grado correctamente
@@ -402,6 +470,10 @@ class GradoViewTestCase(TestCase):
         c.login(username="admin", password="admin")
         response = c.post('/admin/readGrado/', {'titulo': 'GIISI'})
         boolean = True if "grado" in response.context else False
+        self.assertEquals(boolean, True)
+
+        response = c.post('/admin/readGrado/', {})
+        boolean = True if "grados" in response.context else False
         self.assertEquals(boolean, True)
 
     def test_update_grado(self):
@@ -417,11 +489,21 @@ class GradoViewTestCase(TestCase):
         grado = Grado.objects.get(identificador=1)
         self.assertEquals(grado.titulo, 'GIISIActualizado')
 
+        response = c.post('/admin/updateGrado/', {'titu': 'GIISIActualizado', 'identificador': '1'})
+        boolean = True if "grado" in response.context else False
+        self.assertEquals(boolean, True)
+
+        mixer.blend(Grado, id=10)
+        response = c.get('/admin/updateGrado/', {'id': 10})
+        boolean = True if "grado" in response.context else False
+        self.assertEquals(boolean, True)
+
 
 class TestAsignatura(TestCase):
     """
     Test de las vistas de Asignatura
     """
+
     def setUp(self):
         """
         Iniciación de los requisitos para los test de Asignaturas
@@ -541,6 +623,7 @@ class TestHorario(TestCase):
     """
     Test del View Horario
     """
+
     def setUp(self):
         """
         Iniciación de los requisitos para los test de la vista en la que interviene Horario
@@ -571,7 +654,7 @@ class TestHorario(TestCase):
         numeroantes = Horario.objects.all().count()
         _introduce_horario(usuario, "L", date_inicio, date_fin)
         numerodespues = Horario.objects.all().count()
-        boolean = True if numeroantes+2 == numerodespues else False
+        boolean = True if numeroantes + 2 == numerodespues else False
         self.assertEqual(boolean, True)
 
     def test_eliminar_horario(self):
@@ -584,7 +667,7 @@ class TestHorario(TestCase):
         profesor = User.objects.get(username="profesor")
         Horario.objects.create(dia_semana='L', hora_inicio="12:30", profesor=profesor)
         horario = Horario.objects.filter(dia_semana='L').filter(hora_inicio="12:30").filter(profesor=profesor)
-        response = c.post('/miPanel/misHorarios/eliminar/'+str(horario[0].id)+"/", {})
+        response = c.post('/miPanel/misHorarios/eliminar/' + str(horario[0].id) + "/", {})
         boolean = True if "misHorarios" in response.url else False
         self.assertEqual(boolean, True)
         horario = Horario.objects.filter(dia_semana='L').filter(hora_inicio="12:30").filter(profesor=profesor)
@@ -615,7 +698,7 @@ class TestHorario(TestCase):
         Horario.objects.create(dia_semana='J', hora_inicio="12:00", profesor=profesor)
         h1 = Horario.objects.get(dia_semana='X', hora_inicio="12:30", profesor=profesor)
         mixer.blend(Reserva, estado='R', horario=h1, dia='2013-10-10')
-        response = c.post('/profesores/'+str(profesor.id)+"/", {})
+        response = c.post('/profesores/' + str(profesor.id) + "/", {})
         profesor_id = response.context['profesor_id']
         lista_dias = response.context['lista_dias']
         reserva = response.context['reservas']
@@ -636,9 +719,9 @@ class TestHorario(TestCase):
         horario = Horario.objects.get(dia_semana='X', hora_inicio="20:30", profesor=profesor)
         response = c.post('/miPanel/reservarTutoria',
                           {'mensajealumno': 'hola', 'dia': '12-12-2014', 'horario_id': str(horario.id)})
-        print response
         boolean = True if "miPanel" in response.url else False
         self.assertEqual(boolean, True)
+
 
 class FormTest(TestCase):
     """
