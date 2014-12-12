@@ -103,7 +103,7 @@ def mis_horarios(request):
     return render_to_response('misHorarios.html', {'horarios': horarios}, context)
 
 
-def __busca_dia_semana_horario(profesor_id):
+def _busca_dia_semana_horario(profesor_id):
     """
     Metodo auxiliar para saber que dia de la semana un profesor tiene tutorias
 
@@ -146,12 +146,13 @@ def horarios_profesores(request, profesor_id):
     hoy = datetime.datetime.now()
     mas1dia = datetime.timedelta(1, 0)
     dossemanas = hoy + datetime.timedelta(14, 0)
-    semana = __busca_dia_semana_horario(profesor_id)
+    semana = _busca_dia_semana_horario(profesor_id)
     while hoy.day != dossemanas.day:
         d = hoy.weekday()
         if d == semana[0] or d == semana[1] or d == semana[2] or d == semana[3] or d == semana[4]:
             lista_dias.append(hoy.date)
         hoy = hoy + mas1dia
+    hoy = datetime.datetime.now()
     reservas = Reserva.objects.filter(horario__profesor__id=profesor_id).filter(dia__range=[hoy, dossemanas])
     return render_to_response('crearReserva.html', {'lista_dias': lista_dias, 'reservas': reservas,
                                                     'profesor_id': profesor_id}, context)

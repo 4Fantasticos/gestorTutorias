@@ -3,9 +3,9 @@ import datetime
 
 from django.contrib.auth.models import User
 from django.test import TestCase, Client
-
+from mixer.backend.django import mixer
 from tutorias.models import Horario, Asignatura, Reserva, Grado
-from views.horarios import _introduce_horario
+from views.horarios import _introduce_horario, _busca_dia_semana_horario
 
 
 def inicializacion():
@@ -523,4 +523,53 @@ class TestHorario(TestCase):
         self.assertEqual(boolean, True)
         horario = Horario.objects.filter(dia_semana='L').filter(hora_inicio="12:30").filter(profesor=profesor)
         boolean = True if not horario else False
+        self.assertEqual(boolean, True)
+
+    def test__busca_dia_semana_horario(self):
+        """
+        Comprueba que el método auxiliar crea la lista de dias de la semana con tutorias correctamente
+
+        """
+        usuario = User.objects.get(username="profesor")
+        Horario.objects.create(dia_semana='M', hora_inicio="12:30", profesor=usuario)
+        semana = _busca_dia_semana_horario(usuario.id)
+        self.assertEquals(semana[1], 1)
+        self.assertEquals(semana[4], -1)
+
+    def test_horarios_profesores(self):
+        """
+        Comprueba que el context pasado al template es correcto
+        Por cada horario de profesor con dia distinto tenemos dos dias en la lista
+        Si creamos una reserva con una fecha pasada el context debe devolver una lista vacia
+        """
+        c = Client()
+        c.login(username="alumno", password="1234")
+        profesor = User.objects.get(username="profesor")
+        Horario.objects.create(dia_semana='X', hora_inicio="12:30", profesor=profesor)
+        Horario.objects.create(dia_semana='J', hora_inicio="12:00", profesor=profesor)
+        h1 = Horario.objects.get(dia_semana='X', hora_inicio="12:30", profesor=profesor)
+        mixer.blend(Reserva, estado='R', horario=h1, dia='2013-10-10')
+        response = c.post('/profesores/'+str(profesor.id)+"/", {})
+        profesor_id = response.context['profesor_id']
+        lista_dias = response.context['lista_dias']
+        reserva = response.context['reservas']
+        boolean = True if not reserva else False
+        self.assertEqual(boolean, True)
+        self.assertEqual(profesor_id, str(profesor.id))
+        self.assertEqual(len(lista_dias), 4)
+
+    def test_reservar_tutoria(self):
+        """
+        Comprueba que la vista reservarTutoria redirige a miPanel si todo va bien.
+
+        """
+        c = Client()
+        c.login(username="alumno", password="1234")
+        profesor = User.objects.get(username="profesor")
+        Horario.objects.create(dia_semana='X', hora_inicio="20:30", profesor=profesor)
+        horario = Horario.objects.get(dia_semana='X', hora_inicio="20:30", profesor=profesor)
+        response = c.post('/miPanel/reservarTutoria',
+                          {'mensajealumno': 'hola', 'dia': '12-12-2014', 'horario_id': str(horario.id)})
+        print response
+        boolean = True if "miPanel" in response.url else False
         self.assertEqual(boolean, True)
