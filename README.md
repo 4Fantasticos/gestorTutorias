@@ -12,6 +12,7 @@ Puede que realizar las pruebas unitarias y demás métricas de calidad sea más 
 - [Pip](https://pip.pypa.io/en/latest/installing.html)
 - Django 1.7
 - Dajaxice (Ajax y Django de forma facil)
+- [Mixer](http://mixer.readthedocs.org/en/latest/quickstart.html) 
 - virtualenv _Opcional_
 
 ###Instalación
@@ -26,6 +27,8 @@ Entramos dentro de la carpeta y después dentro de Script, ejecutamos **activate
 Nos vamos a la carpeta principal e instalamos django con el comando `pip install Django`
 
 `pip install django-dajaxice`
+
+`pip install mixer`
 
 Hasta aquí para tener las herramientas de desarrollo, después descargar de Github el proyecto. 
 
@@ -43,10 +46,16 @@ Si, es un clone. Basicamente porque ya lo creamos en su dia...
 
 ##Pruebas
 
-Cuando vayamos a realizar las pruebas unitarias, esta documentación nos puede ser de gran ayudar
+Para correr las pruebas en django ejecutar:
 
-- [Mocking Django](http://www.mattjmorrison.com/2011/09/mocking-django.html)
+`python manage.py test`
 
-- [Mixer, application to generate instances of Django](http://mixer.readthedocs.org/en/latest/quickstart.html)
+Para testear la cobertura en django ejecutar:
+
+`coverage run --source='.' manage.py test tutorias`
+
+Para ver el resultado de la cobertura:
+
+`coverage report`
 
 Para todo lo demás `python manage.py help` ;D

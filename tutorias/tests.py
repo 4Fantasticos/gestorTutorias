@@ -719,6 +719,7 @@ class TestHorario(TestCase):
         horario = Horario.objects.get(dia_semana='X', hora_inicio="20:30", profesor=profesor)
         response = c.post('/miPanel/reservarTutoria',
                           {'mensajealumno': 'hola', 'dia': '12-12-2014', 'horario_id': str(horario.id)})
+
         boolean = True if "miPanel" in response.url else False
         self.assertEqual(boolean, True)
 
