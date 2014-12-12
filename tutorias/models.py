@@ -2,27 +2,11 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# Ejemplos sobre relaciones en django
-# https://docs.djangoproject.com/en/1.7/topics/db/examples/
-# Usuario, extendemos el User por defecto de Django
-
 """
 MODELO USER MODIFICADO
 """
 User.add_to_class('dni', models.CharField(max_length=9, unique=True, null=True))
 User.add_to_class('es_profesor', models.BooleanField(default=False, blank=True))
-
-"""
-MÉTODOS MODELO USER
-"""
-
-
-def get_asignaturas(self):
-    lista = self.asignatura_set.all()
-    return lista
-
-
-User.add_to_class('getAsignaturas', get_asignaturas)
 
 """
 MODELO GRADO
