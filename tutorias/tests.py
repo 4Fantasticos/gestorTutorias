@@ -1,12 +1,13 @@
 # encoding:utf-8
 import datetime
-
+import json
 from django.contrib.auth.models import User
 from django.test import TestCase, Client
 from mixer.backend.django import mixer
 from tutorias.models import Horario, Asignatura, Reserva, Grado
 from views.horarios import _introduce_horario, _busca_dia_semana_horario
 from tutorias.form import *
+from tutorias.ajax import gethoras
 
 
 def inicializacion():
@@ -640,6 +641,7 @@ class TestHorario(TestCase):
         boolean = True if "miPanel" in response.url else False
         self.assertEqual(boolean, True)
 
+
 class FormTest(TestCase):
     """
     Test de los formularios del archivo Form.py
@@ -775,3 +777,26 @@ class FormTest(TestCase):
         """
         form = ReservaTutoriasForm({'mensajealumno': 'Prueba', 'dia': '3', 'horario_id': '3'})
         self.assertEquals(form.is_valid(), True)
+
+
+class AjaxTest(TestCase):
+    """
+    Test que comprueba la funcionalidad ajax de la aplicación
+
+    """
+    def setUp(self):
+        """
+        Inicialización de las variables necesarias
+
+        """
+        inicializacion()
+
+    def test_gethoras(self):
+        """
+        Test que obtiene las horas de tutorias de un
+
+        """
+        profesor = User.objects.get(username="profesor")
+        # data diccionario {'alumno': 3, 'profesor': 5, 'dia': u'12-12-2014'}
+        alumno = User.objects.get(username="alumno")
+        pass
