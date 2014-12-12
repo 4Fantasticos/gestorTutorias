@@ -33,7 +33,7 @@
                     <td>{{notificacion.horario}}</td>
                     <td>{{notificacion.alumnos}}</td>
                     <td>{{notificacion.mensajeAlumno}}</td>
-                    <form action="{% url 'mis_notificaciones' %}" method="POST"> {% csrf_token %}
+                    <form action="{% url 'notificaciones_profesor' %}" method="POST"> {% csrf_token %}
                         <input type="hidden" name="id" value="{{notificacion.id}}"/>
                         <td>
                             <button class="btn btn-success" name="aceptar">Aceptar</button>
