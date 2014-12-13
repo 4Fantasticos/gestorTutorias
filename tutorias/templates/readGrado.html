@@ -32,8 +32,8 @@
         <h4>Codigo del grado:</h4>{{gr.identificador}}
         <div align="right">
             <form action="{% url 'update_grado' %}" method="get"> {% csrf_token %}
-            <button class="btn btn-default" name="id" value="{{gr.id}}">Editar {{gr.titulo}}</button>
-        </form>
+                <button class="btn btn-default" name="id" value="{{gr.id}}">Editar {{gr.titulo}}</button>
+            </form>
         </div>
 
         <h4>Asignaturas del grado</h4>

@@ -64,7 +64,8 @@
                 </td>
                 <td class="active">
                     <form action="{% url 'update_user' %}" method="get"> {% csrf_token %}
-                        <button class="btn btn-link" name="username" value="{{us.username}}">Editar {{us.username}}</button>
+                        <button class="btn btn-link" name="username" value="{{us.username}}">Editar {{us.username}}
+                        </button>
                     </form>
                 </td>
             </tr>
