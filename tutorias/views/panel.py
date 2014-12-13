@@ -154,8 +154,6 @@ def notificaciones_profesor(request):
         aceptadas = paginator_aceptadas.page(page_aceptadas)
     except PageNotAnInteger:
         aceptadas = paginator_aceptadas.page(1)
-    except EmptyPage:
-        aceptadas = paginator_aceptadas.page(paginator_aceptadas.num_pages)
     canceladas_lista = Reserva.objects.filter(horario__profesor=request.user).filter(estado='C')
     paginator_canceladas = Paginator(canceladas_lista, 10)
     page_canceladas = request.GET.get('page_c')
@@ -163,8 +161,6 @@ def notificaciones_profesor(request):
         canceladas = paginator_canceladas.page(page_canceladas)
     except PageNotAnInteger:
         canceladas = paginator_canceladas.page(1)
-    except EmptyPage:
-        canceladas = paginator_canceladas.page(paginator_canceladas.num_pages)
     return render_to_response('misNotificaciones.html',
                               {'notificaciones': notificaciones, 'reservas': reservas, 'canceladas': canceladas,
                                'aceptadas': aceptadas}, context)
@@ -192,8 +188,6 @@ def notificaciones_alumno(request):
         aceptadas = paginator_aceptadas.page(page_aceptadas)
     except PageNotAnInteger:
         aceptadas = paginator_aceptadas.page(1)
-    except EmptyPage:
-        aceptadas = paginator_aceptadas.page(paginator_aceptadas.num_pages)
     canceladas_lista = Reserva.objects.filter(alumnos=request.user).filter(estado='C')
     paginator_canceladas = Paginator(canceladas_lista, 10)
     page_canceladas = request.GET.get('page_c')
@@ -201,8 +195,6 @@ def notificaciones_alumno(request):
         canceladas = paginator_canceladas.page(page_canceladas)
     except PageNotAnInteger:
         canceladas = paginator_canceladas.page(1)
-    except EmptyPage:
-        canceladas = paginator_canceladas.page(paginator_canceladas.num_pages)
     return render_to_response('misNotificacionesAlumnos.html',
                               {'notificaciones': notificaciones, 'reservas': reservas, 'canceladas': canceladas,
                                'aceptadas': aceptadas}, context)

@@ -77,7 +77,6 @@ def add_users(request):
             elif es_profesor:
                 request.session['profesor'] = user.id
                 return HttpResponseRedirect(reverse('add_grados_profesor'))
-            return HttpResponseRedirect(reverse('miPanel'))
         else:
             grados = Grado.objects.all()
             return render_to_response('formularioUser.html', {'form': form, 'grados': grados}, context)
@@ -141,8 +140,6 @@ def read_user(request):
         usuarios = paginator.page(page)
     except PageNotAnInteger:
         usuarios = paginator.page(1)
-    except EmptyPage:
-        usuarios = paginator.page(paginator.num_pages)
     form = UserReadForm()
     return render_to_response('readUser.html', {'form': form, 'usuarios': usuarios}, context)
 
@@ -185,8 +182,6 @@ def update_user(request):
                 usuarios = paginator.page(page)
             except PageNotAnInteger:
                 usuarios = paginator.page(1)
-            except EmptyPage:
-                usuarios = paginator.page(paginator.num_pages)
             return render_to_response('readUser.html', {'form': form, 'usuarios': usuarios}, context)
         else:
             username = form.cleaned_data['username']

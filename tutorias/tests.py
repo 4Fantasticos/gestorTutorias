@@ -100,6 +100,7 @@ class HorarioTestCase(TestCase):
 
         """
         horario = Horario.objects.get(dia_semana='L')
+        horario.__unicode__()
         self.assertEquals(horario.profesor.username, "profesor")
 
 
@@ -130,6 +131,7 @@ class AsignaturaTestCase(TestCase):
 
         """
         asignatura = Asignatura.objects.get(codigo=1)
+        asignatura.__unicode__()
         self.assertEquals(len(asignatura.usuarios.all()), 1)
         self.assertEquals(len(asignatura.profesores.all()), 1)
 
@@ -159,6 +161,7 @@ class ReservaTestCase(TestCase):
 
         """
         reserva = Reserva.objects.get(estado="P")
+        reserva.__unicode__()
         self.assertEquals(reserva.alumnos.username, "alumno")
 
 
@@ -227,7 +230,7 @@ class UsuarioViewTestCase(TestCase):
         boolean = True if "grados" in response.context else False
         self.assertEquals(boolean, True)
 
-        response = c.post('/admin/addUser/', {})
+        response = c.get('/admin/addUser/', {})
         boolean = True if "grados" in response.context else False
         self.assertEquals(boolean, True)
 
@@ -519,7 +522,7 @@ class GradoViewTestCase(TestCase):
         boolean = True if "identificador" in response.context['form'] else False
         self.assertEquals(boolean, False)
 
-        response = c.post('/admin/addGrado/', {})
+        response = c.get('/admin/addGrado/', {})
         boolean = True if "form" in response.context else False
         self.assertEquals(boolean, True)
 
@@ -650,7 +653,7 @@ class TestAsignatura(TestCase):
         boolean = True if "grados" in response.context else False
         self.assertEquals(boolean, True)
 
-        response = c.post('/admin/addAsignatura/', {})
+        response = c.get('/admin/addAsignatura/', {})
         boolean = True if "grados" in response.context else False
         self.assertEquals(boolean, True)
 
@@ -686,7 +689,7 @@ class TestAsignatura(TestCase):
         boolean = True if "asignatura" in response.context else False
         self.assertEquals(boolean, True)
 
-        response = c.post('/admin/readAsignatura/', {})
+        response = c.get('/admin/readAsignatura/', {'page': ''})
         boolean = True if "asignaturas" in response.context else False
         self.assertEquals(boolean, True)
 
@@ -769,7 +772,7 @@ class TestHorario(TestCase):
         boolean = True if "form" in response.context else False
         self.assertEqual(boolean, True)
 
-        response = c.post('/admin/addHorario/', {})
+        response = c.get('/admin/addHorario/', {})
         boolean = True if "form" in response.context else False
         self.assertEqual(boolean, True)
 
@@ -804,6 +807,13 @@ class TestHorario(TestCase):
         self.assertEqual(boolean, True)
         horario = Horario.objects.filter(dia_semana='L').filter(hora_inicio="12:30").filter(profesor=profesor)
         boolean = True if not horario else False
+        self.assertEqual(boolean, True)
+
+    def test_mis_horario(self):
+        c = Client()
+        c.login(username="profesor", password="1234")
+        response = c.get('/miPanel/misHorarios/', {})
+        boolean = True if "horarios" in response.context else False
         self.assertEqual(boolean, True)
 
     def test__busca_dia_semana_horario(self):
@@ -1014,6 +1024,7 @@ class AjaxTest(TestCase):
     Test que comprueba la funcionalidad ajax de la aplicación
 
     """
+
     def setUp(self):
         """
         Inicialización de las variables necesarias

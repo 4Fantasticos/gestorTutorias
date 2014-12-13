@@ -91,8 +91,6 @@ def read_grado(request):
         grados = paginator.page(page)
     except PageNotAnInteger:
         grados = paginator.page(1)
-    except EmptyPage:
-        grados = paginator.page(paginator.num_pages)
     form = AsignaturaReadForm()
     return render_to_response('readGrado.html', {'form': form, 'grados': grados}, context)
 
@@ -128,8 +126,6 @@ def update_grado(request):
                 grados = paginator.page(page)
             except PageNotAnInteger:
                 grados = paginator.page(1)
-            except EmptyPage:
-                grados = paginator.page(paginator.num_pages)
             return render_to_response('readGrado.html', {'form': form, 'grados': grados}, context)
         else:
             identificador = form.cleaned_data['identificador']

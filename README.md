@@ -56,6 +56,6 @@ Para testear la cobertura en django ejecutar:
 
 Para ver el resultado de la cobertura:
 
-`coverage report`
+`coverage report -m`
 
 Para todo lo demás `python manage.py help` ;D

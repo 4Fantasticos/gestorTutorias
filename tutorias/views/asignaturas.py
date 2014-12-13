@@ -100,8 +100,6 @@ def read_asignatura(request):
         asignaturas = paginator.page(page)
     except PageNotAnInteger:
         asignaturas = paginator.page(1)
-    except EmptyPage:
-        asignaturas = paginator.page(paginator.num_pages)
     form = AsignaturaReadForm()
     return render_to_response('readAsignatura.html', {'form': form, 'asignaturas': asignaturas}, context)
 
@@ -143,8 +141,6 @@ def update_asignatura(request):
                 asignaturas = paginator.page(page)
             except PageNotAnInteger:
                 asignaturas = paginator.page(1)
-            except EmptyPage:
-                asignaturas = paginator.page(paginator.num_pages)
             form = AsignaturaReadForm()
             return render_to_response('readAsignatura.html', {'form': form, 'asignaturas': asignaturas}, context)
         else:
