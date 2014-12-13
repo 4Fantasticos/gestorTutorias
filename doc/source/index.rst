@@ -4,9 +4,10 @@
    contain the root `toctree` directive.
 
 Documentación del proyecto Gestión de Tutorías
-===============================================
+==============================================
 
-Contenido:
+Contenido del proyecto:
+-----------------------
 
 .. toctree::
    :maxdepth: 2
@@ -21,3 +22,12 @@ Contenido:
    usuarios
    form
 
+Manual de usuario:
+------------------
+
+.. toctree::
+   :maxdepth: 3
+
+   administrador
+   alumno
+   profesor
