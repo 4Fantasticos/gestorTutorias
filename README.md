@@ -59,3 +59,4 @@ Para ver el resultado de la cobertura:
 `coverage report -m`
 
 Para todo lo demás `python manage.py help` ;D
+
