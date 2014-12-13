@@ -2,18 +2,20 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-"""
-MODELO USER MODIFICADO
-"""
+
 User.add_to_class('dni', models.CharField(max_length=9, unique=True, null=True))
 User.add_to_class('es_profesor', models.BooleanField(default=False, blank=True))
 
-"""
-MODELO GRADO
-"""
-
 
 class Grado(models.Model):
+    """
+    Modelo de Grado
+
+    :param: titulo: Titulo del grado
+    :param: identificador: Identificador único del grado
+    :param: usuarios: Lista de usuarios que estudian el grado
+    :param: profesores: Lista de profesores que dan el grad
+    """
     titulo = models.CharField(max_length=200)
     identificador = models.CharField(max_length=3)
     usuarios = models.ManyToManyField(User, related_name="usuarios")
@@ -26,9 +28,6 @@ class Grado(models.Model):
         ordering = ('titulo',)
 
 
-"""
-MODELO HORARIO
-"""
 DIAS_DE_LA_SEMANA = (
     ('L', 'Lunes'),
     ('M', 'Martes'),
@@ -39,6 +38,13 @@ DIAS_DE_LA_SEMANA = (
 
 
 class Horario(models.Model):
+    """
+    Modelo de Horario
+
+    :param: profesor: Profesor de dicho horario
+    :param: dia_semana: Día de la semana de la tutoría
+    :param: hora_inicio: Hora de inicio de la tutoría
+    """
     profesor = models.ForeignKey(User)
     dia_semana = models.CharField(max_length=1, choices=DIAS_DE_LA_SEMANA)
     hora_inicio = models.TimeField()
@@ -50,12 +56,17 @@ class Horario(models.Model):
         ordering = ('dia_semana',)
 
 
-"""
-MODELO ASIGNATURA
-"""
-
-
 class Asignatura(models.Model):
+    """
+    Modelo de Asignatura
+
+    :param: nombre: Nombre de la asignatura
+    :param: codigo: Código único de la asignatura
+    :param: grados: Grado en el cual se imparte la asignatura
+    :param: curso: Curso en el cual se imparte la asignatura
+    :param: usuarios: Lista de usuarios que dan la asignatura
+    :param: profesores: Lista de profesores que dan la asignatura
+    """
     nombre = models.CharField(max_length=100, null=True)
     codigo = models.CharField(max_length=6)
     grados = models.ForeignKey(Grado)
@@ -70,9 +81,6 @@ class Asignatura(models.Model):
         ordering = ('curso',)
 
 
-"""
-MODELO RESERVA
-"""
 ESTADO_RESERVA = (
     ('R', 'Reservado'),
     ('L', 'Libre'),
@@ -82,6 +90,16 @@ ESTADO_RESERVA = (
 
 
 class Reserva(models.Model):
+    """
+    Modelo de Reserva
+
+    :param: estado: Estado de la reserva
+    :param: mensajeAlumno: Mensaje que el alumno deja al profesor
+    :param: mensajeCancel: Mensaje que profesor deja para el alumno
+    :param: dia: Día de la tutoría
+    :param: alumnos: Alumno que pide la tutoría
+    :param: horario: Horario del profesor para la tutoría
+    """
     estado = models.CharField(max_length=1, choices=ESTADO_RESERVA)
     mensajeAlumno = models.CharField(max_length=500)
     mensajeCancel = models.CharField(max_length=500, blank=True)
