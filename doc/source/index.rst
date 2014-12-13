@@ -6,8 +6,10 @@
 Documentación del proyecto Gestión de Tutorías
 ==============================================
 
-Contenido del proyecto:
------------------------
+Aquí se muestra todo el contenido relacionado con el proyecto de Gestión de tutorías desarrollado para la asignatura de Calidad de cuarto curso de la universidad Pablo de Olavide, además de un manual de usuario para una mayor facilidad de uso.
+
+Contenido del proyecto
+----------------------
 
 .. toctree::
    :maxdepth: 2
@@ -22,8 +24,8 @@ Contenido del proyecto:
    usuarios
    form
 
-Manual de usuario:
-------------------
+Manual de usuario
+-----------------
 
 .. toctree::
    :maxdepth: 3
