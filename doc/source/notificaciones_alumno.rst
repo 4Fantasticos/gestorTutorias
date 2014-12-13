@@ -1,4 +1,4 @@
-**Notificaciones Alumno**
+**Notificaciones alumno**
 =========================
 
 Por otro lado, en el panel del alumno, este puede acceder a sus notificaciones mediante el botón Notificaciones
