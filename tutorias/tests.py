@@ -1,12 +1,13 @@
 # encoding:utf-8
 import datetime
-
+import json
 from django.contrib.auth.models import User
 from django.test import TestCase, Client
 from mixer.backend.django import mixer
 from tutorias.models import Horario, Asignatura, Reserva, Grado
 from views.horarios import _introduce_horario, _busca_dia_semana_horario
 from tutorias.form import *
+from tutorias.ajax import gethoras
 
 
 def inicializacion():
@@ -1006,3 +1007,33 @@ class FormTest(TestCase):
         """
         form = ReservaTutoriasForm({'mensajealumno': 'Prueba', 'dia': '3', 'horario_id': '3'})
         self.assertEquals(form.is_valid(), True)
+
+
+class AjaxTest(TestCase):
+    """
+    Test que comprueba la funcionalidad ajax de la aplicación
+
+    """
+    def setUp(self):
+        """
+        Inicialización de las variables necesarias
+
+        """
+        inicializacion()
+
+    def test_gethoras(self):
+        """
+        Comprueba que devuelve los json esperados en funcion de los datos de entrada
+
+        """
+        profesor = User.objects.get(username="profesor")
+        # data diccionario {'alumno': 3, 'profesor': 5, 'dia': u'12-12-2014'}
+        horario = mixer.blend(Horario, profesor=profesor, dia_semana='V')
+        data = {'alumno': 10, 'profesor': profesor.id, 'dia': '12-12-2014'}
+        respuesta = json.loads(gethoras('', data))
+        self.assertEquals(profesor.id, respuesta[0][1])
+        self.assertEquals(str(horario.hora_inicio)[0:5], respuesta[0][0])
+        mixer.blend(Reserva, horario=horario, dia=datetime.date(2014, 12, 12))
+        respuesta = json.loads(gethoras('', data))
+        boolean = True if not respuesta else False
+        self.assertEquals(boolean, True)
