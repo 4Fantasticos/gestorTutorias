@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>tutorias.views.grados &mdash; Gestión de Tutorías 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Gestión de Tutorías 1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Gestión de Tutorías 1 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for tutorias.views.grados</h1><div class="highlight"><pre>
+<span class="c"># encoding:utf-8</span>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;usuario&#39;</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">user_passes_test</span>
+<span class="kn">from</span> <span class="nn">django.core.paginator</span> <span class="kn">import</span> <span class="n">Paginator</span><span class="p">,</span> <span class="n">PageNotAnInteger</span><span class="p">,</span> <span class="n">EmptyPage</span>
+<span class="kn">from</span> <span class="nn">django.core.urlresolvers</span> <span class="kn">import</span> <span class="n">reverse</span>
+<span class="kn">from</span> <span class="nn">django.http.response</span> <span class="kn">import</span> <span class="n">HttpResponseRedirect</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render_to_response</span>
+<span class="kn">from</span> <span class="nn">django.template</span> <span class="kn">import</span> <span class="n">RequestContext</span>
+
+<span class="kn">from</span> <span class="nn">tutorias.models</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">tutorias.form</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="n">u</span><span class="o">.</span><span class="n">is_superuser</span><span class="p">,</span> <span class="n">login_url</span><span class="o">=</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="add_grado"><a class="viewcode-back" href="../../../grados.html#tutorias.views.grados.add_grado">[docs]</a><span class="k">def</span> <span class="nf">add_grado</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Vista añadir grado</span>
+
+<span class="sd">    El siguiente método recoge vía request los parametros de un form, los evalua y añade un grado si procede, en caso</span>
+<span class="sd">    contrario deriva al template formularioGrado.html</span>
+
+<span class="sd">    :param request: Request.</span>
+<span class="sd">    :return: formularioGrado.html.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">GradoForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">titulo</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;titulo&#39;</span><span class="p">]</span>
+            <span class="n">identificador</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;identificador&#39;</span><span class="p">]</span>
+
+            <span class="n">grado</span> <span class="o">=</span> <span class="n">Grado</span><span class="p">(</span><span class="n">titulo</span><span class="o">=</span><span class="n">titulo</span><span class="p">,</span> <span class="n">identificador</span><span class="o">=</span><span class="n">identificador</span><span class="p">)</span>
+            <span class="n">grado</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">&#39;miPanel&#39;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;formularioGrado.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">},</span> <span class="n">context</span><span class="p">)</span>
+
+    <span class="n">form</span> <span class="o">=</span> <span class="n">GradoForm</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;formularioGrado.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">},</span> <span class="n">context</span><span class="p">)</span>
+
+</div>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="n">u</span><span class="o">.</span><span class="n">is_superuser</span><span class="p">,</span> <span class="n">login_url</span><span class="o">=</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="remove_grado"><a class="viewcode-back" href="../../../grados.html#tutorias.views.grados.remove_grado">[docs]</a><span class="k">def</span> <span class="nf">remove_grado</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Elimina un grado del sistema</span>
+
+<span class="sd">    El siguiente método recoge vía request los parametros de un form, los evalua y elimina un grado si procede, en</span>
+<span class="sd">    caso contrario deriva al template removeGrado.html.</span>
+
+<span class="sd">    :param request: request</span>
+<span class="sd">    :return: Vista removeGrado.html</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">GradoRemoveForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">identificador</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;identificador&#39;</span><span class="p">]</span>
+            <span class="n">grado</span> <span class="o">=</span> <span class="n">Grado</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">identificador</span><span class="p">)</span>
+            <span class="n">grado</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+
+            <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">&#39;miPanel&#39;</span><span class="p">))</span>
+
+    <span class="n">grados</span> <span class="o">=</span> <span class="n">Grado</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">form</span> <span class="o">=</span> <span class="n">GradoRemoveForm</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;removeGrado.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s">&#39;grados&#39;</span><span class="p">:</span> <span class="n">grados</span><span class="p">},</span> <span class="n">context</span><span class="p">)</span>
+
+</div>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="n">u</span><span class="o">.</span><span class="n">is_superuser</span><span class="p">,</span> <span class="n">login_url</span><span class="o">=</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="read_grado"><a class="viewcode-back" href="../../../grados.html#tutorias.views.grados.read_grado">[docs]</a><span class="k">def</span> <span class="nf">read_grado</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Consultar un grado del sistema.</span>
+
+<span class="sd">    El siguiente método recoge vía request los parametros de un form, los evalua y muestra los datos de un grado si</span>
+<span class="sd">    procede, en caso contrario deriva al template readGrado.html</span>
+
+<span class="sd">    :param request: request</span>
+<span class="sd">    :return: Vista readGrado.html</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">GradoReadForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">titulo</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;titulo&#39;</span><span class="p">]</span>
+            <span class="n">grado</span> <span class="o">=</span> <span class="n">Grado</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">titulo__icontains</span><span class="o">=</span><span class="n">titulo</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;readGrado.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s">&#39;grado&#39;</span><span class="p">:</span> <span class="n">grado</span><span class="p">},</span> <span class="n">context</span><span class="p">)</span>
+    <span class="n">grado_lista</span> <span class="o">=</span> <span class="n">Grado</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">grado_lista</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="n">page</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;page&#39;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">grados</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">PageNotAnInteger</span><span class="p">:</span>
+        <span class="n">grados</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">form</span> <span class="o">=</span> <span class="n">AsignaturaReadForm</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;readGrado.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s">&#39;grados&#39;</span><span class="p">:</span> <span class="n">grados</span><span class="p">},</span> <span class="n">context</span><span class="p">)</span>
+
+</div>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="n">u</span><span class="o">.</span><span class="n">is_superuser</span><span class="p">,</span> <span class="n">login_url</span><span class="o">=</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="update_grado"><a class="viewcode-back" href="../../../grados.html#tutorias.views.grados.update_grado">[docs]</a><span class="k">def</span> <span class="nf">update_grado</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Modifica un grado del sistema.</span>
+
+<span class="sd">    El siguiente método recoge vía request los parametros de un form, los evalua y modifica un grado si procede, en</span>
+<span class="sd">    caso contrario deriva al template updateGrado.html</span>
+
+<span class="sd">    :param request: request</span>
+<span class="sd">    :return: Vista updateGrado.html</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">GradoForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">titulo</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;titulo&#39;</span><span class="p">]</span>
+            <span class="n">identificador</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;identificador&#39;</span><span class="p">]</span>
+
+            <span class="n">grado</span> <span class="o">=</span> <span class="n">Grado</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">identificador</span><span class="o">=</span><span class="n">identificador</span><span class="p">)</span>
+            <span class="n">grado</span><span class="o">.</span><span class="n">titulo</span> <span class="o">=</span> <span class="n">titulo</span>
+
+            <span class="n">grado</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="n">grado_lista</span> <span class="o">=</span> <span class="n">Grado</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+            <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">grado_lista</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+            <span class="n">page</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;page&#39;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">grados</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">PageNotAnInteger</span><span class="p">:</span>
+                <span class="n">grados</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;readGrado.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s">&#39;grados&#39;</span><span class="p">:</span> <span class="n">grados</span><span class="p">},</span> <span class="n">context</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">identificador</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;identificador&#39;</span><span class="p">]</span>
+            <span class="n">grado</span> <span class="o">=</span> <span class="n">Grado</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">identificador</span><span class="o">=</span><span class="n">identificador</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;updateGrado.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s">&#39;grado&#39;</span><span class="p">:</span> <span class="n">grado</span><span class="p">},</span> <span class="n">context</span><span class="p">)</span>
+    <span class="n">identificador</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">)</span>
+    <span class="n">grado</span> <span class="o">=</span> <span class="n">Grado</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">identificador</span><span class="p">)</span>
+    <span class="n">form</span> <span class="o">=</span> <span class="n">GradoUpdateForm</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;updateGrado.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s">&#39;grado&#39;</span><span class="p">:</span> <span class="n">grado</span><span class="p">},</span> <span class="n">context</span><span class="p">)</span>
+</pre></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/logo_tutorias.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Gestión de Tutorías 1 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2014, Equipo 01: Los 4 Fantásticos.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

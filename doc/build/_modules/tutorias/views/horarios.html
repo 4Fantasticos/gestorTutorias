@@ -1,0 +1,284 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>tutorias.views.horarios &mdash; Gestión de Tutorías 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Gestión de Tutorías 1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Gestión de Tutorías 1 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for tutorias.views.horarios</h1><div class="highlight"><pre>
+<span class="c"># encoding:utf-8</span>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Fran&#39;</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">user_passes_test</span>
+<span class="kn">from</span> <span class="nn">django.core.urlresolvers</span> <span class="kn">import</span> <span class="n">reverse</span>
+<span class="kn">from</span> <span class="nn">django.http.response</span> <span class="kn">import</span> <span class="n">HttpResponseRedirect</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render_to_response</span>
+<span class="kn">from</span> <span class="nn">django.template</span> <span class="kn">import</span> <span class="n">RequestContext</span>
+
+<span class="kn">from</span> <span class="nn">tutorias.models</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">tutorias.form</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="n">u</span><span class="o">.</span><span class="n">es_profesor</span><span class="p">,</span> <span class="n">login_url</span><span class="o">=</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="add_horario"><a class="viewcode-back" href="../../../horarios.html#tutorias.views.horarios.add_horario">[docs]</a><span class="k">def</span> <span class="nf">add_horario</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Vista añadir horario</span>
+
+<span class="sd">    El siguiente método recoge via request los parametros de un form, lo evalua y añade los horarios que procedan</span>
+<span class="sd">    por intervalos de 15 minutos. En caso contrario deriva al template formularioHorario.html</span>
+
+<span class="sd">    :param request: Request</span>
+<span class="sd">    :return: A la url miPanel</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">HorarioForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+            <span class="n">dia_semana</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;dia_semana&#39;</span><span class="p">]</span>
+            <span class="n">hora_inicio</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;hora_inicio&#39;</span><span class="p">]</span>
+            <span class="n">hora_final</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;hora_final&#39;</span><span class="p">]</span>
+            <span class="n">date_inicio</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">combine</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">(),</span> <span class="n">hora_inicio</span><span class="p">)</span>
+            <span class="n">date_fin</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">combine</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">(),</span> <span class="n">hora_final</span><span class="p">)</span>
+            <span class="n">_introduce_horario</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">dia_semana</span><span class="p">,</span> <span class="n">date_inicio</span><span class="p">,</span> <span class="n">date_fin</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">&#39;miPanel&#39;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;formularioHorario.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">},</span> <span class="n">context</span><span class="p">)</span>
+
+    <span class="n">form</span> <span class="o">=</span> <span class="n">HorarioForm</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;formularioHorario.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s">&#39;dias&#39;</span><span class="p">:</span> <span class="n">DIAS_DE_LA_SEMANA</span><span class="p">},</span> <span class="n">context</span><span class="p">)</span>
+
+</div>
+<span class="k">def</span> <span class="nf">_introduce_horario</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">dia_semana</span><span class="p">,</span> <span class="n">date_inicio</span><span class="p">,</span> <span class="n">date_fin</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Metodo que guarda un horario en la base de datos</span>
+
+<span class="sd">    El siguiente método privado recive un usuario que es profesor, el dia de la semana, una fecha de inicio y</span>
+<span class="sd">    una fecha de fin y guarda en la base de datos objetos horarios por intervalos de 15 minutos.</span>
+
+<span class="sd">    :param user: Es un objeto usario concretamente profesor</span>
+<span class="sd">    :param dia_semana: Dia de la semana</span>
+<span class="sd">    :param date_inicio: Hora de inicio</span>
+<span class="sd">    :param date_fin: Hora de fin</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">date_fin</span> <span class="o">-</span> <span class="n">date_inicio</span>
+    <span class="n">minutos</span> <span class="o">=</span> <span class="n">diff</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span> <span class="o">/</span> <span class="mi">60</span>
+    <span class="n">intervalos</span> <span class="o">=</span> <span class="n">minutos</span> <span class="o">//</span> <span class="mi">15</span>
+    <span class="n">mas15</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">900</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">intervalos</span><span class="p">)):</span>
+        <span class="n">horario</span> <span class="o">=</span> <span class="n">Horario</span><span class="p">(</span><span class="n">dia_semana</span><span class="o">=</span><span class="n">dia_semana</span><span class="p">,</span> <span class="n">hora_inicio</span><span class="o">=</span><span class="n">date_inicio</span><span class="o">.</span><span class="n">time</span><span class="p">(),</span> <span class="n">profesor</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+        <span class="n">horarios_en_bd</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">Horario</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">profesor</span><span class="o">=</span><span class="n">user</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">dia_semana</span><span class="o">=</span><span class="n">dia_semana</span><span class="p">)</span><span class="o">.</span>
+                              <span class="nb">filter</span><span class="p">(</span><span class="n">hora_inicio</span><span class="o">=</span><span class="n">date_inicio</span><span class="o">.</span><span class="n">time</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">horarios_en_bd</span> <span class="o">==</span> <span class="p">[]:</span>
+            <span class="n">horario</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">date_inicio</span> <span class="o">=</span> <span class="n">date_inicio</span> <span class="o">+</span> <span class="n">mas15</span>
+
+
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="n">u</span><span class="o">.</span><span class="n">es_profesor</span><span class="p">,</span> <span class="n">login_url</span><span class="o">=</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="eliminar_horario"><a class="viewcode-back" href="../../../horarios.html#tutorias.views.horarios.eliminar_horario">[docs]</a><span class="k">def</span> <span class="nf">eliminar_horario</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">horario_id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Elimina un horario de la base de datos</span>
+
+<span class="sd">    El siguiente método recoge vía request los parametros de un form, los evalua y elimina un horario y</span>
+<span class="sd">    deriva a la url misHorarios</span>
+
+<span class="sd">    :param request: Request</span>
+<span class="sd">    :param horario_id: Identificador del horario en la bd</span>
+<span class="sd">    :return: A la url misHorarios</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">horario</span> <span class="o">=</span> <span class="n">Horario</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">profesor</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">horario_id</span><span class="p">)</span>
+    <span class="n">horario</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">&#39;misHorarios&#39;</span><span class="p">))</span>
+
+</div>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="n">u</span><span class="o">.</span><span class="n">es_profesor</span><span class="p">,</span> <span class="n">login_url</span><span class="o">=</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="mis_horarios"><a class="viewcode-back" href="../../../horarios.html#tutorias.views.horarios.mis_horarios">[docs]</a><span class="k">def</span> <span class="nf">mis_horarios</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Vista que muestra los horarios del profesor</span>
+
+<span class="sd">    El siguiente método muestra al usuario que es profesor, una lista con sus horarios</span>
+
+<span class="sd">    :param request: Request</span>
+<span class="sd">    :return: A la url misHorarios</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+    <span class="n">horarios</span> <span class="o">=</span> <span class="n">Horario</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">profesor</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;misHorarios.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;horarios&#39;</span><span class="p">:</span> <span class="n">horarios</span><span class="p">},</span> <span class="n">context</span><span class="p">)</span>
+
+</div>
+<span class="k">def</span> <span class="nf">_busca_dia_semana_horario</span><span class="p">(</span><span class="n">profesor_id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Metodo auxiliar para saber que dia de la semana un profesor tiene tutorias</span>
+
+<span class="sd">    El siguiente método auxiliar devuelve en un array los dias de la semana que un profesor tiene tutoria.</span>
+
+<span class="sd">    :param profesor_id: Id del usuario profesor en la base de datos</span>
+<span class="sd">    :return: Array cuyo contenido determina que dias de la semana tiene tutorias un profesor.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">horarios</span> <span class="o">=</span> <span class="n">Horario</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">profesor</span><span class="o">=</span><span class="n">profesor_id</span><span class="p">)</span>
+    <span class="n">semana</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">horarios</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">h</span><span class="o">.</span><span class="n">dia_semana</span> <span class="o">==</span> <span class="s">&#39;L&#39;</span><span class="p">:</span>
+            <span class="n">semana</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">elif</span> <span class="n">h</span><span class="o">.</span><span class="n">dia_semana</span> <span class="o">==</span> <span class="s">&#39;M&#39;</span><span class="p">:</span>
+            <span class="n">semana</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">h</span><span class="o">.</span><span class="n">dia_semana</span> <span class="o">==</span> <span class="s">&#39;X&#39;</span><span class="p">:</span>
+            <span class="n">semana</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="k">elif</span> <span class="n">h</span><span class="o">.</span><span class="n">dia_semana</span> <span class="o">==</span> <span class="s">&#39;J&#39;</span><span class="p">:</span>
+            <span class="n">semana</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">semana</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>
+
+    <span class="k">return</span> <span class="n">semana</span>
+
+
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="ow">not</span> <span class="n">u</span><span class="o">.</span><span class="n">es_profesor</span><span class="p">,</span> <span class="n">login_url</span><span class="o">=</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="horarios_profesores"><a class="viewcode-back" href="../../../horarios.html#tutorias.views.horarios.horarios_profesores">[docs]</a><span class="k">def</span> <span class="nf">horarios_profesores</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">profesor_id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Vista que indica que horarios de tutoria tiene disponibles un profesor</span>
+
+<span class="sd">    El siguiente método dado un identificador de usuario que es profesor devuelve los horarios de tutorias disponibles</span>
+<span class="sd">    que se pueden solicitar para reservar una tutoria.</span>
+
+<span class="sd">    :param request: Request</span>
+<span class="sd">    :param profesor_id: Identificador de la base de datos del usuario, que es profesor.</span>
+<span class="sd">    :return: Al template crearRerserva.html</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="n">lista_dias</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">hoy</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="n">mas1dia</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">dossemanas</span> <span class="o">=</span> <span class="n">hoy</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">semana</span> <span class="o">=</span> <span class="n">_busca_dia_semana_horario</span><span class="p">(</span><span class="n">profesor_id</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">hoy</span><span class="o">.</span><span class="n">day</span> <span class="o">!=</span> <span class="n">dossemanas</span><span class="o">.</span><span class="n">day</span><span class="p">:</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">hoy</span><span class="o">.</span><span class="n">weekday</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">d</span> <span class="o">==</span> <span class="n">semana</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="n">d</span> <span class="o">==</span> <span class="n">semana</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="n">d</span> <span class="o">==</span> <span class="n">semana</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="ow">or</span> <span class="n">d</span> <span class="o">==</span> <span class="n">semana</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">or</span> <span class="n">d</span> <span class="o">==</span> <span class="n">semana</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span>
+            <span class="n">lista_dias</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hoy</span><span class="o">.</span><span class="n">date</span><span class="p">)</span>
+        <span class="n">hoy</span> <span class="o">=</span> <span class="n">hoy</span> <span class="o">+</span> <span class="n">mas1dia</span>
+    <span class="n">hoy</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="n">reservas</span> <span class="o">=</span> <span class="n">Reserva</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">horario__profesor__id</span><span class="o">=</span><span class="n">profesor_id</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">dia__range</span><span class="o">=</span><span class="p">[</span><span class="n">hoy</span><span class="p">,</span> <span class="n">dossemanas</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;crearReserva.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;lista_dias&#39;</span><span class="p">:</span> <span class="n">lista_dias</span><span class="p">,</span> <span class="s">&#39;reservas&#39;</span><span class="p">:</span> <span class="n">reservas</span><span class="p">,</span>
+                                                    <span class="s">&#39;profesor_id&#39;</span><span class="p">:</span> <span class="n">profesor_id</span><span class="p">},</span> <span class="n">context</span><span class="p">)</span>
+
+</div>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="ow">not</span> <span class="n">u</span><span class="o">.</span><span class="n">es_profesor</span><span class="p">,</span> <span class="n">login_url</span><span class="o">=</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="reservar_tutoria"><a class="viewcode-back" href="../../../horarios.html#tutorias.views.horarios.reservar_tutoria">[docs]</a><span class="k">def</span> <span class="nf">reservar_tutoria</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Vista Reserva Tutoria</span>
+
+<span class="sd">    El siguiente método recoge via request los parametros de un form, lo evalua y añade la reserva de una tutoria.</span>
+<span class="sd">    En caso contrario deriva al template crearReserva.html</span>
+
+<span class="sd">    :param request: Request</span>
+<span class="sd">    :return: A la url miPanel</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="n">form</span> <span class="o">=</span> <span class="n">ReservaTutoriasForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+        <span class="n">mensajealumno</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;mensajealumno&#39;</span><span class="p">]</span>
+        <span class="n">dia</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;dia&#39;</span><span class="p">]</span>
+        <span class="n">dia</span> <span class="o">=</span> <span class="n">dia</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)</span>
+
+        <span class="n">diab</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">dia</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">dia</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">dia</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">horario_id</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;horario_id&#39;</span><span class="p">]</span>
+        <span class="n">usuario</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+        <span class="n">horario</span> <span class="o">=</span> <span class="n">Horario</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">horario_id</span><span class="p">)</span>
+        <span class="n">reserva</span> <span class="o">=</span> <span class="n">Reserva</span><span class="p">(</span><span class="n">estado</span><span class="o">=</span><span class="s">&#39;P&#39;</span><span class="p">,</span> <span class="n">mensajeAlumno</span><span class="o">=</span><span class="n">mensajealumno</span><span class="p">,</span> <span class="n">mensajeCancel</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">dia</span><span class="o">=</span><span class="n">diab</span><span class="p">,</span> <span class="n">alumnos</span><span class="o">=</span><span class="n">usuario</span><span class="p">,</span>
+                          <span class="n">horario</span><span class="o">=</span><span class="n">horario</span><span class="p">)</span>
+        <span class="n">reserva</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">&#39;miPanel&#39;</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;crearReserva.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">},</span> <span class="n">context</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/logo_tutorias.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Gestión de Tutorías 1 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2014, Equipo 01: Los 4 Fantásticos.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

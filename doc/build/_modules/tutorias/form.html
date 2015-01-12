@@ -1,0 +1,258 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>tutorias.form &mdash; Gestión de Tutorías 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Gestión de Tutorías 1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Gestión de Tutorías 1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for tutorias.form</h1><div class="highlight"><pre>
+<span class="c"># encoding:utf-8</span>
+<span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
+
+
+<div class="viewcode-block" id="UserForm"><a class="viewcode-back" href="../../form.html#tutorias.form.UserForm">[docs]</a><span class="k">class</span> <span class="nc">UserForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Formulario de Usuario</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;Usuario&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+    <span class="n">first_name</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;Nombre&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+    <span class="n">last_name</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;Apellidos&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;Email&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;Password&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">es_profesor</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;¿Es profesor?&quot;</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">dni</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;Dni&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">grado</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;Grados&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="UserRemoveForm"><a class="viewcode-back" href="../../form.html#tutorias.form.UserRemoveForm">[docs]</a><span class="k">class</span> <span class="nc">UserRemoveForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Formulario para eliminar un usuario</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;Usuario&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="UserReadForm"><a class="viewcode-back" href="../../form.html#tutorias.form.UserReadForm">[docs]</a><span class="k">class</span> <span class="nc">UserReadForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Formulario para consultar un usuario</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;Usuario&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="GradoForm"><a class="viewcode-back" href="../../form.html#tutorias.form.GradoForm">[docs]</a><span class="k">class</span> <span class="nc">GradoForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Formulario para añadir un grado</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">titulo</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;Titulo&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">identificador</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;Identificador&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="GradoRemoveForm"><a class="viewcode-back" href="../../form.html#tutorias.form.GradoRemoveForm">[docs]</a><span class="k">class</span> <span class="nc">GradoRemoveForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Formulario para eliminar un grado</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">identificador</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;Identificador&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="GradoReadForm"><a class="viewcode-back" href="../../form.html#tutorias.form.GradoReadForm">[docs]</a><span class="k">class</span> <span class="nc">GradoReadForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Formulario para consultar un grado</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">titulo</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;Titulo&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+</div>
+<span class="n">DIAS_DE_LA_SEMANA</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="s">&#39;L&#39;</span><span class="p">,</span> <span class="s">&#39;Lunes&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;M&#39;</span><span class="p">,</span> <span class="s">&#39;Martes&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;X&#39;</span><span class="p">,</span> <span class="s">&#39;Miércoles&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;J&#39;</span><span class="p">,</span> <span class="s">&#39;Jueves&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;V&#39;</span><span class="p">,</span> <span class="s">&#39;Viernes&#39;</span><span class="p">),</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="HorarioForm"><a class="viewcode-back" href="../../form.html#tutorias.form.HorarioForm">[docs]</a><span class="k">class</span> <span class="nc">HorarioForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Formulario para añadir un horario</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dia_semana</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">ChoiceField</span><span class="p">(</span><span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;form-control&#39;</span><span class="p">}),</span> <span class="n">choices</span><span class="o">=</span><span class="n">DIAS_DE_LA_SEMANA</span><span class="p">,</span>
+                                   <span class="n">label</span><span class="o">=</span><span class="s">&quot;Dia de la Semana&quot;</span><span class="p">)</span>
+    <span class="n">hora_inicio</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">TimeField</span><span class="p">(</span><span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TimeInput</span><span class="p">(</span><span class="n">format</span><span class="o">=</span><span class="s">&#39;%H:%M&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;form-control&#39;</span><span class="p">}),</span> <span class="n">label</span><span class="o">=</span><span class="s">&quot;Hora&quot;</span><span class="p">)</span>
+    <span class="n">hora_final</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">TimeField</span><span class="p">(</span><span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TimeInput</span><span class="p">(</span><span class="n">format</span><span class="o">=</span><span class="s">&#39;%H:%M&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;form-control&#39;</span><span class="p">}),</span> <span class="n">label</span><span class="o">=</span><span class="s">&quot;Hora&quot;</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="AsignaturaForm"><a class="viewcode-back" href="../../form.html#tutorias.form.AsignaturaForm">[docs]</a><span class="k">class</span> <span class="nc">AsignaturaForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Formulario para añadir una asignatura</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nombre</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">codigo</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+    <span class="n">curso</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">grado</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="AsignaturaRemoveForm"><a class="viewcode-back" href="../../form.html#tutorias.form.AsignaturaRemoveForm">[docs]</a><span class="k">class</span> <span class="nc">AsignaturaRemoveForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Formulario para eliminar una asignatura</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">identificador</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="AsignaturaReadForm"><a class="viewcode-back" href="../../form.html#tutorias.form.AsignaturaReadForm">[docs]</a><span class="k">class</span> <span class="nc">AsignaturaReadForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Formulario para consultar una asignatura</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nombre</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="AddAsignaturasForm"><a class="viewcode-back" href="../../form.html#tutorias.form.AddAsignaturasForm">[docs]</a><span class="k">class</span> <span class="nc">AddAsignaturasForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Formulario para añadir una asignatura a un profesor o un alumno</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">asignaturas</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;asignaturas&#39;</span><span class="p">)</span>
+        <span class="n">lista</span> <span class="o">=</span> <span class="p">()</span>
+        <span class="k">for</span> <span class="n">asig</span> <span class="ow">in</span> <span class="n">asignaturas</span><span class="p">:</span>
+            <span class="n">sublista</span> <span class="o">=</span> <span class="p">(</span><span class="n">asig</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">asig</span><span class="o">.</span><span class="n">nombre</span><span class="p">)</span>
+            <span class="n">lista</span> <span class="o">=</span> <span class="n">lista</span> <span class="o">+</span> <span class="p">(</span><span class="n">sublista</span><span class="p">,)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">AddAsignaturasForm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s">&#39;choices&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">MultipleChoiceField</span><span class="p">(</span><span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">CheckboxSelectMultiple</span><span class="p">(),</span> <span class="n">choices</span><span class="o">=</span><span class="n">lista</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="AddGradosForm"><a class="viewcode-back" href="../../form.html#tutorias.form.AddGradosForm">[docs]</a><span class="k">class</span> <span class="nc">AddGradosForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Formulario para añadir grados a los profesores</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">grados</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;grados&#39;</span><span class="p">)</span>
+        <span class="n">lista</span> <span class="o">=</span> <span class="p">()</span>
+        <span class="k">for</span> <span class="n">grado</span> <span class="ow">in</span> <span class="n">grados</span><span class="p">:</span>
+            <span class="n">sublista</span> <span class="o">=</span> <span class="p">(</span><span class="n">grado</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">grado</span><span class="o">.</span><span class="n">titulo</span><span class="p">)</span>
+            <span class="n">lista</span> <span class="o">=</span> <span class="n">lista</span> <span class="o">+</span> <span class="p">(</span><span class="n">sublista</span><span class="p">,)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">AddGradosForm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s">&#39;choices&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">MultipleChoiceField</span><span class="p">(</span><span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">CheckboxSelectMultiple</span><span class="p">(),</span> <span class="n">choices</span><span class="o">=</span><span class="n">lista</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="AsignaturaUpdateForm"><a class="viewcode-back" href="../../form.html#tutorias.form.AsignaturaUpdateForm">[docs]</a><span class="k">class</span> <span class="nc">AsignaturaUpdateForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Formulario para actualizar una asignatura</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nombre</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">codigo</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+    <span class="n">curso</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="GradoUpdateForm"><a class="viewcode-back" href="../../form.html#tutorias.form.GradoUpdateForm">[docs]</a><span class="k">class</span> <span class="nc">GradoUpdateForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Formulario para actualizar un grado</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">titulo</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;Titulo&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">identificador</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;Identificador&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="UserUpdateForm"><a class="viewcode-back" href="../../form.html#tutorias.form.UserUpdateForm">[docs]</a><span class="k">class</span> <span class="nc">UserUpdateForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Formulario para actualizar un usuario</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;Usuario&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+    <span class="n">first_name</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;Nombre&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+    <span class="n">last_name</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;Apellidos&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;Email&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">es_profesor</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;¿Es profesor?&quot;</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">dni</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;Dni&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="ReservaTutoriasForm"><a class="viewcode-back" href="../../form.html#tutorias.form.ReservaTutoriasForm">[docs]</a><span class="k">class</span> <span class="nc">ReservaTutoriasForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Formulario para reservar una tutoría</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mensajealumno</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;mensajeAlumno&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+    <span class="n">dia</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;diaDelMesReseva&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">horario_id</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;IdentificadorHorario&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/logo_tutorias.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Gestión de Tutorías 1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2014, Equipo 01: Los 4 Fantásticos.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

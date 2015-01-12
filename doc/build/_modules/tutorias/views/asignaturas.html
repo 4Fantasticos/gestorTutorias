@@ -1,0 +1,299 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>tutorias.views.asignaturas &mdash; Gestión de Tutorías 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Gestión de Tutorías 1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Gestión de Tutorías 1 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for tutorias.views.asignaturas</h1><div class="highlight"><pre>
+<span class="c"># encoding:utf-8</span>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Laura&#39;</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">user_passes_test</span>
+<span class="kn">from</span> <span class="nn">django.core.paginator</span> <span class="kn">import</span> <span class="n">Paginator</span><span class="p">,</span> <span class="n">PageNotAnInteger</span><span class="p">,</span> <span class="n">EmptyPage</span>
+<span class="kn">from</span> <span class="nn">django.core.urlresolvers</span> <span class="kn">import</span> <span class="n">reverse</span>
+<span class="kn">from</span> <span class="nn">django.http.response</span> <span class="kn">import</span> <span class="n">HttpResponseRedirect</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render_to_response</span>
+<span class="kn">from</span> <span class="nn">django.template</span> <span class="kn">import</span> <span class="n">RequestContext</span>
+<span class="kn">from</span> <span class="nn">tutorias.models</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">tutorias.form</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="n">u</span><span class="o">.</span><span class="n">is_superuser</span><span class="p">,</span> <span class="n">login_url</span><span class="o">=</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="add_asignatura"><a class="viewcode-back" href="../../../asignaturas.html#tutorias.views.asignaturas.add_asignatura">[docs]</a><span class="k">def</span> <span class="nf">add_asignatura</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Añadir asignatura</span>
+
+<span class="sd">    El siguiente método recoge vía request los parametros de un form,</span>
+<span class="sd">    los evalua y crea una asignatura si procede, en caso contrario</span>
+<span class="sd">    deriva al template formularioAsignatura.html</span>
+
+<span class="sd">    :param request: request</span>
+<span class="sd">    :return: Vista de miPanel o de formularioAsignatura.html si algo falla</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">AsignaturaForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">nombre</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;nombre&#39;</span><span class="p">]</span>
+            <span class="n">codigo</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;codigo&#39;</span><span class="p">]</span>
+            <span class="n">curso</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;curso&#39;</span><span class="p">]</span>
+            <span class="n">grado_id</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;grado&#39;</span><span class="p">]</span>
+            <span class="n">grado</span> <span class="o">=</span> <span class="n">Grado</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">identificador</span><span class="o">=</span><span class="n">grado_id</span><span class="p">)</span>
+
+            <span class="n">asignatura</span> <span class="o">=</span> <span class="n">Asignatura</span><span class="p">(</span><span class="n">nombre</span><span class="o">=</span><span class="n">nombre</span><span class="p">,</span> <span class="n">codigo</span><span class="o">=</span><span class="n">codigo</span><span class="p">,</span> <span class="n">curso</span><span class="o">=</span><span class="n">curso</span><span class="p">,</span> <span class="n">grados</span><span class="o">=</span><span class="n">grado</span><span class="p">)</span>
+            <span class="n">asignatura</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">&#39;miPanel&#39;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">grados</span> <span class="o">=</span> <span class="n">Grado</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;formularioAsignatura.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s">&#39;grados&#39;</span><span class="p">:</span> <span class="n">grados</span><span class="p">},</span> <span class="n">context</span><span class="p">)</span>
+
+    <span class="n">grados</span> <span class="o">=</span> <span class="n">Grado</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">form</span> <span class="o">=</span> <span class="n">AsignaturaForm</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;formularioAsignatura.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s">&#39;grados&#39;</span><span class="p">:</span> <span class="n">grados</span><span class="p">},</span> <span class="n">context</span><span class="p">)</span>
+
+</div>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="n">u</span><span class="o">.</span><span class="n">is_superuser</span><span class="p">,</span> <span class="n">login_url</span><span class="o">=</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="remove_asignatura"><a class="viewcode-back" href="../../../asignaturas.html#tutorias.views.asignaturas.remove_asignatura">[docs]</a><span class="k">def</span> <span class="nf">remove_asignatura</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Eliminar asignatura</span>
+
+<span class="sd">    El siguiente método recoge vía request los parametros de un form,</span>
+<span class="sd">    los evalua y elimina una asignatura</span>
+
+<span class="sd">    :param request: request</span>
+<span class="sd">    :return: Vista de miPanel</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">AsignaturaRemoveForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">id_asignatura</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;identificador&#39;</span><span class="p">]</span>
+            <span class="n">asignatura</span> <span class="o">=</span> <span class="n">Asignatura</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">id_asignatura</span><span class="p">)</span>
+            <span class="n">asignatura</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+
+            <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">&#39;miPanel&#39;</span><span class="p">))</span>
+
+    <span class="n">asignaturas</span> <span class="o">=</span> <span class="n">Asignatura</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">form</span> <span class="o">=</span> <span class="n">AsignaturaRemoveForm</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;removeAsignatura.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s">&#39;asignaturas&#39;</span><span class="p">:</span> <span class="n">asignaturas</span><span class="p">},</span> <span class="n">context</span><span class="p">)</span>
+
+</div>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="n">u</span><span class="o">.</span><span class="n">is_superuser</span><span class="p">,</span> <span class="n">login_url</span><span class="o">=</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="read_asignatura"><a class="viewcode-back" href="../../../asignaturas.html#tutorias.views.asignaturas.read_asignatura">[docs]</a><span class="k">def</span> <span class="nf">read_asignatura</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Consultar asignatura</span>
+
+<span class="sd">    El siguiente método recoge vía request los parametros de un form,</span>
+<span class="sd">    los evalua y muestra una asignatura</span>
+
+<span class="sd">    :param request: request</span>
+<span class="sd">    :return: Vista de readAsignatura.html si algo falla</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">AsignaturaReadForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">nombre</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;nombre&#39;</span><span class="p">]</span>
+            <span class="n">asignatura</span> <span class="o">=</span> <span class="n">Asignatura</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">nombre__icontains</span><span class="o">=</span><span class="n">nombre</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;readAsignatura.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s">&#39;asignatura&#39;</span><span class="p">:</span> <span class="n">asignatura</span><span class="p">},</span> <span class="n">context</span><span class="p">)</span>
+    <span class="n">asignaturas_lista</span> <span class="o">=</span> <span class="n">Asignatura</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">asignaturas_lista</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="n">page</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;page&#39;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">asignaturas</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">PageNotAnInteger</span><span class="p">:</span>
+        <span class="n">asignaturas</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">form</span> <span class="o">=</span> <span class="n">AsignaturaReadForm</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;readAsignatura.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s">&#39;asignaturas&#39;</span><span class="p">:</span> <span class="n">asignaturas</span><span class="p">},</span> <span class="n">context</span><span class="p">)</span>
+
+</div>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="n">u</span><span class="o">.</span><span class="n">is_superuser</span><span class="p">,</span> <span class="n">login_url</span><span class="o">=</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="update_asignatura"><a class="viewcode-back" href="../../../asignaturas.html#tutorias.views.asignaturas.update_asignatura">[docs]</a><span class="k">def</span> <span class="nf">update_asignatura</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Modificar asignatura</span>
+
+<span class="sd">    El siguiente método recoge vía request los parametros de un form,</span>
+<span class="sd">    los evalua y modifica una asignatura si procede, en caso contrario</span>
+<span class="sd">    deriva al template updateAsignatura.html</span>
+
+<span class="sd">    :param request: request</span>
+<span class="sd">    :return: Vista de readAsignatura.html o</span>
+<span class="sd">            de updateAsignatura.html si algo falla</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">AsignaturaUpdateForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">nombre</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;nombre&#39;</span><span class="p">]</span>
+            <span class="n">codigo</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;codigo&#39;</span><span class="p">]</span>
+            <span class="n">curso</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;curso&#39;</span><span class="p">]</span>
+
+            <span class="n">asignatura</span> <span class="o">=</span> <span class="n">Asignatura</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">codigo</span><span class="o">=</span><span class="n">codigo</span><span class="p">)</span>
+            <span class="n">asignatura</span><span class="o">.</span><span class="n">nombre</span> <span class="o">=</span> <span class="n">nombre</span>
+            <span class="n">asignatura</span><span class="o">.</span><span class="n">codigo</span> <span class="o">=</span> <span class="n">codigo</span>
+            <span class="n">asignatura</span><span class="o">.</span><span class="n">curso</span> <span class="o">=</span> <span class="n">curso</span>
+
+            <span class="n">asignatura</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="n">asignaturas_lista</span> <span class="o">=</span> <span class="n">Asignatura</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+            <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">asignaturas_lista</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+            <span class="n">page</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;page&#39;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">asignaturas</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">PageNotAnInteger</span><span class="p">:</span>
+                <span class="n">asignaturas</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">form</span> <span class="o">=</span> <span class="n">AsignaturaReadForm</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;readAsignatura.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s">&#39;asignaturas&#39;</span><span class="p">:</span> <span class="n">asignaturas</span><span class="p">},</span> <span class="n">context</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">codigo</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;codigo&#39;</span><span class="p">]</span>
+            <span class="n">asignatura</span> <span class="o">=</span> <span class="n">Asignatura</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">codigo</span><span class="o">=</span><span class="n">codigo</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;updateAsignatura.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s">&#39;asignatura&#39;</span><span class="p">:</span> <span class="n">asignatura</span><span class="p">},</span> <span class="n">context</span><span class="p">)</span>
+    <span class="n">id_asignatura</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">)</span>
+    <span class="n">asignatura</span> <span class="o">=</span> <span class="n">Asignatura</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">id_asignatura</span><span class="p">)</span>
+    <span class="n">form</span> <span class="o">=</span> <span class="n">AsignaturaUpdateForm</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;updateAsignatura.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s">&#39;asignatura&#39;</span><span class="p">:</span> <span class="n">asignatura</span><span class="p">},</span> <span class="n">context</span><span class="p">)</span>
+
+</div>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="n">u</span><span class="o">.</span><span class="n">is_superuser</span><span class="p">,</span> <span class="n">login_url</span><span class="o">=</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="metricas"><a class="viewcode-back" href="../../../asignaturas.html#tutorias.views.asignaturas.metricas">[docs]</a><span class="k">def</span> <span class="nf">metricas</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Metricas de alumnos, profesores y grados</span>
+
+<span class="sd">    El siguiente método calcula estadísticas para conocer</span>
+<span class="sd">    el alumno con más reservas hechas,</span>
+<span class="sd">    el numero de reservas totales, aceptadas y canceladas</span>
+<span class="sd">    por los profesores y el grado con mayor alumnado</span>
+
+<span class="sd">    :param request: request</span>
+<span class="sd">    :return: Vista de miPanel o de formularioAsignatura.html si algo falla</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+
+    <span class="n">alumnos</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">es_profesor</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">maximo</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">alumno_dic</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">alumno</span> <span class="ow">in</span> <span class="n">alumnos</span><span class="p">:</span>
+        <span class="n">num</span> <span class="o">=</span> <span class="n">Reserva</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">alumnos</span><span class="o">=</span><span class="n">alumno</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">num</span> <span class="o">&gt;</span> <span class="n">maximo</span><span class="p">:</span>
+            <span class="n">alumno_dic</span><span class="p">[</span><span class="s">&#39;alumno&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">alumno</span>
+            <span class="n">alumno_dic</span><span class="p">[</span><span class="s">&#39;num&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">num</span>
+            <span class="n">maximo</span> <span class="o">=</span> <span class="n">num</span>
+
+    <span class="n">profesores</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">es_profesor</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">profesores_dic</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">profesor</span> <span class="ow">in</span> <span class="n">profesores</span><span class="p">:</span>
+        <span class="n">profesor_datos</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="n">Reserva</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">horario__profesor</span><span class="o">=</span><span class="n">profesor</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+        <span class="n">aceptadas</span> <span class="o">=</span> <span class="n">Reserva</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">horario__profesor</span><span class="o">=</span><span class="n">profesor</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">estado</span><span class="o">=</span><span class="s">&#39;R&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+        <span class="n">canceladas</span> <span class="o">=</span> <span class="n">Reserva</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">horario__profesor</span><span class="o">=</span><span class="n">profesor</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">estado</span><span class="o">=</span><span class="s">&#39;C&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+        <span class="n">profesor_datos</span><span class="p">[</span><span class="s">&#39;total&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">total</span>
+        <span class="n">profesor_datos</span><span class="p">[</span><span class="s">&#39;aceptadas&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aceptadas</span>
+        <span class="n">profesor_datos</span><span class="p">[</span><span class="s">&#39;canceladas&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">canceladas</span>
+        <span class="n">profesores_dic</span><span class="p">[</span><span class="n">profesor</span><span class="o">.</span><span class="n">username</span><span class="p">]</span> <span class="o">=</span> <span class="n">profesor_datos</span>
+
+    <span class="n">grados</span> <span class="o">=</span> <span class="n">Grado</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">maximo</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">grado_max</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">grado</span> <span class="ow">in</span> <span class="n">grados</span><span class="p">:</span>
+        <span class="n">num</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">usuarios</span><span class="o">=</span><span class="n">grado</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">num</span> <span class="o">&gt;</span> <span class="n">maximo</span><span class="p">:</span>
+            <span class="n">maximo</span> <span class="o">=</span> <span class="n">num</span>
+            <span class="n">grado_max</span><span class="p">[</span><span class="s">&#39;grado&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grado</span>
+            <span class="n">grado_max</span><span class="p">[</span><span class="s">&#39;num&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">num</span>
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;estadisticas.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;alumno_dic&#39;</span><span class="p">:</span> <span class="n">alumno_dic</span><span class="p">,</span>
+                                                    <span class="s">&#39;profesores_dic&#39;</span><span class="p">:</span> <span class="n">profesores_dic</span><span class="p">,</span>
+                                                    <span class="s">&#39;grado_max&#39;</span><span class="p">:</span> <span class="n">grado_max</span><span class="p">},</span> <span class="n">context</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/logo_tutorias.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Gestión de Tutorías 1 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2014, Equipo 01: Los 4 Fantásticos.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

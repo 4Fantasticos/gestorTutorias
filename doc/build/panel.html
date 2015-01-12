@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Documentación del módulo Panel.py &mdash; Gestión de Tutorías 1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Gestión de Tutorías 1 documentation" href="index.html" />
+    <link rel="next" title="Documentación del módulo Usuarios.py" href="usuarios.html" />
+    <link rel="prev" title="Documentación del módulo Horarios.py" href="horarios.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="usuarios.html" title="Documentación del módulo Usuarios.py"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="horarios.html" title="Documentación del módulo Horarios.py"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Gestión de Tutorías 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="documentacion-del-modulo-panel-py">
+<h1>Documentación del módulo Panel.py<a class="headerlink" href="#documentacion-del-modulo-panel-py" title="Permalink to this headline">¶</a></h1>
+<p>Contenido:</p>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+<span class="target" id="module-tutorias.views.panel"></span><dl class="function">
+<dt id="tutorias.views.panel.add_asignaturas_alumnos">
+<code class="descclassname">tutorias.views.panel.</code><code class="descname">add_asignaturas_alumnos</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tutorias/views/panel.html#add_asignaturas_alumnos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tutorias.views.panel.add_asignaturas_alumnos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vista de add_asignaturas_alumnos</p>
+<p>El siguiente método recoge vía request los parametros de un form, los evalua y añade las asignaturas al usuario si
+procede, en caso contrario deriva al template formAddAsignaturas.html</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request</strong> &#8211; Request</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A la vista formAddAsignaturas.html</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tutorias.views.panel.add_asignaturas_profesor">
+<code class="descclassname">tutorias.views.panel.</code><code class="descname">add_asignaturas_profesor</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tutorias/views/panel.html#add_asignaturas_profesor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tutorias.views.panel.add_asignaturas_profesor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vista de add_asignaturas_profesor</p>
+<p>El siguiente método recoge vía request los parametros de un form, los evalua y añade las asignaturas al usuario si
+procede, en caso contrario deriva al template formAddAsignaturas.html</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request</strong> &#8211; Request</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A la vista formAddAsignaturas.html</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tutorias.views.panel.add_grados_profesor">
+<code class="descclassname">tutorias.views.panel.</code><code class="descname">add_grados_profesor</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tutorias/views/panel.html#add_grados_profesor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tutorias.views.panel.add_grados_profesor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vista de add_grados_profesor</p>
+<p>El siguiente método recoge vía request los parametros de un form, los evalua y añade los grados al usuario si
+procede, en caso contrario deriva al template formAddGrados.html</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request</strong> &#8211; Request</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A la vista formAddGrados.html</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tutorias.views.panel.mi_panel">
+<code class="descclassname">tutorias.views.panel.</code><code class="descname">mi_panel</code><span class="sig-paren">(</span><em>request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tutorias/views/panel.html#mi_panel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tutorias.views.panel.mi_panel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vista de panel del usuario</p>
+<p>El siguiente método recoge vía request el usuario logeado y muestra su menu.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request</strong> &#8211; Request</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A la vista miPanel.html</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tutorias.views.panel.notificaciones_alumno">
+<code class="descclassname">tutorias.views.panel.</code><code class="descname">notificaciones_alumno</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tutorias/views/panel.html#notificaciones_alumno"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tutorias.views.panel.notificaciones_alumno" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vista de notificaciones_alumnos</p>
+<p>El siguiente método recoge via request el usuario y muestra el template misNotificacionesAlumnos.html</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request</strong> &#8211; Request</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A la vista misNotificaciones.html</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tutorias.views.panel.notificaciones_profesor">
+<code class="descclassname">tutorias.views.panel.</code><code class="descname">notificaciones_profesor</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tutorias/views/panel.html#notificaciones_profesor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tutorias.views.panel.notificaciones_profesor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vista de notificaciones_profesor</p>
+<p>El siguiente método recoge via request el id de la reserva y la acepta o declina. En caso contrario deriva al
+template misNotificaciones.html</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request</strong> &#8211; Request</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A la vista misNotificaciones.html</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo_tutorias.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="horarios.html"
+                        title="previous chapter">Documentación del módulo Horarios.py</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="usuarios.html"
+                        title="next chapter">Documentación del módulo Usuarios.py</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/panel.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="usuarios.html" title="Documentación del módulo Usuarios.py"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="horarios.html" title="Documentación del módulo Horarios.py"
+             >previous</a> |</li>
+        <li><a href="index.html">Gestión de Tutorías 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2014, Equipo 01: Los 4 Fantásticos.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

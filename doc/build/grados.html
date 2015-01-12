@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Documentación del módulo Grados.py &mdash; Gestión de Tutorías 1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Gestión de Tutorías 1 documentation" href="index.html" />
+    <link rel="next" title="Documentación del módulo Horarios.py" href="horarios.html" />
+    <link rel="prev" title="Documentación del módulo Asignaturas.py" href="asignaturas.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="horarios.html" title="Documentación del módulo Horarios.py"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="asignaturas.html" title="Documentación del módulo Asignaturas.py"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Gestión de Tutorías 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="documentacion-del-modulo-grados-py">
+<h1>Documentación del módulo Grados.py<a class="headerlink" href="#documentacion-del-modulo-grados-py" title="Permalink to this headline">¶</a></h1>
+<p>Contenido:</p>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+<span class="target" id="module-tutorias.views.grados"></span><dl class="function">
+<dt id="tutorias.views.grados.add_grado">
+<code class="descclassname">tutorias.views.grados.</code><code class="descname">add_grado</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tutorias/views/grados.html#add_grado"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tutorias.views.grados.add_grado" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vista añadir grado</p>
+<p>El siguiente método recoge vía request los parametros de un form, los evalua y añade un grado si procede, en caso
+contrario deriva al template formularioGrado.html</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request</strong> &#8211; Request.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">formularioGrado.html.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tutorias.views.grados.read_grado">
+<code class="descclassname">tutorias.views.grados.</code><code class="descname">read_grado</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tutorias/views/grados.html#read_grado"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tutorias.views.grados.read_grado" title="Permalink to this definition">¶</a></dt>
+<dd><p>Consultar un grado del sistema.</p>
+<p>El siguiente método recoge vía request los parametros de un form, los evalua y muestra los datos de un grado si
+procede, en caso contrario deriva al template readGrado.html</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request</strong> &#8211; request</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Vista readGrado.html</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tutorias.views.grados.remove_grado">
+<code class="descclassname">tutorias.views.grados.</code><code class="descname">remove_grado</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tutorias/views/grados.html#remove_grado"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tutorias.views.grados.remove_grado" title="Permalink to this definition">¶</a></dt>
+<dd><p>Elimina un grado del sistema</p>
+<p>El siguiente método recoge vía request los parametros de un form, los evalua y elimina un grado si procede, en
+caso contrario deriva al template removeGrado.html.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request</strong> &#8211; request</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Vista removeGrado.html</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tutorias.views.grados.update_grado">
+<code class="descclassname">tutorias.views.grados.</code><code class="descname">update_grado</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tutorias/views/grados.html#update_grado"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tutorias.views.grados.update_grado" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modifica un grado del sistema.</p>
+<p>El siguiente método recoge vía request los parametros de un form, los evalua y modifica un grado si procede, en
+caso contrario deriva al template updateGrado.html</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request</strong> &#8211; request</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Vista updateGrado.html</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo_tutorias.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="asignaturas.html"
+                        title="previous chapter">Documentación del módulo Asignaturas.py</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="horarios.html"
+                        title="next chapter">Documentación del módulo Horarios.py</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/grados.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="horarios.html" title="Documentación del módulo Horarios.py"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="asignaturas.html" title="Documentación del módulo Asignaturas.py"
+             >previous</a> |</li>
+        <li><a href="index.html">Gestión de Tutorías 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2014, Equipo 01: Los 4 Fantásticos.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

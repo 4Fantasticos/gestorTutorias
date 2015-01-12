@@ -1,0 +1,225 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Documentación del módulo Horarios.py &mdash; Gestión de Tutorías 1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Gestión de Tutorías 1 documentation" href="index.html" />
+    <link rel="next" title="Documentación del módulo Panel.py" href="panel.html" />
+    <link rel="prev" title="Documentación del módulo Grados.py" href="grados.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="panel.html" title="Documentación del módulo Panel.py"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="grados.html" title="Documentación del módulo Grados.py"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Gestión de Tutorías 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="documentacion-del-modulo-horarios-py">
+<h1>Documentación del módulo Horarios.py<a class="headerlink" href="#documentacion-del-modulo-horarios-py" title="Permalink to this headline">¶</a></h1>
+<p>Contenido:</p>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+<span class="target" id="module-tutorias.views.horarios"></span><dl class="function">
+<dt id="tutorias.views.horarios.add_horario">
+<code class="descclassname">tutorias.views.horarios.</code><code class="descname">add_horario</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tutorias/views/horarios.html#add_horario"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tutorias.views.horarios.add_horario" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vista añadir horario</p>
+<p>El siguiente método recoge via request los parametros de un form, lo evalua y añade los horarios que procedan
+por intervalos de 15 minutos. En caso contrario deriva al template formularioHorario.html</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request</strong> &#8211; Request</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A la url miPanel</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tutorias.views.horarios.eliminar_horario">
+<code class="descclassname">tutorias.views.horarios.</code><code class="descname">eliminar_horario</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tutorias/views/horarios.html#eliminar_horario"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tutorias.views.horarios.eliminar_horario" title="Permalink to this definition">¶</a></dt>
+<dd><p>Elimina un horario de la base de datos</p>
+<p>El siguiente método recoge vía request los parametros de un form, los evalua y elimina un horario y
+deriva a la url misHorarios</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>request</strong> &#8211; Request</li>
+<li><strong>horario_id</strong> &#8211; Identificador del horario en la bd</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A la url misHorarios</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tutorias.views.horarios.horarios_profesores">
+<code class="descclassname">tutorias.views.horarios.</code><code class="descname">horarios_profesores</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tutorias/views/horarios.html#horarios_profesores"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tutorias.views.horarios.horarios_profesores" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vista que indica que horarios de tutoria tiene disponibles un profesor</p>
+<p>El siguiente método dado un identificador de usuario que es profesor devuelve los horarios de tutorias disponibles
+que se pueden solicitar para reservar una tutoria.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>request</strong> &#8211; Request</li>
+<li><strong>profesor_id</strong> &#8211; Identificador de la base de datos del usuario, que es profesor.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Al template crearRerserva.html</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tutorias.views.horarios.mis_horarios">
+<code class="descclassname">tutorias.views.horarios.</code><code class="descname">mis_horarios</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tutorias/views/horarios.html#mis_horarios"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tutorias.views.horarios.mis_horarios" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vista que muestra los horarios del profesor</p>
+<p>El siguiente método muestra al usuario que es profesor, una lista con sus horarios</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request</strong> &#8211; Request</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A la url misHorarios</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tutorias.views.horarios.reservar_tutoria">
+<code class="descclassname">tutorias.views.horarios.</code><code class="descname">reservar_tutoria</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tutorias/views/horarios.html#reservar_tutoria"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tutorias.views.horarios.reservar_tutoria" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vista Reserva Tutoria</p>
+<p>El siguiente método recoge via request los parametros de un form, lo evalua y añade la reserva de una tutoria.
+En caso contrario deriva al template crearReserva.html</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request</strong> &#8211; Request</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A la url miPanel</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo_tutorias.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="grados.html"
+                        title="previous chapter">Documentación del módulo Grados.py</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="panel.html"
+                        title="next chapter">Documentación del módulo Panel.py</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/horarios.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="panel.html" title="Documentación del módulo Panel.py"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="grados.html" title="Documentación del módulo Grados.py"
+             >previous</a> |</li>
+        <li><a href="index.html">Gestión de Tutorías 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2014, Equipo 01: Los 4 Fantásticos.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

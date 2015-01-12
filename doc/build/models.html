@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Documentación del módulo Models.py &mdash; Gestión de Tutorías 1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Gestión de Tutorías 1 documentation" href="index.html" />
+    <link rel="next" title="Documentación del módulo Ajax.py" href="ajax.html" />
+    <link rel="prev" title="Documentación del proyecto Gestión de Tutorías" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ajax.html" title="Documentación del módulo Ajax.py"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Documentación del proyecto Gestión de Tutorías"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Gestión de Tutorías 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="documentacion-del-modulo-models-py">
+<h1>Documentación del módulo Models.py<a class="headerlink" href="#documentacion-del-modulo-models-py" title="Permalink to this headline">¶</a></h1>
+<p>Contenido:</p>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+<span class="target" id="module-tutorias.models"></span><dl class="class">
+<dt id="tutorias.models.Asignatura">
+<em class="property">class </em><code class="descclassname">tutorias.models.</code><code class="descname">Asignatura</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tutorias/models.html#Asignatura"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tutorias.models.Asignatura" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modelo de Asignatura</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Param:</th><td class="field-body">nombre: Nombre de la asignatura</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Param:</th><td class="field-body">codigo: Código único de la asignatura</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Param:</th><td class="field-body">grados: Grado en el cual se imparte la asignatura</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Param:</th><td class="field-body">curso: Curso en el cual se imparte la asignatura</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Param:</th><td class="field-body">usuarios: Lista de usuarios que dan la asignatura</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Param:</th><td class="field-body">profesores: Lista de profesores que dan la asignatura</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="tutorias.models.Grado">
+<em class="property">class </em><code class="descclassname">tutorias.models.</code><code class="descname">Grado</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tutorias/models.html#Grado"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tutorias.models.Grado" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modelo de Grado</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Param:</th><td class="field-body">titulo: Titulo del grado</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Param:</th><td class="field-body">identificador: Identificador único del grado</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Param:</th><td class="field-body">usuarios: Lista de usuarios que estudian el grado</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Param:</th><td class="field-body">profesores: Lista de profesores que dan el grad</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="tutorias.models.Horario">
+<em class="property">class </em><code class="descclassname">tutorias.models.</code><code class="descname">Horario</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tutorias/models.html#Horario"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tutorias.models.Horario" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modelo de Horario</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Param:</th><td class="field-body">profesor: Profesor de dicho horario</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Param:</th><td class="field-body">dia_semana: Día de la semana de la tutoría</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Param:</th><td class="field-body">hora_inicio: Hora de inicio de la tutoría</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="tutorias.models.Reserva">
+<em class="property">class </em><code class="descclassname">tutorias.models.</code><code class="descname">Reserva</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tutorias/models.html#Reserva"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tutorias.models.Reserva" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modelo de Reserva</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Param:</th><td class="field-body">estado: Estado de la reserva</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Param:</th><td class="field-body">mensajeAlumno: Mensaje que el alumno deja al profesor</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Param:</th><td class="field-body">mensajeCancel: Mensaje que profesor deja para el alumno</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Param:</th><td class="field-body">dia: Día de la tutoría</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Param:</th><td class="field-body">alumnos: Alumno que pide la tutoría</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Param:</th><td class="field-body">horario: Horario del profesor para la tutoría</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo_tutorias.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Documentación del proyecto Gestión de Tutorías</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ajax.html"
+                        title="next chapter">Documentación del módulo Ajax.py</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/models.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ajax.html" title="Documentación del módulo Ajax.py"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Documentación del proyecto Gestión de Tutorías"
+             >previous</a> |</li>
+        <li><a href="index.html">Gestión de Tutorías 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2014, Equipo 01: Los 4 Fantásticos.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>
